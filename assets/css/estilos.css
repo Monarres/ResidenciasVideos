@@ -1,0 +1,66 @@
+/* Fondo general */
+body {
+  background-color: #f3e6ff; /* morado claro */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tarjetas */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: visible !important; /* ✅ necesario para que dropdown sobresalga */
+}
+
+/* Íconos de carpetas y videos */
+.folder-icon, .video-icon {
+  font-size: 45px;
+  color: #8e44ad;
+}
+
+/* Hover efecto */
+.folder-card, .video-card, .area-card .card {
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+.folder-card:hover, .video-card:hover, .area-card .card:hover {
+  transform: scale(1.05);
+  background-color: #f8f9fa;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: #8e44ad;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #732d91;
+}
+
+/* Cada tarjeta individual tiene su propio z-index */
+.area-card {
+  position: relative;
+  z-index: 1;
+}
+
+/* Elevar tarjeta cuando su menú está abierto */
+.area-card:has(.dropdown-menu.show) {
+  z-index: 999;
+}
+
+/* Asegura que el menú siempre esté visible por delante */
+.dropdown-menu {
+  z-index: 1055 !important;
+  position: absolute !important;
+  inset: auto !important;
+  overflow: visible;
+}
+
+  .area-card .card {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+  .area-card .card:hover {
+    transform: scale(1.03);
+    background-color: #f8f9fa;
+}
