@@ -433,6 +433,8 @@ body {
           </a>
           <a href="ver_respuestas.php" class="main-menu-item">
             <span>📊</span> Ver respuestas
+            <a href="unidades.php" class="main-menu-item">
+            <span>🏢</span> Ver unidades
           </a>
         </div>
       </div>
