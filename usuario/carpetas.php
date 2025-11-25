@@ -162,14 +162,14 @@ body {
   transform: translateX(-50%);
 }
 
-.user-info {
+.header-right {
   display: flex;
   align-items: center;
   gap: 15px;
   margin-left: auto;
 }
 
-.btn-logout {
+.btn-volver {
   background: white;
   border: none;
   color: #9b7cb8;
@@ -181,11 +181,91 @@ body {
   display: inline-block;
 }
 
-.btn-logout:hover {
+.btn-volver:hover {
   background: #f8f9fa;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   color: #9b7cb8;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.user-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  font-weight: 500;
+  border-radius: 25px;
+  padding: 8px 20px;
+  transition: 0.3s;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-toggle:hover {
+  background: white;
+  color: #9b7cb8;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 10px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(155, 124, 184, 0.3);
+  min-width: 200px;
+  padding: 10px;
+  z-index: 10000;
+  display: none;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.user-dropdown-item {
+  padding: 12px 20px;
+  transition: 0.3s;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+.user-dropdown-item:last-child {
+  margin-bottom: 0;
+}
+
+.user-dropdown-item:hover {
+  background: linear-gradient(135deg, rgba(245, 163, 199, 0.2), rgba(155, 124, 184, 0.2));
+  transform: translateX(5px);
+  color: #9b7cb8;
+}
+
+.user-dropdown-item.logout {
+  color: #dc3545;
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.05), rgba(245, 163, 199, 0.1));
+}
+
+.user-dropdown-item.logout:hover {
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(245, 163, 199, 0.2));
+  color: #dc3545;
 }
 
 .container {
@@ -230,7 +310,6 @@ body {
   border: 3px solid #28a745;
 }
 
-/* 🔒 ESTILOS PARA MÓDULOS BLOQUEADOS */
 .modulo-card.bloqueado {
   background: #e0e0e0;
   opacity: 0.6;
@@ -450,7 +529,11 @@ body {
     font-size: 1.2rem;
   }
   
-  .btn-logout {
+  .header-right {
+    gap: 10px;
+  }
+  
+  .btn-volver, .user-toggle {
     padding: 6px 15px;
     font-size: 0.9rem;
   }
@@ -471,8 +554,20 @@ body {
 <div class="top-header">
   <div class="container-fluid">
     <h2>📚 Módulos de Capacitación</h2>
-    <div class="user-info">
-      <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
+    <div class="header-right">
+      <!-- Menú de usuario -->
+      <div class="user-section">
+        <button class="user-toggle" id="userToggle">
+          <span>👤</span> <?= htmlspecialchars($nombre) ?> <span style="font-size: 0.8em;">▼</span>
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <a href="../logout.php" class="user-dropdown-item logout">
+            <span>🚪</span> Cerrar sesión
+          </a>
+        </div>
+      </div>
+      
+      <a href="dashboard.php" class="btn-volver">⬅ Volver</a>
     </div>
   </div>
 </div>
@@ -573,6 +668,22 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+// Toggle del menú de usuario
+const userToggle = document.getElementById('userToggle');
+const userDropdown = document.getElementById('userDropdown');
+
+userToggle.addEventListener('click', function(e) {
+  e.stopPropagation();
+  userDropdown.classList.toggle('show');
+});
+
+// Cerrar el menú al hacer clic fuera
+document.addEventListener('click', function(e) {
+  if (!userToggle.contains(e.target) && !userDropdown.contains(e.target)) {
+    userDropdown.classList.remove('show');
+  }
+});
+
 // Animación de las barras de progreso al cargar
 document.addEventListener('DOMContentLoaded', function() {
   const progressBars = document.querySelectorAll('.progress-bar');

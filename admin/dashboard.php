@@ -58,9 +58,18 @@ body {
 
 .top-header .container-fluid {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 0 30px;
+}
+.top-header h2 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header-right {
+  margin-left: auto;
 }
 
 .top-header h2 {

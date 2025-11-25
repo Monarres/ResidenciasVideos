@@ -455,7 +455,7 @@ body {
       
       <div class="mt-3">
         <label class="form-label fw-bold" style="color: #9b7cb8;">
-          👔 Franquiciatario/s Asignado/s
+          👔 Franquiciatarios Asignados (opcional)
         </label>
         <div class="franquiciatarios-list">
           <?php if (empty($franquiciatarios)): ?>
@@ -526,14 +526,17 @@ body {
                 <span class="badge bg-info"><?= $u['total_usuarios'] ?> usuarios</span>
               </td>
               <td style="text-align: center;">
-                <button class="btn btn-info btn-sm me-1"
-                        onclick="verUsuarios(<?= $u['id_unidad'] ?>, '<?= htmlspecialchars($u['nombre']) ?>')">
+                <button class="btn btn-info btn-sm me-1 btn-ver-usuarios"
+                        data-id="<?= $u['id_unidad'] ?>"
+                        data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
                   👥 Ver Usuarios
                 </button>
-                <button class="btn btn-warning btn-sm me-1"
+                <button class="btn btn-warning btn-sm me-1 btn-editar"
                         data-bs-toggle="modal"
                         data-bs-target="#modalEditar"
-                        onclick="cargarDatosEdicion(<?= $u['id_unidad'] ?>, '<?= htmlspecialchars($u['nombre']) ?>', '<?= htmlspecialchars($u['direccion']) ?>')">
+                        data-id="<?= $u['id_unidad'] ?>"
+                        data-nombre="<?= htmlspecialchars($u['nombre']) ?>"
+                        data-direccion="<?= htmlspecialchars($u['direccion']) ?>">
                   ✏️ Editar
                 </button>
                 <button class="btn btn-danger btn-sm btn-delete"
@@ -625,95 +628,115 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Cargar datos de edición
-async function cargarDatosEdicion(id, nombre, direccion) {
-  document.getElementById('edit-id').value = id;
-  document.getElementById('edit-nombre').value = nombre;
-  document.getElementById('edit-direccion').value = direccion;
+// Esperar a que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
   
-  // Desmarcar todos los checkboxes
-  document.querySelectorAll('.edit-franq-check').forEach(check => check.checked = false);
-  
-  // Obtener franquiciatarios de la unidad
-  try {
-    const response = await fetch(`obtener_franquiciatarios_unidad.php?id_unidad=${id}`);
-    const data = await response.json();
-    
-    if (data.franquiciatarios) {
-      data.franquiciatarios.forEach(franqId => {
-        const checkbox = document.querySelector(`.edit-franq-check[value="${franqId}"]`);
-        if (checkbox) checkbox.checked = true;
-      });
-    }
-  } catch (error) {
-    console.error('Error al cargar franquiciatarios:', error);
-  }
-}
-
-// Ver usuarios de la unidad
-async function verUsuarios(idUnidad, nombreUnidad) {
-  document.getElementById('tituloModalUsuarios').textContent = `👥 Usuarios de: ${nombreUnidad}`;
-  document.getElementById('contenidoUsuarios').innerHTML = `
-    <div class="text-center">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
-    </div>
-  `;
-  
-  const modal = new bootstrap.Modal(document.getElementById('modalUsuarios'));
-  modal.show();
-  
-  try {
-    const response = await fetch(`obtener_usuarios_unidad.php?id_unidad=${idUnidad}`);
-    const data = await response.json();
-    
-    let html = '';
-    if (data.usuarios && data.usuarios.length > 0) {
-      html = '<div class="table-responsive"><table class="table table-hover"><thead class="table-light"><tr><th>Nombre</th><th>Email</th><th>Área</th></tr></thead><tbody>';
-      data.usuarios.forEach(usuario => {
-        html += `
-          <tr>
-            <td><strong>${usuario.nombre}</strong></td>
-            <td>${usuario.email}</td>
-            <td>${usuario.area_nombre ? '<span class="franq-badge">📁 ' + usuario.area_nombre + '</span>' : '<span class="text-muted">Sin área</span>'}</td>
-          </tr>
-        `;
-      });
-      html += '</tbody></table></div>';
-    } else {
-      html = '<div class="alert alert-info">Esta unidad no tiene usuarios asignados todavía.</div>';
-    }
-    
-    document.getElementById('contenidoUsuarios').innerHTML = html;
-  } catch (error) {
-    document.getElementById('contenidoUsuarios').innerHTML = '<div class="alert alert-danger">Error al cargar usuarios</div>';
-    console.error('Error:', error);
-  }
-}
-
-// Eliminar unidad
-document.querySelectorAll('.btn-delete').forEach(btn => {
-  btn.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const id = btn.dataset.id;
-    const nombre = btn.dataset.nombre;
-    
-    const result = await Swal.fire({
-      title: '¿Eliminar unidad?',
-      html: `Se eliminará la unidad: <strong>${nombre}</strong><br><br><small>Los usuarios de esta unidad no serán eliminados, solo se desvinculará la unidad.</small>`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      confirmButtonColor: '#dc3545',
-      cancelButtonText: 'Cancelar',
-      reverseButtons: true
+  // Cargar datos de edición
+  document.querySelectorAll('.btn-editar').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const id = this.dataset.id;
+      const nombre = this.dataset.nombre;
+      const direccion = this.dataset.direccion;
+      
+      document.getElementById('edit-id').value = id;
+      document.getElementById('edit-nombre').value = nombre;
+      document.getElementById('edit-direccion').value = direccion;
+      
+      // Desmarcar todos los checkboxes
+      document.querySelectorAll('.edit-franq-check').forEach(check => check.checked = false);
+      
+      // Obtener franquiciatarios de la unidad
+      try {
+        const response = await fetch(`obtener_franquiciatarios_unidad.php?id_unidad=${id}`);
+        const data = await response.json();
+        
+        if (data.franquiciatarios) {
+          data.franquiciatarios.forEach(franqId => {
+            const checkbox = document.querySelector(`.edit-franq-check[value="${franqId}"]`);
+            if (checkbox) checkbox.checked = true;
+          });
+        }
+      } catch (error) {
+        console.error('Error al cargar franquiciatarios:', error);
+      }
     });
-
-    if (result.isConfirmed) {
-      window.location.href = `unidades.php?eliminar=${id}`;
-    }
   });
+
+  // Ver usuarios de la unidad
+  document.querySelectorAll('.btn-ver-usuarios').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const idUnidad = this.dataset.id;
+      const nombreUnidad = this.dataset.nombre;
+      
+      console.log('Ver usuarios de unidad:', idUnidad, nombreUnidad); // Debug
+      
+      document.getElementById('tituloModalUsuarios').textContent = `👥 Usuarios de: ${nombreUnidad}`;
+      document.getElementById('contenidoUsuarios').innerHTML = `
+        <div class="text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      `;
+      
+      const modal = new bootstrap.Modal(document.getElementById('modalUsuarios'));
+      modal.show();
+      
+      try {
+        const response = await fetch(`obtener_usuarios_unidad.php?id_unidad=${idUnidad}`);
+        const data = await response.json();
+        
+        console.log('Respuesta del servidor:', data); // Debug
+        
+        let html = '';
+        if (data.usuarios && data.usuarios.length > 0) {
+          html = '<div class="table-responsive"><table class="table table-hover"><thead class="table-light"><tr><th>Nombre</th><th>Email</th><th>Área</th></tr></thead><tbody>';
+          data.usuarios.forEach(usuario => {
+            html += `
+              <tr>
+                <td><strong>${usuario.nombre}</strong></td>
+                <td>${usuario.email}</td>
+                <td>${usuario.area_nombre ? '<span class="franq-badge">🪪 ' + usuario.area_nombre + '</span>' : '<span class="text-muted">Sin área</span>'}</td>
+              </tr>
+            `;
+          });
+          html += '</tbody></table></div>';
+        } else {
+          html = '<div class="alert alert-info">Esta unidad no tiene usuarios asignados todavía.</div>';
+        }
+        
+        document.getElementById('contenidoUsuarios').innerHTML = html;
+      } catch (error) {
+        console.error('Error al cargar usuarios:', error); // Debug
+        document.getElementById('contenidoUsuarios').innerHTML = '<div class="alert alert-danger">Error al cargar usuarios: ' + error.message + '</div>';
+      }
+    });
+  });
+
+  // Eliminar unidad
+  document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const id = btn.dataset.id;
+      const nombre = btn.dataset.nombre;
+      
+      const result = await Swal.fire({
+        title: '¿Eliminar unidad?',
+        html: `Se eliminará la unidad: <strong>${nombre}</strong><br><br><small>Los usuarios de esta unidad no serán eliminados, solo se desvinculará la unidad.</small>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        confirmButtonColor: '#dc3545',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      });
+
+      if (result.isConfirmed) {
+        window.location.href = `unidades.php?eliminar=${id}`;
+      }
+    });
+  });
+  
 });
 </script>
 </body>

@@ -480,7 +480,7 @@ body {
             <option value="">-- Seleccionar área --</option>
             <?php foreach ($areas as $area): ?>
               <option value="<?= $area['id_carpeta'] ?>" <?= $id_area == $area['id_carpeta'] ? 'selected' : '' ?>>
-                📁 <?= htmlspecialchars($area['nombre']) ?>
+                🪪 <?= htmlspecialchars($area['nombre']) ?>
               </option>
             <?php endforeach; ?>
           </select>

@@ -43,9 +43,17 @@ try {
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; padding-top:100px; }
 .top-header { position:fixed; top:0; left:0; right:0; background:linear-gradient(135deg,#b893cc,#f5a3c7); box-shadow:0 2px 10px rgba(0,0,0,0.15); z-index:1000; padding:20px 0; margin:15px; border-radius:20px; }
-.top-header .container-fluid { display:flex; justify-content:space-between; align-items:center; padding:0 30px; }
+.top-header .container-fluid { display:flex; justify-content:center; align-items:center; padding:0 30px; }
 .top-header h2 { color:white; font-weight:600; margin:0; font-size:1.5rem; }
+.top-header h2 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
+.header-right {
+  margin-left: auto;
+}
 .header-right {
   display: flex;
   align-items: center;

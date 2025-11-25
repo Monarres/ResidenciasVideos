@@ -88,9 +88,59 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       margin-left: auto;
     }
 
-    .user-name {
+    .user-section {
+      position: relative;
+    }
+
+    .user-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
       color: white;
       font-weight: 500;
+      border-radius: 25px;
+      padding: 8px 20px;
+      cursor: pointer;
+      display: inline-flex;
+      gap: 8px;
+      transition: 0.3s;
+    }
+
+    .user-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 10px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(155,124,184,0.3);
+      min-width: 200px;
+      padding: 10px;
+      display: none;
+      z-index: 1001;
+    }
+
+    .user-dropdown.show {
+      display: block;
+    }
+
+    .user-dropdown-item {
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 500;
+      text-decoration: none;
+      color: #dc3545;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: 0.3s;
+    }
+
+    .user-dropdown-item:hover {
+      background: #f8f9fa;
     }
 
     .btn-volver {
@@ -270,10 +320,6 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         font-size: 1.2rem;
       }
 
-      .user-name {
-        display: none;
-      }
-
       .btn-volver {
         padding: 6px 15px;
         font-size: 0.9rem;
@@ -287,7 +333,19 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="container-fluid">
     <h2>📂 <?= htmlspecialchars($carpeta['nombre']) ?> </h2>
     <div class="header-actions">
-      <span class="user-name"><?= htmlspecialchars($_SESSION['nombre'] ?? 'Franquiciatario') ?></span>
+      <!-- Usuario Desplegable -->
+      <div class="user-section">
+        <button class="user-toggle" id="userToggle">
+          👤 <?= htmlspecialchars($_SESSION['nombre'] ?? 'Franquiciatario') ?> ▼
+        </button>
+
+        <div class="user-dropdown" id="userDropdown">
+          <a href="usuarios_franquiciatario.php" class="user-dropdown-item" style="color: #9b7cb8;">👥 Mis Usuarios</a>
+          <a href="../logout.php" class="user-dropdown-item">🚪 Cerrar sesión</a>
+        </div>
+      </div>
+
+      <!-- Botón Volver -->
       <a href="area.php?id=<?= $carpeta['id_padre'] ?>" class="btn-volver">
         ⬅ Volver
       </a>
@@ -381,6 +439,20 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   <?php endif; ?>
 </div>
+
+<script>
+const userToggle = document.getElementById('userToggle');
+const userDropdown = document.getElementById('userDropdown');
+
+userToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  userDropdown.classList.toggle('show');
+});
+
+document.addEventListener('click', () => {
+  userDropdown.classList.remove('show');
+});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

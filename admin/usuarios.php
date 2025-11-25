@@ -18,28 +18,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['accion']) && $_POST['
     $contrasena = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $rol = $_POST['rol'];
     $id_carpeta = ($rol === 'usuario' && !empty($_POST['id_carpeta'])) ? (int)$_POST['id_carpeta'] : null;
+    $id_unidad = ($rol === 'usuario' && !empty($_POST['id_unidad'])) ? (int)$_POST['id_unidad'] : null;
 
     if (!empty($nombre) && !empty($email) && !empty($_POST['password'])) {
-        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, contrasena, rol, id_carpeta) 
-                               VALUES (:nombre, :email, :contrasena, :rol, :id_carpeta)");
+        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, email, contrasena, rol, id_carpeta, id_unidad) 
+                               VALUES (:nombre, :email, :contrasena, :rol, :id_carpeta, :id_unidad)");
         try {
             $stmt->execute([
                 'nombre' => $nombre,
                 'email' => $email,
                 'contrasena' => $contrasena,
                 'rol' => $rol,
-                'id_carpeta' => $id_carpeta
+                'id_carpeta' => $id_carpeta,
+                'id_unidad' => $id_unidad
             ]);
-            $mensaje = "Usuario agregado correctamente";
-            $tipo_mensaje = "success";
             header("Location: usuarios.php?msg=success");
             exit;
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
-                $mensaje = "El correo ya está registrado. Intenta con otro.";
+                $mensaje = "El correo ya está registrado.";
                 $tipo_mensaje = "danger";
             } else {
-                $mensaje = "Error al insertar usuario: " . $e->getMessage();
+                $mensaje = "Error: " . $e->getMessage();
                 $tipo_mensaje = "danger";
             }
         }
@@ -56,14 +56,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['accion']) && $_POST['
     $email = trim($_POST['email']);
     $rol = $_POST['rol'];
     $id_carpeta = ($rol === 'usuario' && !empty($_POST['id_carpeta'])) ? (int)$_POST['id_carpeta'] : null;
+    $id_unidad = ($rol === 'usuario' && !empty($_POST['id_unidad'])) ? (int)$_POST['id_unidad'] : null;
 
     if (!empty($_POST['password'])) {
         $contrasena = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, contrasena = :contrasena, rol = :rol, id_carpeta = :id_carpeta WHERE id_usuario = :id";
-        $params = ['nombre' => $nombre, 'email' => $email, 'contrasena' => $contrasena, 'rol' => $rol, 'id_carpeta' => $id_carpeta, 'id' => $id];
+        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, contrasena = :contrasena, rol = :rol, id_carpeta = :id_carpeta, id_unidad = :id_unidad WHERE id_usuario = :id";
+        $params = ['nombre' => $nombre, 'email' => $email, 'contrasena' => $contrasena, 'rol' => $rol, 'id_carpeta' => $id_carpeta, 'id_unidad' => $id_unidad, 'id' => $id];
     } else {
-        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, rol = :rol, id_carpeta = :id_carpeta WHERE id_usuario = :id";
-        $params = ['nombre' => $nombre, 'email' => $email, 'rol' => $rol, 'id_carpeta' => $id_carpeta, 'id' => $id];
+        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email, rol = :rol, id_carpeta = :id_carpeta, id_unidad = :id_unidad WHERE id_usuario = :id";
+        $params = ['nombre' => $nombre, 'email' => $email, 'rol' => $rol, 'id_carpeta' => $id_carpeta, 'id_unidad' => $id_unidad, 'id' => $id];
     }
 
     try {
@@ -72,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['accion']) && $_POST['
         header("Location: usuarios.php?msg=updated");
         exit;
     } catch (PDOException $e) {
-        $mensaje = "Error al actualizar usuario: " . $e->getMessage();
+        $mensaje = "Error: " . $e->getMessage();
         $tipo_mensaje = "danger";
     }
 }
@@ -82,10 +83,8 @@ if (isset($_GET['eliminar'])) {
     $id = (int) $_GET['eliminar'];
     
     try {
-        // Iniciar transacción
         $pdo->beginTransaction();
         
-        // Primero verificar si el usuario tiene respuestas
         $stmt = $pdo->prepare("SELECT 
                               (SELECT COUNT(*) FROM respuestas_usuario WHERE id_usuario = ?) as total_incisos,
                               (SELECT COUNT(*) FROM respuestas_archivo WHERE id_usuario = ?) as total_archivos");
@@ -94,78 +93,68 @@ if (isset($_GET['eliminar'])) {
         
         $tiene_respuestas = ($totales['total_incisos'] > 0 || $totales['total_archivos'] > 0);
         
-        // Si tiene respuestas, eliminarlas primero
         if ($tiene_respuestas) {
-            // Obtener rutas de archivos para eliminarlos físicamente
             $stmt = $pdo->prepare("SELECT ruta_archivo FROM respuestas_archivo WHERE id_usuario = ?");
             $stmt->execute([$id]);
             $archivos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            // Eliminar archivos físicos
             foreach ($archivos as $archivo) {
                 if (file_exists($archivo['ruta_archivo'])) {
                     unlink($archivo['ruta_archivo']);
                 }
             }
             
-            // Eliminar respuestas de archivo
             $stmt = $pdo->prepare("DELETE FROM respuestas_archivo WHERE id_usuario = ?");
             $stmt->execute([$id]);
             
-            // Eliminar respuestas de cuestionarios
             $stmt = $pdo->prepare("DELETE FROM respuestas_usuario WHERE id_usuario = ?");
             $stmt->execute([$id]);
         }
         
-        // Finalmente eliminar el usuario
         $stmt = $pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
         $stmt->execute([$id]);
         
-        // Confirmar transacción
         $pdo->commit();
-        
         header("Location: usuarios.php?msg=deleted");
         exit;
         
     } catch (PDOException $e) {
-        // Revertir transacción en caso de error
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
-        
-        $mensaje = "Error al eliminar usuario: " . $e->getMessage();
+        $mensaje = "Error: " . $e->getMessage();
         $tipo_mensaje = "danger";
     }
 }
 
-// Mensajes desde redirect
+// Mensajes
 if (isset($_GET['msg'])) {
     switch ($_GET['msg']) {
-        case 'success':
-            $mensaje = "✅ Usuario agregado correctamente";
-            $tipo_mensaje = "success";
-            break;
-        case 'updated':
-            $mensaje = "✅ Usuario actualizado correctamente";
-            $tipo_mensaje = "success";
-            break;
-        case 'deleted':
-            $mensaje = "✅ Usuario eliminado correctamente";
-            $tipo_mensaje = "success";
-            break;
+        case 'success': $mensaje = "✅ Usuario agregado"; $tipo_mensaje = "success"; break;
+        case 'updated': $mensaje = "✅ Usuario actualizado"; $tipo_mensaje = "success"; break;
+        case 'deleted': $mensaje = "✅ Usuario eliminado"; $tipo_mensaje = "success"; break;
     }
 }
 
 // 🔹 Listar usuarios
-$stmt = $pdo->query("SELECT u.*, c.nombre as area_nombre 
+$stmt = $pdo->query("SELECT u.*, 
+                     c.nombre as area_nombre, 
+                     un.nombre as unidad_nombre,
+                     GROUP_CONCAT(DISTINCT un_franq.nombre SEPARATOR ', ') as unidades_franquiciatario
                      FROM usuarios u 
                      LEFT JOIN carpetas c ON u.id_carpeta = c.id_carpeta 
+                     LEFT JOIN unidades un ON u.id_unidad = un.id_unidad
+                     LEFT JOIN unidad_franquiciatarios uf ON u.id_usuario = uf.id_usuario
+                     LEFT JOIN unidades un_franq ON uf.id_unidad = un_franq.id_unidad
+                     GROUP BY u.id_usuario
                      ORDER BY u.id_usuario DESC");
 $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Obtener todas las áreas para el selector
 $stmt_areas = $pdo->query("SELECT id_carpeta, nombre FROM carpetas WHERE id_padre IS NULL ORDER BY nombre ASC");
 $areas = $stmt_areas->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt_unidades = $pdo->query("SELECT id_unidad, nombre, direccion FROM unidades ORDER BY nombre ASC");
+$unidades_disponibles = $stmt_unidades->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -381,37 +370,6 @@ body {
   border-radius: 20px;
 }
 
-.swal2-popup {
-  border-radius: 20px !important;
-  font-family: 'Poppins', sans-serif !important;
-  padding: 30px !important;
-  background: #ffffff !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
-}
-
-.swal2-title {
-  color: #9b7cb8 !important;
-  font-weight: 700 !important;
-  font-size: 1.8rem !important;
-  margin-bottom: 20px !important;
-}
-
-.swal2-confirm {
-  background: linear-gradient(135deg, #f5a3c7, #9b7cb8) !important;
-  border: none !important;
-  border-radius: 25px !important;
-  padding: 12px 35px !important;
-  font-weight: 600 !important;
-}
-
-.swal2-cancel {
-  background: white !important;
-  border: 2px solid #9b7cb8 !important;
-  border-radius: 25px !important;
-  padding: 12px 35px !important;
-  color: #9b7cb8 !important;
-}
-
 .select-area-container {
   display: none;
   margin-top: 15px;
@@ -435,10 +393,53 @@ body {
   display: inline-block;
 }
 
+.unidad-badge {
+  background: linear-gradient(135deg, rgba(23, 162, 184, 0.2), rgba(19, 132, 150, 0.2));
+  color: #138496;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+  margin: 2px;
+}
+
 .no-area {
   color: #999;
   font-style: italic;
   font-size: 0.9rem;
+}
+
+.nav-pills .nav-link {
+  color: #9b7cb8;
+  font-weight: 500;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  background: white;
+  border: 2px solid #e0e0e0;
+}
+
+.nav-pills .nav-link:hover {
+  background: rgba(155, 124, 184, 0.1);
+  border-color: #9b7cb8;
+}
+
+.nav-pills .nav-link.active {
+  background: linear-gradient(135deg, #f5a3c7, #9b7cb8);
+  color: white;
+  border-color: transparent;
+}
+
+.nav-pills .nav-link .badge {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+}
+
+.nav-pills .nav-link.active .badge {
+  background: white !important;
+  color: #9b7cb8 !important;
 }
 
 @media (max-width: 768px) {
@@ -463,6 +464,13 @@ body {
   .table {
     font-size: 0.85rem;
   }
+  
+  .nav-pills .nav-link {
+    font-size: 0.85rem;
+    padding: 8px 15px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
 }
   </style>
 </head>
@@ -472,6 +480,7 @@ body {
   <div class="container-fluid">
     <h2>👥 Gestión de Usuarios</h2>
     <div class="user-info">
+      <a href="unidades.php" class="btn-logout">🏢 Unidades</a>
       <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
     </div>
   </div>
@@ -518,102 +527,294 @@ body {
         </div>
       </div>
       
-      <!-- Panel de selección de área (solo para usuarios) -->
-      <div id="areaSelectContainer" class="select-area-container">
-        <label class="form-label fw-bold" style="color: #9b7cb8;">
-          📁 Seleccionar Área de Acceso
-        </label>
-        <select name="id_carpeta" id="areaSelect" class="form-select">
-          <option value="">-- Seleccionar área --</option>
-          <?php foreach($areas as $area): ?>
-            <option value="<?= $area['id_carpeta'] ?>"><?= htmlspecialchars($area['nombre']) ?></option>
-          <?php endforeach; ?>
-        </select>
-        <small class="text-muted d-block mt-2">
-          ℹ️ El usuario solo tendrá acceso al área seleccionada
-        </small>
+      <div id="areaUnidadContainer" class="select-area-container">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold" style="color: #9b7cb8;">🪪 Seleccionar Área de Acceso</label>
+            <select name="id_carpeta" id="areaSelect" class="form-select">
+              <option value="">-- Seleccionar área --</option>
+              <?php foreach($areas as $area): ?>
+                <option value="<?= $area['id_carpeta'] ?>"><?= htmlspecialchars($area['nombre']) ?></option>
+              <?php endforeach; ?>
+            </select>
+            <small class="text-muted d-block mt-2">ℹ️ Área a la que tendrá acceso el usuario</small>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold" style="color: #138496;">🏢 Seleccionar Unidad</label>
+            <select name="id_unidad" id="unidadSelect" class="form-select">
+              <option value="">-- Seleccionar unidad --</option>
+              <?php foreach($unidades_disponibles as $unidad): ?>
+                <option value="<?= $unidad['id_unidad'] ?>">
+                  <?= htmlspecialchars($unidad['nombre']) ?> 
+                  <small>(<?= htmlspecialchars($unidad['direccion']) ?>)</small>
+                </option>
+              <?php endforeach; ?>
+            </select>
+            <small class="text-muted d-block mt-2">ℹ️ Unidad a la que pertenece el usuario</small>
+          </div>
+        </div>
       </div>
     </form>
   </div>
-
-  <!-- Tabla de usuarios -->
+<!-- Tabla de usuarios con pestañas -->
   <div class="card p-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 style="color: #9b7cb8; font-weight: 600; margin: 0;">📋 Lista de Usuarios</h5>
-      <span class="badge"><?= count($usuarios) ?> usuarios</span>
+      <span class="badge"><?= count($usuarios) ?> usuarios totales</span>
     </div>
     
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Rol</th>
-            <th>Área</th>
-            <th style="text-align: center;">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php $i=1; foreach ($usuarios as $u): ?>
-          <tr>
-            <td><?= $i++ ?></td>
-            <td><?= htmlspecialchars($u['nombre']) ?></td>
-            <td><?= htmlspecialchars($u['email']) ?></td>
-            <td>
-              <span class="badge bg-secondary" style="font-size: 0.85rem;">
-                <?php 
-                  if($u['rol'] === 'admin') echo '👑 Administrador';
-                  elseif($u['rol'] === 'franquiciatario') echo '🏢 Franquiciatario';
-                  else echo '👤 Usuario';
-                ?>
-              </span>
-            </td>
-            <td>
-              <?php if($u['area_nombre']): ?>
-                <span class="area-badge">📁 <?= htmlspecialchars($u['area_nombre']) ?></span>
+    <!-- Pestañas de navegación -->
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-usuarios-tab" data-bs-toggle="pill" data-bs-target="#pills-usuarios" type="button" role="tab">
+          👤 Usuarios
+          <span class="badge bg-light text-dark ms-1">
+            <?php 
+            $count_usuarios = count(array_filter($usuarios, function($u) {
+                return $u['rol'] === 'usuario';
+            }));
+            echo $count_usuarios;
+            ?>
+          </span>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-franquiciatarios-tab" data-bs-toggle="pill" data-bs-target="#pills-franquiciatarios" type="button" role="tab">
+          🏢 Franquiciatarios
+          <span class="badge bg-light text-dark ms-1">
+            <?php 
+            $count_franq = count(array_filter($usuarios, function($u) {
+                return $u['rol'] === 'franquiciatario';
+            }));
+            echo $count_franq;
+            ?>
+          </span>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-admin-tab" data-bs-toggle="pill" data-bs-target="#pills-admin" type="button" role="tab">
+          👑 Administradores
+          <span class="badge bg-light text-dark ms-1">
+            <?php 
+            $count_admin = count(array_filter($usuarios, function($u) {
+                return $u['rol'] === 'admin';
+            }));
+            echo $count_admin;
+            ?>
+          </span>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Contenido de las pestañas -->
+    <div class="tab-content" id="pills-tabContent">
+      
+      <!-- Tab Usuarios -->
+      <div class="tab-pane fade show active" id="pills-usuarios" role="tabpanel">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Área</th>
+                <th>Unidad</th>
+                <th style="text-align: center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php 
+              $usuarios_filtrados = array_filter($usuarios, function($u) {
+                  return $u['rol'] === 'usuario';
+              });
+              if(empty($usuarios_filtrados)): 
+              ?>
+                <tr>
+                  <td colspan="6" class="text-center text-muted">No hay usuarios registrados</td>
+                </tr>
               <?php else: ?>
-                <span class="no-area">— Acceso total —</span>
+                <?php $i=1; foreach ($usuarios_filtrados as $u): ?>
+                <tr>
+                  <td><?= $i++ ?></td>
+                  <td><?= htmlspecialchars($u['nombre']) ?></td>
+                  <td><?= htmlspecialchars($u['email']) ?></td>
+                  <td>
+                    <?php if($u['area_nombre']): ?>
+                      <span class="area-badge">🪪 <?= htmlspecialchars($u['area_nombre']) ?></span>
+                    <?php else: ?>
+                      <span class="no-area">—</span>
+                    <?php endif; ?>
+                  </td>
+                  <td>
+                    <?php if($u['unidad_nombre']): ?>
+                      <span class="unidad-badge">🏢 <?= htmlspecialchars($u['unidad_nombre']) ?></span>
+                    <?php else: ?>
+                      <span class="no-area">—</span>
+                    <?php endif; ?>
+                  </td>
+                  <td style="text-align: center;">
+                    <button class="btn btn-warning btn-sm me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEditar"
+                            data-id="<?= $u['id_usuario'] ?>"
+                            data-nombre="<?= htmlspecialchars($u['nombre']) ?>"
+                            data-email="<?= htmlspecialchars($u['email']) ?>"
+                            data-rol="<?= $u['rol'] ?>"
+                            data-carpeta="<?= $u['id_carpeta'] ?? '' ?>"
+                            data-unidad="<?= $u['id_unidad'] ?? '' ?>">
+                      ✏️Editar
+                    </button>
+                    
+                    <button class="btn btn-danger btn-sm btn-delete me-1"
+                            data-id="<?= $u['id_usuario'] ?>"
+                            data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
+                      🗑️Eliminar
+                    </button>
+                    
+                    <button class="btn btn-reset btn-sm"
+                            data-id="<?= $u['id_usuario'] ?>"
+                            data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
+                      🔄Rehacer
+                    </button>
+                  </td>
+                </tr>
+                <?php endforeach; ?>
               <?php endif; ?>
-            </td>
-            <td style="text-align: center;">
-              <button class="btn btn-warning btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalEditar"
-                      data-id="<?= $u['id_usuario'] ?>"
-                      data-nombre="<?= htmlspecialchars($u['nombre']) ?>"
-                      data-email="<?= htmlspecialchars($u['email']) ?>"
-                      data-rol="<?= $u['rol'] ?>"
-                      data-carpeta="<?= $u['id_carpeta'] ?? '' ?>">
-                ✏️ Editar
-              </button>
-              
-              <button class="btn btn-danger btn-sm btn-delete me-1"
-                      data-id="<?= $u['id_usuario'] ?>"
-                      data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
-                🗑️ Eliminar
-              </button>
-              
-              <?php if($u['rol'] === 'usuario'): ?>
-              <button class="btn btn-reset btn-sm"
-                      data-id="<?= $u['id_usuario'] ?>"
-                      data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
-                🔄 Resetear
-              </button>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Franquiciatarios -->
+      <div class="tab-pane fade" id="pills-franquiciatarios" role="tabpanel">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Unidades Asignadas</th>
+                <th style="text-align: center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php 
+              $franquiciatarios_filtrados = array_filter($usuarios, function($u) {
+                  return $u['rol'] === 'franquiciatario';
+              });
+              if(empty($franquiciatarios_filtrados)): 
+              ?>
+                <tr>
+                  <td colspan="5" class="text-center text-muted">No hay franquiciatarios registrados</td>
+                </tr>
+              <?php else: ?>
+                <?php $i=1; foreach ($franquiciatarios_filtrados as $u): ?>
+                <tr>
+                  <td><?= $i++ ?></td>
+                  <td><?= htmlspecialchars($u['nombre']) ?></td>
+                  <td><?= htmlspecialchars($u['email']) ?></td>
+                  <td>
+                    <?php if($u['unidades_franquiciatario']): ?>
+                      <?php 
+                        $unidades = explode(', ', $u['unidades_franquiciatario']);
+                        foreach($unidades as $unidad): 
+                      ?>
+                        <span class="unidad-badge">🏢 <?= htmlspecialchars($unidad) ?></span>
+                      <?php endforeach; ?>
+                    <?php else: ?>
+                      <span class="no-area">Sin unidades asignadas</span>
+                    <?php endif; ?>
+                  </td>
+                  <td style="text-align: center;">
+                    <button class="btn btn-warning btn-sm me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEditar"
+                            data-id="<?= $u['id_usuario'] ?>"
+                            data-nombre="<?= htmlspecialchars($u['nombre']) ?>"
+                            data-email="<?= htmlspecialchars($u['email']) ?>"
+                            data-rol="<?= $u['rol'] ?>"
+                            data-carpeta="<?= $u['id_carpeta'] ?? '' ?>"
+                            data-unidad="<?= $u['id_unidad'] ?? '' ?>">
+                      ✏️Editar
+                    </button>
+                    
+                    <button class="btn btn-danger btn-sm btn-delete"
+                            data-id="<?= $u['id_usuario'] ?>"
+                            data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
+                      🗑️Eliminar
+                    </button>
+                  </td>
+                </tr>
+                <?php endforeach; ?>
               <?php endif; ?>
-            </td>
-          </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Administradores -->
+      <div class="tab-pane fade" id="pills-admin" role="tabpanel">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th style="text-align: center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php 
+              $admin_filtrados = array_filter($usuarios, function($u) {
+                  return $u['rol'] === 'admin';
+              });
+              if(empty($admin_filtrados)): 
+              ?>
+                <tr>
+                  <td colspan="4" class="text-center text-muted">No hay administradores registrados</td>
+                </tr>
+              <?php else: ?>
+                <?php $i=1; foreach ($admin_filtrados as $u): ?>
+                <tr>
+                  <td><?= $i++ ?></td>
+                  <td><?= htmlspecialchars($u['nombre']) ?></td>
+                  <td><?= htmlspecialchars($u['email']) ?></td>
+                  <td style="text-align: center;">
+                    <button class="btn btn-warning btn-sm me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEditar"
+                            data-id="<?= $u['id_usuario'] ?>"
+                            data-nombre="<?= htmlspecialchars($u['nombre']) ?>"
+                            data-email="<?= htmlspecialchars($u['email']) ?>"
+                            data-rol="<?= $u['rol'] ?>"
+                            data-carpeta="<?= $u['id_carpeta'] ?? '' ?>"
+                            data-unidad="<?= $u['id_unidad'] ?? '' ?>">
+                      ✏️Editar
+                    </button>
+                    
+                    <button class="btn btn-danger btn-sm btn-delete"
+                            data-id="<?= $u['id_usuario'] ?>"
+                            data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
+                      🗑️Eliminar
+                    </button>
+                  </td>
+                </tr>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
-
 <!-- Modal Editar -->
 <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <form method="POST" class="modal-content" id="formEditarUsuario">
       <input type="hidden" name="accion" value="editar">
       <input type="hidden" name="id_usuario" id="edit-id">
@@ -622,15 +823,17 @@ body {
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="mb-3">
-          <label class="form-label fw-bold">Nombre</label>
-          <input type="text" class="form-control" name="nombre" id="edit-nombre" required>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Nombre</label>
+            <input type="text" class="form-control" name="nombre" id="edit-nombre" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Correo</label>
+            <input type="email" class="form-control" name="email" id="edit-email" required>
+          </div>
         </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold">Correo</label>
-          <input type="email" class="form-control" name="email" id="edit-email" required>
-        </div>
-        <div class="mb-3">
+        <div class="mb-3 mt-3">
           <label class="form-label fw-bold">Nueva Contraseña (opcional)</label>
           <input type="password" class="form-control" name="password" placeholder="Dejar vacío para no cambiar">
         </div>
@@ -643,17 +846,34 @@ body {
           </select>
         </div>
         
-        <!-- Panel de selección de área en el modal -->
-        <div id="editAreaSelectContainer" class="select-area-container">
-          <label class="form-label fw-bold" style="color: #9b7cb8;">
-            📁 Seleccionar Área de Acceso
-          </label>
-          <select name="id_carpeta" id="edit-area" class="form-select">
-            <option value="">-- Seleccionar área --</option>
-            <?php foreach($areas as $area): ?>
-              <option value="<?= $area['id_carpeta'] ?>"><?= htmlspecialchars($area['nombre']) ?></option>
-            <?php endforeach; ?>
-          </select>
+        <!-- Panel de selección de área y unidad en el modal -->
+        <div id="editAreaUnidadContainer" class="select-area-container">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-bold" style="color: #9b7cb8;">
+                🪪 Área de Acceso
+              </label>
+              <select name="id_carpeta" id="edit-area" class="form-select">
+                <option value="">-- Seleccionar área --</option>
+                <?php foreach($areas as $area): ?>
+                  <option value="<?= $area['id_carpeta'] ?>"><?= htmlspecialchars($area['nombre']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold" style="color: #138496;">
+                🏢 Unidad
+              </label>
+              <select name="id_unidad" id="edit-unidad" class="form-select">
+                <option value="">-- Seleccionar unidad --</option>
+                <?php foreach($unidades_disponibles as $unidad): ?>
+                  <option value="<?= $unidad['id_unidad'] ?>">
+                    <?= htmlspecialchars($unidad['nombre']) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -678,7 +898,6 @@ body {
         <div class="alert alert-warning" style="border-radius: 15px;">
           <strong>⚠️ Advertencia:</strong><br>
           Se eliminarán todas las respuestas (cuestionarios y archivos) del módulo seleccionado.
-          El usuario deberá volver a contestar ese módulo completo.
         </div>
         
         <div class="mb-3">
@@ -687,15 +906,10 @@ body {
         </div>
         
         <div class="mb-3">
-          <label class="form-label fw-bold" style="color: #9b7cb8;">
-            📁 Seleccionar Módulo a Resetear
-          </label>
+          <label class="form-label fw-bold" style="color: #9b7cb8;">📁 Módulo a Resetear</label>
           <select id="reset-modulo" class="form-select" required>
             <option value="">-- Seleccionar módulo --</option>
           </select>
-          <small class="text-muted d-block mt-2">
-            ℹ️ Solo se mostrarán los módulos donde el usuario tiene respuestas registradas
-          </small>
         </div>
         
         <div id="reset-detalles" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 15px;">
@@ -718,35 +932,43 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Mostrar/ocultar selector de área según el rol (formulario agregar)
+// Mostrar/ocultar selector de área y unidad según el rol (formulario agregar)
 const rolSelect = document.getElementById('rolSelect');
-const areaSelectContainer = document.getElementById('areaSelectContainer');
+const areaUnidadContainer = document.getElementById('areaUnidadContainer');
 const areaSelect = document.getElementById('areaSelect');
+const unidadSelect = document.getElementById('unidadSelect');
 
 rolSelect.addEventListener('change', function() {
   if (this.value === 'usuario') {
-    areaSelectContainer.classList.add('show');
-    areaSelect.required = true;
-  } else {
-    areaSelectContainer.classList.remove('show');
+    areaUnidadContainer.classList.add('show');
     areaSelect.required = false;
+    unidadSelect.required = false;
+  } else {
+    areaUnidadContainer.classList.remove('show');
+    areaSelect.required = false;
+    unidadSelect.required = false;
     areaSelect.value = '';
+    unidadSelect.value = '';
   }
 });
 
-// Mostrar/ocultar selector de área según el rol (modal editar)
+// Mostrar/ocultar selector de área y unidad según el rol (modal editar)
 const editRolSelect = document.getElementById('edit-rol');
-const editAreaSelectContainer = document.getElementById('editAreaSelectContainer');
+const editAreaUnidadContainer = document.getElementById('editAreaUnidadContainer');
 const editAreaSelect = document.getElementById('edit-area');
+const editUnidadSelect = document.getElementById('edit-unidad');
 
 editRolSelect.addEventListener('change', function() {
   if (this.value === 'usuario') {
-    editAreaSelectContainer.classList.add('show');
-    editAreaSelect.required = true;
-  } else {
-    editAreaSelectContainer.classList.remove('show');
+    editAreaUnidadContainer.classList.add('show');
     editAreaSelect.required = false;
+    editUnidadSelect.required = false;
+  } else {
+    editAreaUnidadContainer.classList.remove('show');
+    editAreaSelect.required = false;
+    editUnidadSelect.required = false;
     editAreaSelect.value = '';
+    editUnidadSelect.value = '';
   }
 });
 
@@ -760,26 +982,29 @@ modalEditar.addEventListener('show.bs.modal', event => {
   document.getElementById('edit-rol').value = button.getAttribute('data-rol');
   
   const carpetaId = button.getAttribute('data-carpeta');
+  const unidadId = button.getAttribute('data-unidad');
   document.getElementById('edit-area').value = carpetaId || '';
+  document.getElementById('edit-unidad').value = unidadId || '';
   
-  // Mostrar u ocultar el selector de área según el rol
+  // Mostrar u ocultar el selector de área y unidad según el rol
   if (button.getAttribute('data-rol') === 'usuario') {
-    editAreaSelectContainer.classList.add('show');
-    editAreaSelect.required = true;
-  } else {
-    editAreaSelectContainer.classList.remove('show');
+    editAreaUnidadContainer.classList.add('show');
     editAreaSelect.required = false;
+    editUnidadSelect.required = false;
+  } else {
+    editAreaUnidadContainer.classList.remove('show');
+    editAreaSelect.required = false;
+    editUnidadSelect.required = false;
   }
 });
 
-// Eliminar usuario con SweetAlert2 - Versión mejorada con advertencia de respuestas
+// Eliminar usuario con SweetAlert2
 document.querySelectorAll('.btn-delete').forEach(btn => {
   btn.addEventListener('click', async (e) => {
     e.preventDefault();
     const id = btn.dataset.id;
     const nombre = btn.dataset.nombre;
     
-    // Primero verificar si el usuario tiene respuestas
     try {
       const response = await fetch(`verificar_respuestas.php?id_usuario=${id}`);
       const data = await response.json();
@@ -813,7 +1038,6 @@ document.querySelectorAll('.btn-delete').forEach(btn => {
       });
 
       if (result.isConfirmed) {
-        // Mostrar loading
         Swal.fire({
           title: 'Eliminando...',
           text: 'Por favor espera',
@@ -830,7 +1054,6 @@ document.querySelectorAll('.btn-delete').forEach(btn => {
       
     } catch (error) {
       console.error('Error:', error);
-      // Si falla la verificación, mostrar mensaje simple
       const result = await Swal.fire({
         title: '¿Eliminar usuario?',
         text: `Se eliminará a ${nombre} y todas sus respuestas`,
@@ -846,11 +1069,6 @@ document.querySelectorAll('.btn-delete').forEach(btn => {
     }
   });
 });
-
-// ========================================
-// FUNCIONALIDAD DE RESETEAR RESPUESTAS
-// ========================================
-
 // Abrir modal de resetear respuestas
 document.querySelectorAll('.btn-reset').forEach(btn => {
   btn.addEventListener('click', async () => {
@@ -862,7 +1080,6 @@ document.querySelectorAll('.btn-reset').forEach(btn => {
     document.getElementById('reset-detalles').style.display = 'none';
     document.getElementById('btnConfirmarReset').disabled = true;
     
-    // Obtener módulos con respuestas del usuario
     try {
       const response = await fetch(`obtener_modulos_usuario.php?id_usuario=${idUsuario}`);
       const data = await response.json();
@@ -880,7 +1097,6 @@ document.querySelectorAll('.btn-reset').forEach(btn => {
           selectModulo.appendChild(option);
         });
         
-        // Mostrar modal
         const modal = new bootstrap.Modal(document.getElementById('modalResetear'));
         modal.show();
       } else {
@@ -941,7 +1157,6 @@ document.getElementById('btnConfirmarReset').addEventListener('click', async fun
   });
   
   if (result.isConfirmed) {
-    // Mostrar loading
     Swal.fire({
       title: 'Eliminando respuestas...',
       text: 'Por favor espera',
@@ -971,7 +1186,6 @@ document.getElementById('btnConfirmarReset').addEventListener('click', async fun
           icon: 'success',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          // Cerrar modal y recargar
           bootstrap.Modal.getInstance(document.getElementById('modalResetear')).hide();
           location.reload();
         });

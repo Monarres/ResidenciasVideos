@@ -504,7 +504,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>📂 <?= htmlspecialchars($carpeta['nombre']) ?></h2>
+    <h2>📚 <?= htmlspecialchars($carpeta['nombre']) ?></h2>
     <div class="header-right">
   <!-- Sección de Usuario con Cerrar Sesión -->
   <div class="user-section">
@@ -697,12 +697,6 @@ document.addEventListener('click', function(e) {
     userDropdown.classList.remove('show');
   }
 });
-function escapeHtml(str) {
-  if (!str) return '';
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
 
 // FUNCIÓN AUXILIAR
 function escapeHtml(str) {
@@ -712,6 +706,44 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// Función para reordenar opciones después de eliminar
+function reordenarOpciones(contenedorOpciones, selectRespuesta) {
+  const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const opcionesItems = contenedorOpciones.querySelectorAll('.opcion-item');
+  const respuestaSeleccionada = selectRespuesta.value;
+  
+  // Mapeo de letras antiguas a nuevas
+  const mapeoLetras = {};
+  
+  opcionesItems.forEach((item, index) => {
+    const letraAntigua = item.getAttribute('data-letra');
+    const letraNueva = letras[index];
+    mapeoLetras[letraAntigua] = letraNueva;
+    
+    // Actualizar la letra en el DOM
+    item.setAttribute('data-letra', letraNueva);
+    item.querySelector('.input-group-text').textContent = letraNueva;
+    item.querySelector('.opcion-texto').placeholder = `Opción ${letraNueva}`;
+  });
+  
+  // Reconstruir el select con las letras actualizadas
+  selectRespuesta.innerHTML = '<option value="">Selecciona la respuesta correcta</option>';
+  
+  opcionesItems.forEach((item, index) => {
+    const letra = letras[index];
+    const option = document.createElement('option');
+    option.value = letra;
+    option.textContent = letra;
+    selectRespuesta.appendChild(option);
+  });
+  
+  // Actualizar la respuesta seleccionada si existía
+  if (respuestaSeleccionada && mapeoLetras[respuestaSeleccionada]) {
+    selectRespuesta.value = mapeoLetras[respuestaSeleccionada];
+  } else {
+    selectRespuesta.value = '';
+  }
+}
 // BOTÓN AÑADIR VIDEO - CON INCISOS DINÁMICOS Y ENVÍO COMPLETO
 document.getElementById("btnAddVideo").addEventListener("click", async () => {
   const { value: formValues } = await Swal.fire({
@@ -783,24 +815,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
                 </button>
               </div>
               <div class="contenedor-opciones">
-                <div class="opcion-item mb-2" data-letra="A">
-                  <div class="input-group">
-                    <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">A</span>
-                    <input type="text" class="form-control opcion-texto" placeholder="Opción A" style="border-radius: 0 10px 10px 0;">
-                  </div>
-                </div>
-                <div class="opcion-item mb-2" data-letra="B">
-                  <div class="input-group">
-                    <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">B</span>
-                    <input type="text" class="form-control opcion-texto" placeholder="Opción B" style="border-radius: 0 10px 10px 0;">
-                  </div>
-                </div>
-                <div class="opcion-item mb-2" data-letra="C">
-                  <div class="input-group">
-                    <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">C</span>
-                    <input type="text" class="form-control opcion-texto" placeholder="Opción C" style="border-radius: 0 10px 10px 0;">
-                  </div>
-                </div>
+                <!-- Inicialmente vacío - se agregan con el botón -->
               </div>
               
               <small class="d-block mt-3 fw-bold" style="color: #666;">Respuesta correcta:</small>
@@ -849,7 +864,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         const contenedorOpciones = div.querySelector('.contenedor-opciones');
         const selectRespuesta = div.querySelector('.select-respuesta');
         
-        btnAgregarOpcion.addEventListener('click', () => {
+btnAgregarOpcion.addEventListener('click', () => {
           const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
           const opcionesActuales = contenedorOpciones.querySelectorAll('.opcion-item');
           const siguienteLetra = letras[opcionesActuales.length];
@@ -886,19 +901,10 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
           nuevaOption.textContent = siguienteLetra;
           selectRespuesta.appendChild(nuevaOption);
           
-          // Configurar botón eliminar
+          // Configurar botón eliminar CON REORDENAMIENTO
           nuevaOpcion.querySelector('.btn-eliminar-opcion').addEventListener('click', function() {
-            const letra = nuevaOpcion.getAttribute('data-letra');
             nuevaOpcion.remove();
-            
-            // Eliminar del select
-            const optionToRemove = selectRespuesta.querySelector(`option[value="${letra}"]`);
-            if (optionToRemove) optionToRemove.remove();
-            
-            // Si era la respuesta seleccionada, limpiar selección
-            if (selectRespuesta.value === letra) {
-              selectRespuesta.value = '';
-            }
+            reordenarOpciones(contenedorOpciones, selectRespuesta);
           });
         });
       });
@@ -1281,43 +1287,38 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
             cont.appendChild(div);
 
             // Si es pregunta de incisos, cargar opciones
-            if (!esArchivo && datosPregunta) {
-              const contenedorOpciones = div.querySelector('.contenedor-opciones');
-              const selectRespuesta = div.querySelector('.select-respuesta');
-              
-              // Cargar opciones existentes
-              if (Object.keys(opciones).length > 0) {
-                Object.entries(opciones).forEach(([letra, texto]) => {
-                  agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
-                });
-              } else {
-                // Formato antiguo
-                const opcionesAntiguas = [
-                  ['A', datosPregunta.opcion_a],
-                  ['B', datosPregunta.opcion_b],
-                  ['C', datosPregunta.opcion_c]
-                ];
-                
-                opcionesAntiguas.forEach(([letra, texto]) => {
-                  if (texto) {
-                    agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
-                  }
-                });
-              }
-              
-              // Seleccionar respuesta correcta
-              if (datosPregunta.respuesta_correcta) {
-                selectRespuesta.value = datosPregunta.respuesta_correcta;
-              }
-            } else if (!esArchivo) {
-              // Nueva pregunta, agregar opciones por defecto
-              const contenedorOpciones = div.querySelector('.contenedor-opciones');
-              const selectRespuesta = div.querySelector('.select-respuesta');
-              
-              ['A', 'B', 'C'].forEach(letra => {
-                agregarOpcion(contenedorOpciones, selectRespuesta, letra, '');
-              });
-            }
+if (!esArchivo && datosPregunta) {
+  const contenedorOpciones = div.querySelector('.contenedor-opciones');
+  const selectRespuesta = div.querySelector('.select-respuesta');
+  
+  // Cargar opciones existentes
+  if (Object.keys(opciones).length > 0) {
+    Object.entries(opciones).forEach(([letra, texto]) => {
+      agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
+    });
+  } else {
+    // Formato antiguo
+    const opcionesAntiguas = [
+      ['A', datosPregunta.opcion_a],
+      ['B', datosPregunta.opcion_b],
+      ['C', datosPregunta.opcion_c]
+    ];
+    
+    opcionesAntiguas.forEach(([letra, texto]) => {
+      if (texto) {
+        agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
+      }
+    });
+  }
+  
+  // Seleccionar respuesta correcta
+  if (datosPregunta.respuesta_correcta) {
+    selectRespuesta.value = datosPregunta.respuesta_correcta;
+  }
+} else if (!esArchivo) {
+  // Nueva pregunta, NO agregar opciones por defecto (se agregan con el botón)
+  // Contenedor vacío
+}
 
             // Configurar botones de tipo
             configurarBotonesTipo(div);
@@ -1327,41 +1328,35 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
           }
           
           // Función para agregar una opción
-          function agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto = '') {
-            const nuevaOpcion = document.createElement('div');
-            nuevaOpcion.className = 'opcion-item mb-2';
-            nuevaOpcion.setAttribute('data-letra', letra);
-            
-            const esEliminable = !['A', 'B', 'C'].includes(letra);
-            
-            nuevaOpcion.innerHTML = `
-              <div class="input-group">
-                <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">${letra}</span>
-                <input type="text" class="form-control opcion-texto" placeholder="Opción ${letra}" value="${escapeHtml(texto)}" style="border-radius: 0${esEliminable ? '' : ' 10px 10px 0'};">
-                ${esEliminable ? '<button type="button" class="btn btn-danger btn-eliminar-opcion" style="border-radius: 0 10px 10px 0;">🗑️</button>' : ''}
-              </div>
-            `;
-            
-            contenedorOpciones.appendChild(nuevaOpcion);
-            
-            // Agregar al select si no existe
-            if (!selectRespuesta.querySelector(`option[value="${letra}"]`)) {
-              const option = document.createElement('option');
-              option.value = letra;
-              option.textContent = letra;
-              selectRespuesta.appendChild(option);
-            }
-            
-            // Configurar botón eliminar
-            if (esEliminable) {
-              nuevaOpcion.querySelector('.btn-eliminar-opcion').addEventListener('click', function() {
-                nuevaOpcion.remove();
-                const optionToRemove = selectRespuesta.querySelector(`option[value="${letra}"]`);
-                if (optionToRemove) optionToRemove.remove();
-                if (selectRespuesta.value === letra) selectRespuesta.value = '';
-              });
-            }
-          }
+function agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto = '') {
+  const nuevaOpcion = document.createElement('div');
+  nuevaOpcion.className = 'opcion-item mb-2';
+  nuevaOpcion.setAttribute('data-letra', letra);
+  
+  nuevaOpcion.innerHTML = `
+    <div class="input-group">
+      <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">${letra}</span>
+      <input type="text" class="form-control opcion-texto" placeholder="Opción ${letra}" value="${escapeHtml(texto)}" style="border-radius: 0;">
+      <button type="button" class="btn btn-danger btn-eliminar-opcion" style="border-radius: 0 10px 10px 0;">🗑️</button>
+    </div>
+  `;
+  
+  contenedorOpciones.appendChild(nuevaOpcion);
+  
+  // Agregar al select si no existe
+  if (!selectRespuesta.querySelector(`option[value="${letra}"]`)) {
+    const option = document.createElement('option');
+    option.value = letra;
+    option.textContent = letra;
+    selectRespuesta.appendChild(option);
+  }
+  
+  // Configurar botón eliminar CON REORDENAMIENTO
+  nuevaOpcion.querySelector('.btn-eliminar-opcion').addEventListener('click', function() {
+    nuevaOpcion.remove();
+    reordenarOpciones(contenedorOpciones, selectRespuesta);
+  });
+}
           
           // Configurar botones de tipo de pregunta
           function configurarBotonesTipo(div) {
