@@ -28,11 +28,11 @@ $tipo_mensaje = '';
 if (isset($_GET['msg'])) {
     switch($_GET['msg']) {
         case 'video_subido':
-            $mensaje = "✅ Video y cuestionario subidos correctamente";
+            $mensaje = " Video y cuestionario subidos correctamente";
             $tipo_mensaje = "success";
             break;
         case 'cuestionario_guardado':
-            $mensaje = "✅ Cuestionario guardado correctamente";
+            $mensaje = " Cuestionario guardado correctamente";
             $tipo_mensaje = "success";
             break;
     }
@@ -504,21 +504,21 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>📚 <?= htmlspecialchars($carpeta['nombre']) ?></h2>
+    <h2> <?= htmlspecialchars($carpeta['nombre']) ?></h2>
     <div class="header-right">
   <!-- Sección de Usuario con Cerrar Sesión -->
   <div class="user-section">
     <button class="user-toggle" id="userToggle">
-      <span>👤</span> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;">▼</span>
+      <span></span> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;">▼</span>
     </button>
     <div class="user-dropdown" id="userDropdown">
       <a href="../logout.php" class="user-dropdown-item">
-        <span>🚪</span> Cerrar sesión
+        <span></span> Cerrar sesión
       </a>
     </div>
   </div>
       <a href="area.php?id=<?= $carpeta['id_padre'] ?>" class="btn-volver">
-        ⬅ Volver
+        Volver
       </a>
     </div>
   </div>
@@ -534,7 +534,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <div class="btn-add-video-container">
     <button id="btnAddVideo" class="btn-add-video">
-      ➕ Añadir Video
+       Añadir Video
     </button>
   </div>
 
@@ -573,7 +573,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </video>
                   <?php else: ?>
                     <div class="alert alert-warning mb-0">
-                      ⚠️ Video no encontrado
+                       Video no encontrado
                     </div>
                   <?php endif; ?>
                   
@@ -581,11 +581,11 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <small class="text-muted">ID: <?= $video['id_video'] ?></small>
                     <?php if ($video['num_preguntas'] > 0): ?>
                       <span class="cuestionario-badge completo">
-                        ✅ <?= $video['num_preguntas'] ?> pregunta<?= $video['num_preguntas'] != 1 ? 's' : '' ?>
+                         <?= $video['num_preguntas'] ?> pregunta<?= $video['num_preguntas'] != 1 ? 's' : '' ?>
                       </span>
                     <?php else: ?>
                       <span class="cuestionario-badge pendiente">
-                        ⚠️ Sin cuestionario
+                         Sin cuestionario
                       </span>
                     <?php endif; ?>
                   </div>
@@ -593,13 +593,13 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <div class="d-flex gap-2 mt-3">
                     <button class="btn btn-secondary-custom btn-sm flex-fill btn-edit-completo" 
                             data-id="<?= $video['id_video'] ?>">
-                      ✏️ Editar
+                       Editar
                     </button>
                     <button class="btn btn-danger btn-sm flex-fill btn-del-video" 
                             data-id="<?= $video['id_video'] ?>"
                             data-title="<?= htmlspecialchars($video['titulo']) ?>"
                             style="border-radius: 12px;">
-                      🗑️ Eliminar
+                       Eliminar
                     </button>
                   </div>
                 </div>
@@ -607,7 +607,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-6">
                   <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 style="color: #9b7cb8; font-weight: 600; margin: 0;">
-                      📝 Cuestionario
+                       Cuestionario
                     </h6>
                   </div>
                   
@@ -644,11 +644,11 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
   ?>
   <small class="d-block mt-2" style="color: #28a745; font-weight: 600;">
-    ✓ Respuesta: <?= htmlspecialchars($p['respuesta_correcta']) ?>
+     Respuesta: <?= htmlspecialchars($p['respuesta_correcta']) ?>
   </small>
                           <?php else: ?>
                             <small class="d-block mt-2" style="color: #9b7cb8; font-weight: 600;">
-                              📎 Pregunta de tipo archivo
+                               Pregunta de tipo archivo
                             </small>
                             <?php if (!empty($p['instrucciones_archivo'])): ?>
                               <small class="d-block text-muted mt-1">
@@ -661,7 +661,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                   <?php else: ?>
                     <div class="alert alert-warning mb-0">
-                      ⚠️ Este video aún no tiene preguntas.
+                      Este video aún no tiene preguntas.
                     </div>
                   <?php endif; ?>
                 </div>
@@ -673,7 +673,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   <?php else: ?>
     <div class="empty-state">
-      <div class="icon">🎬</div>
+      <div class="icon"></div>
       <h4>No hay videos en este módulo</h4>
       <p class="text-muted">Sube tu primer video usando el botón de arriba</p>
     </div>
@@ -681,7 +681,27 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  // Agregar ANTES de los fetch
+const originalFetch = window.fetch;
+window.fetch = function(...args) {
+    console.log('🔍 Fetch llamado a:', args[0]);
+    return originalFetch.apply(this, args)
+        .then(response => {
+            console.log(' Respuesta recibida de:', args[0], 'Status:', response.status);
+            if (response.status === 404) {
+                console.error(' ERROR 404 en:', args[0]);
+            }
+            return response;
+        })
+        .catch(error => {
+            console.error(' Error en fetch a:', args[0], error);
+            throw error;
+        });
+};
+
+
   // Toggle del menú de usuario
 const userToggle = document.getElementById('userToggle');
 const userDropdown = document.getElementById('userDropdown');
@@ -712,13 +732,17 @@ function reordenarOpciones(contenedorOpciones, selectRespuesta) {
   const opcionesItems = contenedorOpciones.querySelectorAll('.opcion-item');
   const respuestaSeleccionada = selectRespuesta.value;
   
-  // Mapeo de letras antiguas a nuevas
+  // Crear mapeo de letras antiguas a nuevas
   const mapeoLetras = {};
+  const nuevasOpciones = [];
   
   opcionesItems.forEach((item, index) => {
     const letraAntigua = item.getAttribute('data-letra');
     const letraNueva = letras[index];
+    const textoOpcion = item.querySelector('.opcion-texto').value;
+    
     mapeoLetras[letraAntigua] = letraNueva;
+    nuevasOpciones.push({ letra: letraNueva, texto: textoOpcion });
     
     // Actualizar la letra en el DOM
     item.setAttribute('data-letra', letraNueva);
@@ -726,28 +750,28 @@ function reordenarOpciones(contenedorOpciones, selectRespuesta) {
     item.querySelector('.opcion-texto').placeholder = `Opción ${letraNueva}`;
   });
   
-  // Reconstruir el select con las letras actualizadas
+  // Reconstruir el select completamente
   selectRespuesta.innerHTML = '<option value="">Selecciona la respuesta correcta</option>';
   
-  opcionesItems.forEach((item, index) => {
-    const letra = letras[index];
+  nuevasOpciones.forEach(opcion => {
     const option = document.createElement('option');
-    option.value = letra;
-    option.textContent = letra;
+    option.value = opcion.letra;
+    option.textContent = opcion.letra;
     selectRespuesta.appendChild(option);
   });
   
-  // Actualizar la respuesta seleccionada si existía
+  // Actualizar la respuesta seleccionada usando el mapeo
   if (respuestaSeleccionada && mapeoLetras[respuestaSeleccionada]) {
     selectRespuesta.value = mapeoLetras[respuestaSeleccionada];
   } else {
     selectRespuesta.value = '';
   }
 }
+
 // BOTÓN AÑADIR VIDEO - CON INCISOS DINÁMICOS Y ENVÍO COMPLETO
 document.getElementById("btnAddVideo").addEventListener("click", async () => {
   const { value: formValues } = await Swal.fire({
-    title: '🎬 Añadir nuevo video',
+    title: ' Añadir nuevo video',
     html: `
       <div style="text-align:left; max-height:70vh; overflow-y:auto; padding: 0 10px;">
         <label class="fw-bold">Título del video:</label>
@@ -762,26 +786,23 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
 
         <hr class="my-4">
 
-        <h6 style="color:#9b7cb8; font-weight:600;">📝 Cuestionario</h6>
+        <h6 style="color:#9b7cb8; font-weight:600;"> Cuestionario</h6>
         
         <div style="background: linear-gradient(135deg, rgba(245, 163, 199, 0.1), rgba(155, 124, 184, 0.1)); border: 2px solid #9b7cb8; border-radius: 15px; padding: 15px; margin-top: 15px; margin-bottom: 20px;">
-          <label class="fw-bold" style="color: #9b7cb8;">📋 Instrucciones del cuestionario:</label>
+          <label class="fw-bold" style="color: #9b7cb8;"> Instrucciones del cuestionario:</label>
           <textarea id="instruccionesCuestionario" class="swal2-textarea" placeholder="Escribe las instrucciones generales para el cuestionario (opcional)..." style="width:100%; margin-left: -5px; margin-top: 8px; min-height: 100px; border: 2px solid #ddd;"></textarea>
-          <small class="text-muted d-block mt-2">
-            ℹ️ Estas instrucciones se mostrarán a los usuarios antes de comenzar el cuestionario.
-          </small>
         </div>
 
         <div id="contenedorPreguntas" style="margin-top:10px;"></div>
 
         <button type="button" class="btn mt-3" id="btnAgregarPregunta" style="background: linear-gradient(135deg, #f5a3c7, #9b7cb8); color: white; border:none; border-radius:15px; padding: 10px 20px; font-weight: 600;">
-          ➕ Agregar pregunta
+          Agregar pregunta
         </button>
       </div>
     `,
     width: '900px',
     showCancelButton: true,
-    confirmButtonText: '💾 Guardar y publicar',
+    confirmButtonText: ' Guardar y publicar',
     cancelButtonText: 'Cancelar',
     didOpen: () => {
       const cont = document.getElementById("contenedorPreguntas");
@@ -795,11 +816,11 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
           <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <label class="fw-bold" style="color: #9b7cb8;">Pregunta ${num}</label>
-              <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.pregunta-item').remove()" style="border-radius: 15px;">🗑️</button>
+              <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.pregunta-item').remove()" style="border-radius: 15px;">Eliminar</button>
             </div>
             
             <div class="mt-2 mb-2">
-              <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn active" data-tipo="incisos" style="border-radius: 10px; margin-right: 5px;">📝 Opción múltiple</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn active" data-tipo="incisos" style="border-radius: 10px; margin-right: 5px;"> Opción múltiple</button>
               <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn" data-tipo="archivo" style="border-radius: 10px;">📎 Subir archivo</button>
             </div>
             
@@ -811,7 +832,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <small class="fw-bold" style="color: #666;">Opciones de respuesta:</small>
                 <button type="button" class="btn btn-sm btn-agregar-opcion" style="background: #9b7cb8; color: white; border-radius: 10px; padding: 4px 12px;">
-                  ➕ Agregar opción
+                   Agregar opción
                 </button>
               </div>
               <div class="contenedor-opciones">
@@ -821,9 +842,6 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
               <small class="d-block mt-3 fw-bold" style="color: #666;">Respuesta correcta:</small>
               <select class="form-control mt-2 select-respuesta" style="border-radius: 15px;">
                 <option value="">Selecciona la respuesta correcta</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
               </select>
             </div>
             
@@ -864,7 +882,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         const contenedorOpciones = div.querySelector('.contenedor-opciones');
         const selectRespuesta = div.querySelector('.select-respuesta');
         
-btnAgregarOpcion.addEventListener('click', () => {
+        btnAgregarOpcion.addEventListener('click', () => {
           const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
           const opcionesActuales = contenedorOpciones.querySelectorAll('.opcion-item');
           const siguienteLetra = letras[opcionesActuales.length];
@@ -889,7 +907,7 @@ btnAgregarOpcion.addEventListener('click', () => {
             <div class="input-group">
               <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">${siguienteLetra}</span>
               <input type="text" class="form-control opcion-texto" placeholder="Opción ${siguienteLetra}" style="border-radius: 0;">
-              <button type="button" class="btn btn-danger btn-eliminar-opcion" style="border-radius: 0 10px 10px 0;">🗑️</button>
+              <button type="button" class="btn btn-danger btn-eliminar-opcion" style="border-radius: 0 10px 10px 0;">Eliminar</button>
             </div>
           `;
           
@@ -1037,7 +1055,7 @@ btnAgregarOpcion.addEventListener('click', () => {
 
     console.log("Enviando video...");
     
-    const res = await fetch("guardar_video.php", { 
+    const res = await fetch("/learning/admin/guardar_video.php", { 
       method: "POST", 
       body: formData,
       signal: controller.signal
@@ -1112,7 +1130,7 @@ document.querySelectorAll('.btn-del-video').forEach(btn => {
     
     const result = await Swal.fire({
       title: '¿Eliminar video?',
-      html: `Se eliminará el video:<br><strong>"${escapeHtml(titulo)}"</strong><br><br>⚠️ Esta acción no se puede deshacer y eliminará también todas las preguntas asociadas.`,
+      html: `Se eliminará el video:<br><strong>"${escapeHtml(titulo)}"</strong><br><br> Esta acción no se puede deshacer y eliminará también todas las preguntas asociadas.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
@@ -1169,7 +1187,8 @@ document.querySelectorAll('.btn-del-video').forEach(btn => {
     }
   });
 });
-// Botón Editar Video Completo (Añadir después del código del botón Eliminar)
+
+// Botón Editar Video Completo
 document.querySelectorAll('.btn-edit-completo').forEach(btn => {
   btn.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -1186,7 +1205,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
 
     try {
       // Obtener datos del video y preguntas
-      const res = await fetch(`obtener_video.php?id=${idVideo}`);
+      const res = await fetch(`/learning/admin/obtener_video.php?id=${idVideo}`);
       const data = await res.json();
       
       if (!data.success) {
@@ -1198,7 +1217,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
       
       // Mostrar formulario de edición
       const { value: formValues } = await Swal.fire({
-        title: '✏️ Editar video',
+        title: ' Editar video',
         html: `
           <div style="text-align:left; max-height:70vh; overflow-y:auto; padding: 0 10px;">
             <label class="fw-bold">Título del video:</label>
@@ -1213,23 +1232,23 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
 
             <hr class="my-4">
 
-            <h6 style="color:#9b7cb8; font-weight:600;">📝 Cuestionario</h6>
+            <h6 style="color:#9b7cb8; font-weight:600;"> Cuestionario</h6>
             
             <div style="background: linear-gradient(135deg, rgba(245, 163, 199, 0.1), rgba(155, 124, 184, 0.1)); border: 2px solid #9b7cb8; border-radius: 15px; padding: 15px; margin-top: 15px; margin-bottom: 20px;">
-              <label class="fw-bold" style="color: #9b7cb8;">📋 Instrucciones del cuestionario:</label>
+              <label class="fw-bold" style="color: #9b7cb8;"> Instrucciones del cuestionario:</label>
               <textarea id="instruccionesCuestionario" class="swal2-textarea" placeholder="Escribe las instrucciones generales para el cuestionario (opcional)..." style="width:100%; margin-left: -5px; margin-top: 8px; min-height: 100px; border: 2px solid #ddd;">${escapeHtml(video.instrucciones_cuestionario || '')}</textarea>
             </div>
 
             <div id="contenedorPreguntas" style="margin-top:10px;"></div>
 
             <button type="button" class="btn mt-3" id="btnAgregarPregunta" style="background: linear-gradient(135deg, #f5a3c7, #9b7cb8); color: white; border:none; border-radius:15px; padding: 10px 20px; font-weight: 600;">
-              ➕ Agregar pregunta
+               Agregar pregunta
             </button>
           </div>
         `,
         width: '900px',
         showCancelButton: true,
-        confirmButtonText: '💾 Guardar cambios',
+        confirmButtonText: ' Guardar cambios',
         cancelButtonText: 'Cancelar',
         didOpen: () => {
           const cont = document.getElementById("contenedorPreguntas");
@@ -1249,13 +1268,13 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
               <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <label class="fw-bold" style="color: #9b7cb8;">Pregunta ${num}</label>
-                  <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.pregunta-item').remove()" style="border-radius: 15px;">🗑️</button>
+                  <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.pregunta-item').remove()" style="border-radius: 15px;">Eliminar</button>
                 </div>
                 
                 <input type="hidden" class="pregunta-id" value="${datosPregunta?.id_cuestionario || ''}">
                 
                 <div class="mt-2 mb-2">
-                  <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn ${!esArchivo ? 'active' : ''}" data-tipo="incisos" style="border-radius: 10px; margin-right: 5px;">📝 Opción múltiple</button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn ${!esArchivo ? 'active' : ''}" data-tipo="incisos" style="border-radius: 10px; margin-right: 5px;"> Opción múltiple</button>
                   <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn ${esArchivo ? 'active' : ''}" data-tipo="archivo" style="border-radius: 10px;">📎 Subir archivo</button>
                 </div>
                 
@@ -1267,7 +1286,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
                   <div class="d-flex justify-content-between align-items-center mb-2">
                     <small class="fw-bold" style="color: #666;">Opciones de respuesta:</small>
                     <button type="button" class="btn btn-sm btn-agregar-opcion" style="background: #9b7cb8; color: white; border-radius: 10px; padding: 4px 12px;">
-                      ➕ Agregar opción
+                       Agregar opción
                     </button>
                   </div>
                   <div class="contenedor-opciones"></div>
@@ -1287,320 +1306,419 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
             cont.appendChild(div);
 
             // Si es pregunta de incisos, cargar opciones
-if (!esArchivo && datosPregunta) {
-  const contenedorOpciones = div.querySelector('.contenedor-opciones');
-  const selectRespuesta = div.querySelector('.select-respuesta');
-  
-  // Cargar opciones existentes
-  if (Object.keys(opciones).length > 0) {
-    Object.entries(opciones).forEach(([letra, texto]) => {
-      agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
-    });
-  } else {
-    // Formato antiguo
-    const opcionesAntiguas = [
-      ['A', datosPregunta.opcion_a],
-      ['B', datosPregunta.opcion_b],
-      ['C', datosPregunta.opcion_c]
-    ];
-    
-    opcionesAntiguas.forEach(([letra, texto]) => {
-      if (texto) {
-        agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
-      }
-    });
-  }
-  
-  // Seleccionar respuesta correcta
-  if (datosPregunta.respuesta_correcta) {
-    selectRespuesta.value = datosPregunta.respuesta_correcta;
-  }
-} else if (!esArchivo) {
-  // Nueva pregunta, NO agregar opciones por defecto (se agregan con el botón)
-  // Contenedor vacío
-}
-
-            // Configurar botones de tipo
-            configurarBotonesTipo(div);
-            
-            // Configurar botón agregar opción
-            configurarBotonAgregarOpcion(div);
-          }
-          
-          // Función para agregar una opción
-function agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto = '') {
-  const nuevaOpcion = document.createElement('div');
-  nuevaOpcion.className = 'opcion-item mb-2';
-  nuevaOpcion.setAttribute('data-letra', letra);
-  
-  nuevaOpcion.innerHTML = `
-    <div class="input-group">
-      <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">${letra}</span>
-      <input type="text" class="form-control opcion-texto" placeholder="Opción ${letra}" value="${escapeHtml(texto)}" style="border-radius: 0;">
-      <button type="button" class="btn btn-danger btn-eliminar-opcion" style="border-radius: 0 10px 10px 0;">🗑️</button>
-    </div>
-  `;
-  
-  contenedorOpciones.appendChild(nuevaOpcion);
-  
-  // Agregar al select si no existe
-  if (!selectRespuesta.querySelector(`option[value="${letra}"]`)) {
-    const option = document.createElement('option');
-    option.value = letra;
-    option.textContent = letra;
-    selectRespuesta.appendChild(option);
-  }
-  
-  // Configurar botón eliminar CON REORDENAMIENTO
-  nuevaOpcion.querySelector('.btn-eliminar-opcion').addEventListener('click', function() {
-    nuevaOpcion.remove();
-    reordenarOpciones(contenedorOpciones, selectRespuesta);
-  });
-}
-          
-          // Configurar botones de tipo de pregunta
-          function configurarBotonesTipo(div) {
-            const tipoBtns = div.querySelectorAll(".tipo-btn");
-            const preguntaTextoContainer = div.querySelector('.pregunta-texto-container');
-            const opcionesDinamicas = div.querySelector('.opciones-dinamicas');
-            const archivoContainer = div.querySelector('.archivo-container');
-            
-            tipoBtns.forEach(btn => {
-              btn.addEventListener("click", () => {
-                tipoBtns.forEach(x => x.classList.remove("active"));
-                btn.classList.add("active");
-                const tipo = btn.dataset.tipo;
-                
-                if (tipo === 'incisos') {
-                  preguntaTextoContainer.style.display = 'block';
-                  opcionesDinamicas.style.display = 'block';
-                  archivoContainer.style.display = 'none';
-                } else {
-                  preguntaTextoContainer.style.display = 'none';
-                  opcionesDinamicas.style.display = 'none';
-                  archivoContainer.style.display = 'block';
-                }
-              });
-            });
-          }
-          
-          // Configurar botón agregar opción
-          function configurarBotonAgregarOpcion(div) {
-            const btnAgregarOpcion = div.querySelector('.btn-agregar-opcion');
-            const contenedorOpciones = div.querySelector('.contenedor-opciones');
-            const selectRespuesta = div.querySelector('.select-respuesta');
-            
-            btnAgregarOpcion.addEventListener('click', () => {
-              const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-              const opcionesActuales = contenedorOpciones.querySelectorAll('.opcion-item');
-              const siguienteLetra = letras[opcionesActuales.length];
+            if (!esArchivo && datosPregunta) {
+              const contenedorOpciones = div.querySelector('.contenedor-opciones');
+              const selectRespuesta = div.querySelector('.select-respuesta');
               
-              if (opcionesActuales.length >= 26) {
-                Swal.fire({
-                  icon: 'warning',
-                  title: 'Límite alcanzado',
-                  text: 'No puedes agregar más de 26 opciones',
-                  toast: true,
-                  position: 'top-end',
-                  timer: 3000,
-                  showConfirmButton: false
+              // Cargar opciones existentes
+              if (Object.keys(opciones).length > 0) {
+                Object.entries(opciones).forEach(([letra, texto]) => {
+                  agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
                 });
-                return;
+              } else {
+                // Formato antiguo
+                const opcionesAntiguas = [
+                  ['A', datosPregunta.opcion_a],
+                  ['B', datosPregunta.opcion_b],
+                  ['C', datosPregunta.opcion_c]
+                ];
+                opcionesAntiguas.forEach(([letra, texto]) => {
+              if (texto) {
+                agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
               }
-              
-              agregarOpcion(contenedorOpciones, selectRespuesta, siguienteLetra, '');
             });
           }
           
-          // Cargar preguntas existentes
-          preguntas.forEach((p, i) => {
-            crearPregunta(p, i + 1);
-          });
-          
-          // Configurar botón agregar pregunta nueva
-          document.getElementById("btnAgregarPregunta").addEventListener("click", () => {
-            crearPregunta();
-          });
-        },
-        preConfirm: () => {
-          const titulo = document.getElementById("tituloVideo").value.trim();
-          const descripcion = document.getElementById("descripcionVideo").value.trim();
-          const archivo = document.getElementById("archivoVideo").files[0];
-          const instruccionesCuestionario = document.getElementById("instruccionesCuestionario").value.trim();
-
-          if (!titulo) {
-            Swal.showValidationMessage("Debes ingresar el título del video");
-            return false;
+          // Seleccionar respuesta correcta
+          if (datosPregunta.respuesta_correcta) {
+            selectRespuesta.value = datosPregunta.respuesta_correcta;
           }
+        }
 
-          if (archivo && archivo.size > 524288000) {
-            Swal.showValidationMessage("El archivo es demasiado grande. Máximo 500MB");
-            return false;
-          }
-
-          // Recolectar preguntas
-          const preguntasEditadas = [];
-          let errorValidacion = null;
-          
-          document.querySelectorAll(".pregunta-item").forEach((div, i) => {
-            if (errorValidacion) return;
+        // Configurar botones de tipo
+        configurarBotonesTipo(div);
+        
+        // Configurar botón agregar opción
+        configurarBotonAgregarOpcion(div);
+      }
+      
+      // Función para agregar una opción
+      function agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto = '') {
+        const nuevaOpcion = document.createElement('div');
+        nuevaOpcion.className = 'opcion-item mb-2';
+        nuevaOpcion.setAttribute('data-letra', letra);
+        
+        nuevaOpcion.innerHTML = `
+          <div class="input-group">
+            <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">${letra}</span>
+            <input type="text" class="form-control opcion-texto" placeholder="Opción ${letra}" value="${escapeHtml(texto)}" style="border-radius: 0;">
+            <button type="button" class="btn btn-danger btn-eliminar-opcion" style="border-radius: 0 10px 10px 0;">Eliminar</button>
+          </div>
+        `;
+        
+        contenedorOpciones.appendChild(nuevaOpcion);
+        
+        // Agregar al select si no existe
+        if (!selectRespuesta.querySelector(`option[value="${letra}"]`)) {
+          const option = document.createElement('option');
+          option.value = letra;
+          option.textContent = letra;
+          selectRespuesta.appendChild(option);
+        }
+        
+        // Configurar botón eliminar CON REORDENAMIENTO
+        nuevaOpcion.querySelector('.btn-eliminar-opcion').addEventListener('click', function() {
+          nuevaOpcion.remove();
+          reordenarOpciones(contenedorOpciones, selectRespuesta);
+        });
+      }
+      
+      // Configurar botones de tipo de pregunta
+      function configurarBotonesTipo(div) {
+        const tipoBtns = div.querySelectorAll(".tipo-btn");
+        const preguntaTextoContainer = div.querySelector('.pregunta-texto-container');
+        const opcionesDinamicas = div.querySelector('.opciones-dinamicas');
+        const archivoContainer = div.querySelector('.archivo-container');
+        
+        tipoBtns.forEach(btn => {
+          btn.addEventListener("click", () => {
+            tipoBtns.forEach(x => x.classList.remove("active"));
+            btn.classList.add("active");
+            const tipo = btn.dataset.tipo;
             
-            const id = div.querySelector('.pregunta-id').value;
-            const tipo = div.querySelector(".tipo-btn.active")?.dataset.tipo;
-
-            if (tipo === "incisos") {
-              const pregunta = div.querySelector('.pregunta-input').value.trim();
-              
-              if (!pregunta) {
-                errorValidacion = `La pregunta ${i+1} no puede estar vacía`;
-                return;
-              }
-
-              const opciones = {};
-              const opcionesItems = div.querySelectorAll('.opcion-item');
-              
-              opcionesItems.forEach(item => {
-                const letra = item.getAttribute('data-letra');
-                const texto = item.querySelector('.opcion-texto').value.trim();
-                
-                if (!texto) {
-                  errorValidacion = `La opción ${letra} de la pregunta ${i+1} no puede estar vacía`;
-                  return;
-                }
-                
-                opciones[letra] = texto;
-              });
-
-              if (Object.keys(opciones).length < 2) {
-                errorValidacion = `La pregunta ${i+1} debe tener al menos 2 opciones`;
-                return;
-              }
-
-              const resp = div.querySelector('.select-respuesta').value;
-              
-              if (!resp) {
-                errorValidacion = `Debes seleccionar la respuesta correcta de la pregunta ${i+1}`;
-                return;
-              }
-
-              preguntasEditadas.push({
-                id,
-                tipo,
-                pregunta,
-                opciones,
-                respuesta_correcta: resp
-              });
-            } else if (tipo === "archivo") {
-              const instrucciones = div.querySelector('.instrucciones-archivo').value.trim();
-              
-              if (!instrucciones) {
-                errorValidacion = `La pregunta ${i+1} de tipo archivo debe tener instrucciones`;
-                return;
-              }
-
-              preguntasEditadas.push({
-                id,
-                tipo,
-                pregunta: instrucciones,
-                instrucciones: instrucciones
-              });
+            if (tipo === 'incisos') {
+              preguntaTextoContainer.style.display = 'block';
+              opcionesDinamicas.style.display = 'block';
+              archivoContainer.style.display = 'none';
+            } else {
+              preguntaTextoContainer.style.display = 'none';
+              opcionesDinamicas.style.display = 'none';
+              archivoContainer.style.display = 'block';
             }
           });
+        });
+      }
+      
+      // Configurar botón agregar opción
+      function configurarBotonAgregarOpcion(div) {
+        const btnAgregarOpcion = div.querySelector('.btn-agregar-opcion');
+        const contenedorOpciones = div.querySelector('.contenedor-opciones');
+        const selectRespuesta = div.querySelector('.select-respuesta');
+        
+        btnAgregarOpcion.addEventListener('click', () => {
+          const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          const opcionesActuales = contenedorOpciones.querySelectorAll('.opcion-item');
+          const siguienteLetra = letras[opcionesActuales.length];
+          
+          if (opcionesActuales.length >= 26) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Límite alcanzado',
+              text: 'No puedes agregar más de 26 opciones',
+              toast: true,
+              position: 'top-end',
+              timer: 3000,
+              showConfirmButton: false
+            });
+            return;
+          }
+          
+          agregarOpcion(contenedorOpciones, selectRespuesta, siguienteLetra, '');
+        });
+      }
+      
+      // Cargar preguntas existentes
+      preguntas.forEach((p, i) => {
+        crearPregunta(p, i + 1);
+      });
+      
+      // Configurar botón agregar pregunta nueva
+      document.getElementById("btnAgregarPregunta").addEventListener("click", () => {
+        crearPregunta();
+      });
+    },
+    preConfirm: () => {
+      const titulo = document.getElementById("tituloVideo").value.trim();
+      const descripcion = document.getElementById("descripcionVideo").value.trim();
+      const archivo = document.getElementById("archivoVideo").files[0];
+      const instruccionesCuestionario = document.getElementById("instruccionesCuestionario").value.trim();
 
-          if (errorValidacion) {
-            Swal.showValidationMessage(errorValidacion);
-            return false;
+      if (!titulo) {
+        Swal.showValidationMessage("Debes ingresar el título del video");
+        return false;
+      }
+
+      if (archivo && archivo.size > 524288000) {
+        Swal.showValidationMessage("El archivo es demasiado grande. Máximo 500MB");
+        return false;
+      }
+
+      // Clasificar preguntas: nuevas, actualizadas y eliminadas
+      const preguntasNuevas = [];
+      const preguntasActualizadas = [];
+      const preguntasEliminadas = [];
+      
+      // IDs de preguntas originales (las que vinieron del servidor)
+      const idsOriginales = preguntas.map(p => p.id_cuestionario.toString());
+      
+      // IDs de preguntas actuales en el formulario
+      const idsActuales = [];
+      
+      let errorValidacion = null;
+      
+      document.querySelectorAll(".pregunta-item").forEach((div, i) => {
+        if (errorValidacion) return;
+        
+        const id = div.querySelector('.pregunta-id').value;
+        const tipo = div.querySelector(".tipo-btn.active")?.dataset.tipo;
+
+        if (tipo === "incisos") {
+          const pregunta = div.querySelector('.pregunta-input').value.trim();
+          
+          if (!pregunta) {
+            errorValidacion = `La pregunta ${i+1} no puede estar vacía`;
+            return;
           }
 
-          if (preguntasEditadas.length === 0) {
-            Swal.showValidationMessage("Debes tener al menos una pregunta en el cuestionario");
-            return false;
+          const opciones = {};
+          const opcionesItems = div.querySelectorAll('.opcion-item');
+          
+          opcionesItems.forEach(item => {
+            const letra = item.getAttribute('data-letra');
+            const texto = item.querySelector('.opcion-texto').value.trim();
+            
+            if (!texto) {
+              errorValidacion = `La opción ${letra} de la pregunta ${i+1} no puede estar vacía`;
+              return;
+            }
+            
+            opciones[letra] = texto;
+          });
+
+          if (Object.keys(opciones).length < 2) {
+            errorValidacion = `La pregunta ${i+1} debe tener al menos 2 opciones`;
+            return;
           }
 
-          return { titulo, descripcion, archivo, preguntas: preguntasEditadas, instruccionesCuestionario };
+          const resp = div.querySelector('.select-respuesta').value;
+          
+          if (!resp) {
+            errorValidacion = `Debes seleccionar la respuesta correcta de la pregunta ${i+1}`;
+            return;
+          }
+
+          // Verificar que la respuesta existe en las opciones
+          if (!opciones[resp]) {
+            errorValidacion = `La respuesta correcta "${resp}" no existe entre las opciones de la pregunta ${i+1}`;
+            return;
+          }
+
+          const preguntaData = {
+            tipo,
+            pregunta,
+            opciones,
+            respuesta_correcta: resp
+          };
+
+          if (id) {
+            // Pregunta existente - ACTUALIZAR
+            preguntaData.id = id;
+            preguntasActualizadas.push(preguntaData);
+            idsActuales.push(id);
+          } else {
+            // Pregunta nueva
+            preguntasNuevas.push(preguntaData);
+          }
+
+        } else if (tipo === "archivo") {
+          const instrucciones = div.querySelector('.instrucciones-archivo').value.trim();
+          
+          if (!instrucciones) {
+            errorValidacion = `La pregunta ${i+1} de tipo archivo debe tener instrucciones`;
+            return;
+          }
+
+          const preguntaData = {
+            tipo,
+            pregunta: instrucciones,
+            instrucciones: instrucciones
+          };
+
+          if (id) {
+            // Pregunta existente - ACTUALIZAR
+            preguntaData.id = id;
+            preguntasActualizadas.push(preguntaData);
+            idsActuales.push(id);
+          } else {
+            // Pregunta nueva
+            preguntasNuevas.push(preguntaData);
+          }
         }
       });
 
-      if (!formValues) return;
+      if (errorValidacion) {
+        Swal.showValidationMessage(errorValidacion);
+        return false;
+      }
 
-      // Mostrar loading
-      Swal.fire({
-        title: 'Guardando cambios...',
-        html: '<p>Por favor espera mientras se actualizan los datos.</p>',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        showConfirmButton: false,
-        didOpen: () => {
-          Swal.showLoading();
+      // Detectar preguntas eliminadas (las que estaban pero ya no están)
+      idsOriginales.forEach(idOriginal => {
+        if (!idsActuales.includes(idOriginal)) {
+          preguntasEliminadas.push(idOriginal);
         }
       });
 
-      // Enviar datos actualizados
-      const formData = new FormData();
-      formData.append("id_video", idVideo);
-      formData.append("titulo", formValues.titulo);
-      formData.append("descripcion", formValues.descripcion);
-      formData.append("preguntas", JSON.stringify(formValues.preguntas));
-      formData.append("instrucciones_cuestionario", formValues.instruccionesCuestionario);
-      
-      if (formValues.archivo) {
-        formData.append("video", formValues.archivo);
+      if (preguntasNuevas.length === 0 && preguntasActualizadas.length === 0) {
+        Swal.showValidationMessage("Debes tener al menos una pregunta en el cuestionario");
+        return false;
       }
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 300000);
-
-      const updateRes = await fetch("actualizar_video.php", {
-        method: "POST",
-        body: formData,
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      const contentType = updateRes.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await updateRes.text();
-        console.error("Respuesta no JSON:", text);
-        throw new Error("El servidor no devolvió una respuesta válida");
-      }
-
-      const updateData = await updateRes.json();
-
-      if (updateData.success) {
-        await Swal.fire({
-          icon: 'success',
-          title: '¡Cambios guardados!',
-          text: updateData.message,
-          confirmButtonText: 'Aceptar'
-        });
-        location.reload();
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: updateData.message
-        });
-      }
-
-    } catch (error) {
-      console.error("Error:", error);
-      
-      if (error.name === 'AbortError') {
-        Swal.fire({
-          icon: 'error',
-          title: 'Tiempo agotado',
-          text: 'La operación tomó demasiado tiempo. Intenta nuevamente.'
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.message || 'No se pudieron cargar los datos del video'
-        });
-      }
+      return { 
+        titulo, 
+        descripcion, 
+        archivo, 
+        preguntasNuevas, 
+        preguntasActualizadas, 
+        preguntasEliminadas,
+        instruccionesCuestionario 
+      };
     }
   });
+
+  if (!formValues) return;
+
+  // Mostrar loading
+  Swal.fire({
+    title: 'Guardando cambios...',
+    html: '<p>Por favor espera mientras se actualizan los datos.</p>',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    showConfirmButton: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  // Enviar datos actualizados con clasificación correcta
+  const formData = new FormData();
+  formData.append("id_video", idVideo);
+  formData.append("titulo", formValues.titulo);
+  formData.append("descripcion", formValues.descripcion);
+  formData.append("instrucciones_cuestionario", formValues.instruccionesCuestionario);
+
+  // Clasificar preguntas según el formato que espera el servidor
+  if (formValues.preguntasNuevas.length > 0) {
+    formData.append("preguntas_nuevas", JSON.stringify(formValues.preguntasNuevas));
+  }
+
+  if (formValues.preguntasActualizadas.length > 0) {
+    formData.append("preguntas_actualizadas", JSON.stringify(formValues.preguntasActualizadas));
+  }
+
+  if (formValues.preguntasEliminadas.length > 0) {
+    formData.append("preguntas_eliminadas", JSON.stringify(formValues.preguntasEliminadas));
+  }
+
+  if (formValues.archivo) {
+    formData.append("video", formValues.archivo);
+  }
+
+  // LOG PARA DEBUGGING
+  console.log("=== DATOS A ENVIAR ===");
+  console.log("ID Video:", idVideo);
+  console.log("Título:", formValues.titulo);
+  console.log("Preguntas nuevas:", formValues.preguntasNuevas);
+  console.log("Preguntas actualizadas:", formValues.preguntasActualizadas);
+  console.log("Preguntas eliminadas:", formValues.preguntasEliminadas);
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 300000);
+
+    const updateRes = await fetch("/learning/admin/actualizar_video_completo.php", {
+      method: "POST",
+      body: formData,
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    console.log("Status de respuesta:", updateRes.status);
+
+    const contentType = updateRes.headers.get("content-type");
+    const responseText = await updateRes.text();
+    
+    console.log("Respuesta del servidor:", responseText);
+
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("El servidor no devolvió JSON. Respuesta: " + responseText.substring(0, 500));
+    }
+
+    let updateData;
+    try {
+      updateData = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error("Error al parsear JSON:", parseError);
+      throw new Error("Respuesta inválida del servidor: " + responseText.substring(0, 500));
+    }
+
+    console.log("Datos parseados:", updateData);
+
+    if (updateData.success) {
+      await Swal.fire({
+        icon: 'success',
+        title: '¡Cambios guardados!',
+        text: updateData.message,
+        confirmButtonText: 'Aceptar'
+      });
+      location.reload();
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al guardar',
+        html: `
+          <p><strong>Mensaje:</strong> ${updateData.message || 'Error desconocido'}</p>
+          ${updateData.error ? `<p class="text-muted" style="font-size: 0.9rem;"><strong>Detalle:</strong> ${updateData.error}</p>` : ''}
+        `,
+        width: '600px'
+      });
+    }
+
+  } catch (error) {
+    console.error("Error completo:", error);
+    
+    if (error.name === 'AbortError') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Tiempo agotado',
+        text: 'La operación tomó demasiado tiempo. Intenta nuevamente.'
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de conexión',
+        html: `
+          <p><strong>Error:</strong> ${error.message}</p>
+          <details style="margin-top: 15px; text-align: left;">
+            <summary style="cursor: pointer; color: #9b7cb8; font-weight: 600;">Ver detalles técnicos</summary>
+            <pre style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.8rem; overflow-x: auto;">${error.stack || error.message}</pre>
+          </details>
+        `,
+        width: '700px'
+      });
+    }
+  }
+
+} catch (error) {
+  console.error("Error:", error);
+  
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: error.message || 'No se pudieron cargar los datos del video'
+  });
+}
+});
 });
 </script>
 </body>

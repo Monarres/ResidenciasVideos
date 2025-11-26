@@ -937,14 +937,26 @@ const rolSelect = document.getElementById('rolSelect');
 const areaUnidadContainer = document.getElementById('areaUnidadContainer');
 const areaSelect = document.getElementById('areaSelect');
 const unidadSelect = document.getElementById('unidadSelect');
+const areaColumn = areaSelect.closest('.col-md-6');
 
 rolSelect.addEventListener('change', function() {
   if (this.value === 'usuario') {
+    // Usuario: mostrar ÁREA y UNIDAD
     areaUnidadContainer.classList.add('show');
+    areaColumn.style.display = 'block';
+    areaSelect.required = false;
+    unidadSelect.required = false;
+  } else if (this.value === 'franquiciatario') {
+    // Franquiciatario: mostrar SOLO UNIDAD (ocultar columna de área)
+    areaUnidadContainer.classList.add('show');
+    areaColumn.style.display = 'none';
+    areaSelect.value = '';
     areaSelect.required = false;
     unidadSelect.required = false;
   } else {
+    // Admin: ocultar todo
     areaUnidadContainer.classList.remove('show');
+    areaColumn.style.display = 'block';
     areaSelect.required = false;
     unidadSelect.required = false;
     areaSelect.value = '';
@@ -957,14 +969,26 @@ const editRolSelect = document.getElementById('edit-rol');
 const editAreaUnidadContainer = document.getElementById('editAreaUnidadContainer');
 const editAreaSelect = document.getElementById('edit-area');
 const editUnidadSelect = document.getElementById('edit-unidad');
+const editAreaColumn = editAreaSelect.closest('.col-md-6');
 
 editRolSelect.addEventListener('change', function() {
   if (this.value === 'usuario') {
+    // Usuario: mostrar ÁREA y UNIDAD
     editAreaUnidadContainer.classList.add('show');
+    editAreaColumn.style.display = 'block';
+    editAreaSelect.required = false;
+    editUnidadSelect.required = false;
+  } else if (this.value === 'franquiciatario') {
+    // Franquiciatario: mostrar SOLO UNIDAD (ocultar columna de área)
+    editAreaUnidadContainer.classList.add('show');
+    editAreaColumn.style.display = 'none';
+    editAreaSelect.value = '';
     editAreaSelect.required = false;
     editUnidadSelect.required = false;
   } else {
+    // Admin: ocultar todo
     editAreaUnidadContainer.classList.remove('show');
+    editAreaColumn.style.display = 'block';
     editAreaSelect.required = false;
     editUnidadSelect.required = false;
     editAreaSelect.value = '';
@@ -976,10 +1000,12 @@ editRolSelect.addEventListener('change', function() {
 const modalEditar = document.getElementById('modalEditar');
 modalEditar.addEventListener('show.bs.modal', event => {
   const button = event.relatedTarget;
+  const rol = button.getAttribute('data-rol');
+  
   document.getElementById('edit-id').value = button.getAttribute('data-id');
   document.getElementById('edit-nombre').value = button.getAttribute('data-nombre');
   document.getElementById('edit-email').value = button.getAttribute('data-email');
-  document.getElementById('edit-rol').value = button.getAttribute('data-rol');
+  document.getElementById('edit-rol').value = rol;
   
   const carpetaId = button.getAttribute('data-carpeta');
   const unidadId = button.getAttribute('data-unidad');
@@ -987,12 +1013,22 @@ modalEditar.addEventListener('show.bs.modal', event => {
   document.getElementById('edit-unidad').value = unidadId || '';
   
   // Mostrar u ocultar el selector de área y unidad según el rol
-  if (button.getAttribute('data-rol') === 'usuario') {
+  if (rol === 'usuario') {
+    // Usuario: mostrar área y unidad
     editAreaUnidadContainer.classList.add('show');
+    editAreaColumn.style.display = 'block';
+    editAreaSelect.required = false;
+    editUnidadSelect.required = false;
+  } else if (rol === 'franquiciatario') {
+    // Franquiciatario: mostrar solo unidad
+    editAreaUnidadContainer.classList.add('show');
+    editAreaColumn.style.display = 'none';
     editAreaSelect.required = false;
     editUnidadSelect.required = false;
   } else {
+    // Admin: ocultar todo
     editAreaUnidadContainer.classList.remove('show');
+    editAreaColumn.style.display = 'block';
     editAreaSelect.required = false;
     editUnidadSelect.required = false;
   }

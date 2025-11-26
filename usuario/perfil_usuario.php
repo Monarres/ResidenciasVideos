@@ -383,7 +383,7 @@ body {
     </div>
     
     <div class="info-row">
-      <div class="info-label">📁 Área asignada:</div>
+      <div class="info-label">🪪 Área asignada:</div>
       <div class="info-value">
         <?php if($usuario_data['area_nombre']): ?>
           <span class="badge-custom"><?= htmlspecialchars($usuario_data['area_nombre']) ?></span>

@@ -605,7 +605,7 @@ body {
           
           <div class="modulo-header">
             <div class="modulo-numero"><?= $numero_modulo ?></div>
-            <div class="modulo-icon"><?= $bloqueado ? '🔒' : '📁' ?></div>
+            <div class="modulo-icon"><?= $bloqueado ? '🔒' : '📚' ?></div>
             <h3 class="modulo-nombre"><?= htmlspecialchars($carpeta['nombre']) ?></h3>
           </div>
           

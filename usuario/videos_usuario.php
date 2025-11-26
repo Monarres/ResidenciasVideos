@@ -8,9 +8,8 @@ if(!isset($_SESSION['id_usuario'])){
 }
 
 $id_usuario = $_SESSION['id_usuario'];
+$nombre = $_SESSION['nombre'] ?? "Usuario";
 $id_carpeta_usuario = $_SESSION['id_carpeta']; // Área asignada al usuario
-
-
 
 // Obtener videos de la carpeta del usuario Y de sus subcarpetas (módulos)
 $stmt = $pdo->prepare("
@@ -141,14 +140,69 @@ body {
   transform: translateX(-50%);
 }
 
-.user-info {
+.header-right {
   display: flex;
   align-items: center;
   gap: 15px;
   margin-left: auto;
 }
 
-.btn-logout {
+.user-section {
+  position: relative;
+}
+
+.user-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  font-weight: 500;
+  border-radius: 25px;
+  padding: 8px 20px;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  transition: 0.3s;
+}
+
+.user-toggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 10px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(155,124,184,0.3);
+  min-width: 200px;
+  padding: 10px;
+  display: none;
+  z-index: 10001;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.user-dropdown-item {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s;
+  color: #dc3545;
+}
+
+.user-dropdown-item:hover {
+  background: #f8f9fa;
+}
+
+.btn-volver {
   background: white;
   border: none;
   color: #9b7cb8;
@@ -160,7 +214,7 @@ body {
   display: inline-block;
 }
 
-.btn-logout:hover {
+.btn-volver:hover {
   background: #f8f9fa;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -421,7 +475,7 @@ video {
     font-size: 1.2rem;
   }
   
-  .btn-logout {
+  .btn-volver, .user-toggle {
     padding: 6px 15px;
     font-size: 0.9rem;
   }
@@ -437,12 +491,24 @@ video {
   </style>
 </head>
 <body>
-
+  
 <div class="top-header">
   <div class="container-fluid">
     <h2>🎬 Videos de Capacitación</h2>
-    <div class="user-info">
-      <a href="carpetas.php" class="btn-logout">⬅ Volver</a>
+    <div class="header-right">
+      <!-- Menú de usuario -->
+      <div class="user-section">
+        <button class="user-toggle" id="userToggle">
+          <span>👤</span> <?= htmlspecialchars($nombre) ?> <span style="font-size: 0.8em;">▼</span>
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <a href="../logout.php" class="user-dropdown-item logout">
+            <span>🚪</span> Cerrar sesión
+          </a>
+        </div>
+      </div>
+      <!-- Botón Volver -->
+      <a href="carpetas.php" class="btn-volver">⬅ Volver</a>
     </div>
   </div>
 </div>
@@ -452,7 +518,7 @@ video {
     <div class="card">
       <div class="video-header">
         <h3><?= htmlspecialchars($video_actual['titulo']) ?></h3>
-        <small>📁 <?= htmlspecialchars($video_actual['carpeta_nombre']) ?></small>
+        <small>📚 <?= htmlspecialchars($video_actual['carpeta_nombre']) ?></small>
       </div>
       
       <div class="card-body" id="videoContainer">
@@ -645,14 +711,11 @@ video {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// ==========================================
 // MOSTRAR RESULTADO DEL CUESTIONARIO
-// ==========================================
 <?php if (isset($_SESSION['resultado_cuestionario'])): ?>
   const resultado = <?= json_encode($_SESSION['resultado_cuestionario']) ?>;
   
   if (resultado.tipo === 'archivo') {
-    // Mostrar mensaje para cuestionarios con archivos
     Swal.fire({
       title: '📋 Respuestas Enviadas',
       html: `
@@ -663,7 +726,6 @@ video {
             Tus respuestas han sido enviadas correctamente.<br>
             Un administrador revisará tus archivos y asignará tu calificación.
           </p>
-
         </div>
       `,
       icon: 'info',
@@ -674,9 +736,7 @@ video {
       }
     });
   } else {
-    // Mostrar calificación para cuestionarios solo de incisos
     const aprobado = resultado.porcentaje >= 70;
-    const emoji = aprobado ? '🎉' : '📖';
     const color = aprobado ? '#28a745' : '#ff6b6b';
     
     Swal.fire({
@@ -689,10 +749,6 @@ video {
             ${resultado.porcentaje}%
           </div>
           
-         
-           
-    
-          
           <div style="margin-top: 30px; padding: 20px; background: ${aprobado ? 'rgba(40, 167, 69, 0.1)' : 'rgba(255, 107, 107, 0.1)'}; border-radius: 10px; border-left: 4px solid ${color};">
             <strong style="font-size: 1.2rem; color: ${color};">
               ${aprobado ? '✅ ¡APROBADO!' : '❌ NO APROBADO'}
@@ -701,7 +757,6 @@ video {
               ${aprobado ? 'Has superado el 70% mínimo requerido' : 'Necesitas al menos 70% para aprobar'}
             </p>
           </div>
-          
         </div>
       `,
       icon: aprobado ? 'success' : 'warning',
@@ -716,7 +771,6 @@ video {
   <?php unset($_SESSION['resultado_cuestionario']); ?>
 <?php endif; ?>
 
-// Mostrar si se completó el módulo
 <?php if (isset($_GET['modulo_completado'])): ?>
   Swal.fire({
     title: '🎉 ¡Módulo Completado!',
@@ -726,29 +780,30 @@ video {
   });
 <?php endif; ?>
 
-// ==========================================
 // CONTROL DEL VIDEO Y CUESTIONARIO
-// ==========================================
 const videoPlayer = document.getElementById('videoPlayer');
 const btnMostrarCuestionario = document.getElementById('btnMostrarCuestionario');
 const videoContainer = document.getElementById('videoContainer');
 const cuestionarioContainer = document.getElementById('cuestionarioContainer');
 
 let videoCompletado = false;
-
-// Verificar si el video tiene cuestionario
 const tienePreguntas = <?= count($preguntas) > 0 ? 'true' : 'false' ?>;
 const totalPreguntas = <?= count($preguntas) ?>;
 
 console.log('Total de preguntas cargadas:', totalPreguntas);
 
-// Mostrar botón cuando el video termina
 videoPlayer.addEventListener('ended', function() {
   videoCompletado = true;
   if (tienePreguntas) {
     btnMostrarCuestionario.style.display = 'inline-block';
     
-    // Notificación de que el video terminó
+    Swal.fire({
+      title: '✅ Video Completado',
+      text: 'Ahora puedes contestar el cuestionario',
+      icon: 'success',
+      confirmButtonText: 'Entendido'
+    });
+  } else {
     Swal.fire({
       title: '✅ Video Completado',
       text: 'Este video no tiene cuestionario. ¿Deseas continuar?',
@@ -764,11 +819,9 @@ videoPlayer.addEventListener('ended', function() {
   }
 });
 
-// También permitir mostrar el cuestionario si el usuario avanza manualmente cerca del final
 videoPlayer.addEventListener('timeupdate', function() {
   if (!videoCompletado && tienePreguntas) {
     const porcentaje = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-    // Mostrar botón cuando esté al 95% o más
     if (porcentaje >= 95) {
       videoCompletado = true;
       btnMostrarCuestionario.style.display = 'inline-block';
@@ -776,7 +829,6 @@ videoPlayer.addEventListener('timeupdate', function() {
   }
 });
 
-// Al hacer clic en el botón del cuestionario
 if (btnMostrarCuestionario) {
   btnMostrarCuestionario.addEventListener('click', function() {
     if (!videoCompletado) {
@@ -789,16 +841,13 @@ if (btnMostrarCuestionario) {
       return;
     }
 
-    // Ir directamente al cuestionario (sin advertencia previa)
     videoContainer.style.display = 'none';
     cuestionarioContainer.style.display = 'block';
 
-    // Scroll suave hacia el cuestionario
     setTimeout(() => {
       cuestionarioContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
 
-    // Mensaje de instrucción
     Swal.fire({
       title: '📝 Cuestionario',
       html: 'Responde todas las preguntas antes de enviar',
@@ -809,57 +858,18 @@ if (btnMostrarCuestionario) {
   });
 }
 
-// Mostrar alerta si el usuario intenta volver al video mientras hace el cuestionario
-document.querySelector('.btn-logout').addEventListener('click', async function(e) {
-  if (cuestionarioContainer.style.display === 'block') {
-    e.preventDefault();
-
-    const result = await Swal.fire({
-      title: '⚠️ ¡Atención!',
-      html: 'Si vuelves al video se perderá tu progreso.<br><br>¿Deseas continuar?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, volver al video',
-      cancelButtonText: 'Cancelar',
-      reverseButtons: true
-    });
-
-    if (result.isConfirmed) {
-      // Volver al video sin salir del módulo
-      cuestionarioContainer.style.display = 'none';
-      videoContainer.style.display = 'block';
-
-      // Volver al inicio del video
-      const video = document.querySelector('video');
-      if (video) {
-        video.currentTime = 0;
-        video.pause();
-      }
-
-      // Scroll al video
-      setTimeout(() => {
-        videoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    }
-  }
-});
-
-// ==========================================
 // VALIDACIÓN DEL FORMULARIO
-// ==========================================
 const formCuestionario = document.getElementById('formCuestionario');
 let formularioEnviando = false;
 
 if (formCuestionario) {
   formCuestionario.addEventListener('submit', function(e) {
-    // Si ya está enviando, no prevenir el envío
     if (formularioEnviando) {
       return true;
     }
     
     e.preventDefault();
     
-    // Verificar que todas las preguntas estén respondidas
     const preguntasCards = formCuestionario.querySelectorAll('.pregunta-card');
     let preguntasSinResponder = [];
     
@@ -867,13 +877,11 @@ if (formCuestionario) {
       const tipoPregunta = card.getAttribute('data-tipo');
       
       if (tipoPregunta === 'archivo') {
-        // Verificar que se haya subido un archivo
         const fileInput = card.querySelector('input[type="file"]');
         if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
           preguntasSinResponder.push(index + 1);
         }
       } else {
-        // Verificar que se haya seleccionado una opción
         const radioChecked = card.querySelector('input[type="radio"]:checked');
         if (!radioChecked) {
           preguntasSinResponder.push(index + 1);
@@ -889,7 +897,6 @@ if (formCuestionario) {
         confirmButtonText: 'Entendido'
       });
       
-      // Hacer scroll a la primera pregunta sin responder
       const primeraSinResponder = formCuestionario.querySelector('.pregunta-card[data-pregunta="' + preguntasSinResponder[0] + '"]');
       if (primeraSinResponder) {
         primeraSinResponder.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -901,7 +908,6 @@ if (formCuestionario) {
       return false;
     }
     
-    // Confirmar envío
     Swal.fire({
       title: '¿Enviar respuestas?',
       html: 'Estás enviando las respuestas de <strong>' + totalPreguntas + ' preguntas</strong>.<br><br>Una vez enviadas no podrás modificarlas.',
@@ -911,10 +917,8 @@ if (formCuestionario) {
       cancelButtonText: 'Revisar de nuevo'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Permitir la salida de la página
         permitirSalida = true;
         
-        // Mostrar loading
         Swal.fire({
           title: 'Enviando...',
           text: 'Por favor espera',
@@ -926,10 +930,7 @@ if (formCuestionario) {
           }
         });
         
-        // Marcar que el formulario está enviando
         formularioEnviando = true;
-        
-        // Enviar el formulario usando el método tradicional
         formCuestionario.submit();
       }
     });
@@ -938,9 +939,28 @@ if (formCuestionario) {
   });
 }
 
-// ==========================================
+// MENÚ DE USUARIO
+const userToggle = document.getElementById('userToggle');
+const userDropdown = document.getElementById('userDropdown');
+
+if (userToggle && userDropdown) {
+  userToggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    userDropdown.classList.toggle('show');
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!userToggle.contains(e.target) && !userDropdown.contains(e.target)) {
+      userDropdown.classList.remove('show');
+    }
+  });
+
+  userDropdown.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+}
+
 // PREVENIR RECARGA ACCIDENTAL
-// ==========================================
 let permitirSalida = false;
 
 window.addEventListener('beforeunload', function(e) {

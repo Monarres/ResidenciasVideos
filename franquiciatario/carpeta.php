@@ -331,7 +331,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>📂 <?= htmlspecialchars($carpeta['nombre']) ?> </h2>
+    <h2>📚 <?= htmlspecialchars($carpeta['nombre']) ?> </h2>
     <div class="header-actions">
       <!-- Usuario Desplegable -->
       <div class="user-section">
