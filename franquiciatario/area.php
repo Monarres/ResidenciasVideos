@@ -34,10 +34,26 @@ try {
 <!doctype html>
 <html lang="es">
 <head>
+
+
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+
+
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Área - <?= htmlspecialchars($area['nombre']) ?></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; padding-top:100px; }
@@ -152,28 +168,31 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
   .top-header h2 { font-size:1.2rem; }
   .btn-logout { padding:6px 15px; font-size:0.9rem; }
 }
+.icono-libro:hover {
+  animation: fa-beat 1s infinite;
+}
 </style>
 </head>
 <body>
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>Área: <?= htmlspecialchars($area['nombre']) ?></h2>
+    <h2> <i class="fa-solid fa-location-dot fa-beat" style="color: #ffffffff;"></i> Área: <?= htmlspecialchars($area['nombre']) ?></h2>
     <div class="user-info">
       <!-- Usuario Desplegable -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          👤 <?= htmlspecialchars($_SESSION['nombre'] ?? 'Franquiciatario') ?> ▼
+          <i class="fa-solid fa-user" style="color: #B197FC;"></i> <?= htmlspecialchars($_SESSION['nombre'] ?? 'Franquiciatario') ?> <i class="fa-solid fa-caret-down" style="color: #B197FC;"></i>    
         </button>
 
         <div class="user-dropdown" id="userDropdown">
-          <a href="usuarios_franquiciatario.php" class="user-dropdown-item" style="color: #9b7cb8;">👥 Mis Usuarios</a>
-          <a href="../logout.php" class="user-dropdown-item">🚪 Cerrar sesión</a>
+          <a href="usuarios_franquiciatario.php" class="user-dropdown-item" style="color: #9b7cb8;"><i class="fas fa-users"></i> Mis Usuarios</a>
+          <a href="../logout.php" class="user-dropdown-item"><i class="fa-solid fa-door-open" style="color: #ef061d;"></i> Cerrar sesión</a>
         </div>
       </div>
 
       <!-- Botón Volver -->
-      <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
+      <a href="dashboard.php" class="btn-logout"><i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver</a>
     </div>
   </div>
 </div>
@@ -188,13 +207,12 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
     <?php foreach($modulos as $m): ?>
       <div class="col-lg-3 col-md-4 col-sm-6 mb-4 area-card" data-id="<?= (int)$m['id_carpeta'] ?>">
         <div class="card p-3 text-center folder-card" onclick="location.href='carpeta.php?id=<?= (int)$m['id_carpeta'] ?>'">
-          <div class="folder-icon">📚</div>
+          <div class="folder-icon">  <i class="fa-solid fa-book icono-libro" style="color: #B197FC;"></i>        </div>
           <h5><?= htmlspecialchars($m['nombre']) ?></h5>
         </div>
       </div>
     <?php endforeach; ?>
   </div>
-
 </div>
 
 <script>

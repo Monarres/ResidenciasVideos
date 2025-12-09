@@ -152,9 +152,82 @@ $franquiciatarios = $stmt_franq->fetchAll(PDO::FETCH_ASSOC);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Unidades</title>
+  
+  <!-- jQuery primero (requerido por Select2) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+  
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
   <style>
+/* ====== Select2 personalizado ====== */
+.select2-container--default .select2-selection--multiple {
+    background-color: #f8f5fa;
+    border: 2px solid #cbb4e3;
+    border-radius: 12px;
+    padding: 6px;
+    min-height: 48px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.select2-container--default .select2-selection--multiple .select2-search__field {
+    font-size: 15px;
+    color: #7a6390;
+}
+.select2-container--default.select2-container--focus .select2-selection--multiple,
+.select2-container--default .select2-selection--multiple:focus {
+    border-color: #9b7cb8;
+    box-shadow: 0 4px 14px rgba(155,124,184,0.12);
+    outline: none;
+}
+.select2-container--default .select2-selection__choice {
+    background-color: #9b7cb8 !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 4px 10px !important;
+    border-radius: 8px !important;
+    font-size: 14px;
+    margin-top: 4px !important;
+}
+.select2-container--default .select2-selection__choice__remove {
+    color: rgba(255,255,255,0.9) !important;
+    margin-right: 6px;
+    font-weight: 700;
+}
+.select2-container--default .select2-dropdown {
+    border: 2px solid #cbb4e3;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(43, 38, 69, 0.08);
+}
+.select2-container--default .select2-results__option {
+    padding: 10px 14px;
+    font-size: 15px;
+    border-bottom: 1px solid #f0edf6;
+}
+.select2-container--default .select2-results__option--highlighted {
+    background-color: #9b7cb8 !important;
+    color: #fff !important;
+}
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #efe6fb !important;
+    color: #3b2b4d !important;
+}
+
+@media (max-width: 576px) {
+  .select2-container .select2-selection--multiple { min-height: 44px; }
+  .select2-container--default .select2-selection__choice { font-size: 13px; padding: 3px 8px !important; }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -360,32 +433,6 @@ body {
   border-radius: 20px;
 }
 
-.franquiciatarios-list {
-  background: linear-gradient(135deg, rgba(245, 163, 199, 0.1), rgba(155, 124, 184, 0.1));
-  padding: 10px 15px;
-  border-radius: 10px;
-  margin-top: 10px;
-}
-
-.franq-checkbox {
-  margin: 8px 0;
-  padding: 8px 12px;
-  background: white;
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  transition: 0.3s;
-}
-
-.franq-checkbox:hover {
-  border-color: #9b7cb8;
-  background: rgba(155, 124, 184, 0.05);
-}
-
-.franq-checkbox input[type="checkbox"] {
-  margin-right: 8px;
-  cursor: pointer;
-}
-
 .franq-badge {
   background: linear-gradient(135deg, rgba(245, 163, 199, 0.3), rgba(155, 124, 184, 0.3));
   color: #9b7cb8;
@@ -417,10 +464,10 @@ body {
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>🏢 Gestión de Unidades</h2>
+    <h2><i class="fa-solid fa-building-columns"></i> Gestión de Unidades</h2>
     <div class="user-info">
-      <a href="usuarios.php" class="btn-logout">👥 Usuarios</a>
-      <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
+      <a href="usuarios.php" class="btn-logout"><i class="fa-solid fa-users" style="color: #B197FC;"></i> Usuarios</a>
+      <a href="dashboard.php" class="btn-logout"><i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver</a>
     </div>
   </div>
 </div>
@@ -436,7 +483,7 @@ body {
 
   <!-- Formulario para agregar -->
   <div class="card p-4 mb-4">
-    <h5 class="mb-3" style="color: #9b7cb8; font-weight: 600;">➕ Agregar Nueva Unidad</h5>
+    <h5 class="mb-3" style="color: #9b7cb8; font-weight: 600;"><i class="fa-solid fa-circle-plus"></i> Agregar Nueva Unidad</h5>
     <form method="POST">
       <input type="hidden" name="accion" value="agregar">
       <div class="row g-3">
@@ -452,28 +499,21 @@ body {
           <button class="btn btn-primary w-100" type="submit">Agregar</button>
         </div>
       </div>
-      
-      <div class="mt-3">
-        <label class="form-label fw-bold" style="color: #9b7cb8;">
-          👔 Franquiciatarios Asignados (opcional)
-        </label>
-        <div class="franquiciatarios-list">
+      <div class="row mt-3">
+        <div class="col-12">
+          <label class="form-label fw-bold" style="color: #9b7cb8;">
+            <i class="fa-solid fa-shirt"></i> Franquiciatarios Asignados
+          </label>
           <?php if (empty($franquiciatarios)): ?>
             <p class="text-muted mb-0">No hay franquiciatarios disponibles. <a href="usuarios.php">Crear franquiciatario</a></p>
           <?php else: ?>
-            <div class="row">
+            <select id="select-franquiciatarios" name="franquiciatarios[]" class="form-select" multiple="multiple">
               <?php foreach($franquiciatarios as $franq): ?>
-                <div class="col-md-6">
-                  <div class="franq-checkbox">
-                    <label style="cursor: pointer; margin: 0; width: 100%;">
-                      <input type="checkbox" name="franquiciatarios[]" value="<?= $franq['id_usuario'] ?>">
-                      <strong><?= htmlspecialchars($franq['nombre']) ?></strong>
-                      <br><small class="text-muted"><?= htmlspecialchars($franq['email']) ?></small>
-                    </label>
-                  </div>
-                </div>
+                <option value="<?= $franq['id_usuario'] ?>">
+                  <?= htmlspecialchars($franq['nombre']) ?> — <?= htmlspecialchars($franq['email']) ?>
+                </option>
               <?php endforeach; ?>
-            </div>
+            </select>
           <?php endif; ?>
         </div>
       </div>
@@ -483,7 +523,7 @@ body {
   <!-- Tabla de unidades -->
   <div class="card p-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 style="color: #9b7cb8; font-weight: 600; margin: 0;">📋 Lista de Unidades</h5>
+      <h5 style="color: #9b7cb8; font-weight: 600; margin: 0;"><i class="fa-solid fa-list"></i> Lista de Unidades</h5>
       <span class="badge"><?= count($unidades) ?> unidades</span>
     </div>
     
@@ -516,7 +556,7 @@ body {
                     $franqs = explode(', ', $u['franquiciatarios']);
                     foreach($franqs as $franq): 
                   ?>
-                    <span class="franq-badge">👔 <?= htmlspecialchars($franq) ?></span>
+                    <span class="franq-badge"><i class="fa-solid fa-shirt"></i> <?= htmlspecialchars($franq) ?></span>
                   <?php endforeach; ?>
                 <?php else: ?>
                   <span class="text-muted">Sin asignar</span>
@@ -529,20 +569,18 @@ body {
                 <button class="btn btn-info btn-sm me-1 btn-ver-usuarios"
                         data-id="<?= $u['id_unidad'] ?>"
                         data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
-                  👥 Ver Usuarios
+                  <i class="fa-solid fa-users"></i> Ver Usuarios
                 </button>
                 <button class="btn btn-warning btn-sm me-1 btn-editar"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalEditar"
                         data-id="<?= $u['id_unidad'] ?>"
                         data-nombre="<?= htmlspecialchars($u['nombre']) ?>"
                         data-direccion="<?= htmlspecialchars($u['direccion']) ?>">
-                  ✏️ Editar
+                  <i class="fa-solid fa-pen-to-square"></i> Editar
                 </button>
                 <button class="btn btn-danger btn-sm btn-delete"
                         data-id="<?= $u['id_unidad'] ?>"
                         data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
-                  🗑️ Eliminar
+                  <i class="fa-solid fa-trash-can"></i> Eliminar
                 </button>
               </td>
             </tr>
@@ -561,7 +599,7 @@ body {
       <input type="hidden" name="accion" value="editar">
       <input type="hidden" name="id_unidad" id="edit-id">
       <div class="modal-header">
-        <h5 class="modal-title">✏️ Editar Unidad</h5>
+        <h5 class="modal-title">Editar Unidad</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -575,25 +613,19 @@ body {
         </div>
         <div class="mb-3">
           <label class="form-label fw-bold" style="color: #9b7cb8;">
-            👔 Franquiciatarios Asignados
+            <i class="fa-solid fa-shirt"></i> Franquiciatarios Asignados
           </label>
-          <div class="franquiciatarios-list" id="edit-franquiciatarios-list">
-            <?php if (!empty($franquiciatarios)): ?>
-              <div class="row">
-                <?php foreach($franquiciatarios as $franq): ?>
-                  <div class="col-md-6">
-                    <div class="franq-checkbox">
-                      <label style="cursor: pointer; margin: 0; width: 100%;">
-                        <input type="checkbox" name="franquiciatarios[]" value="<?= $franq['id_usuario'] ?>" class="edit-franq-check">
-                        <strong><?= htmlspecialchars($franq['nombre']) ?></strong>
-                        <br><small class="text-muted"><?= htmlspecialchars($franq['email']) ?></small>
-                      </label>
-                    </div>
-                  </div>
-                <?php endforeach; ?>
-              </div>
-            <?php endif; ?>
-          </div>
+          <?php if (empty($franquiciatarios)): ?>
+            <p class="text-muted mb-0">No hay franquiciatarios disponibles.</p>
+          <?php else: ?>
+            <select id="edit-franquiciatarios-select" name="franquiciatarios[]" class="form-select" multiple="multiple">
+              <?php foreach($franquiciatarios as $franq): ?>
+                <option value="<?= $franq['id_usuario'] ?>">
+                  <?= htmlspecialchars($franq['nombre']) ?> — <?= htmlspecialchars($franq['email']) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          <?php endif; ?>
         </div>
       </div>
       <div class="modal-footer">
@@ -609,7 +641,7 @@ body {
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tituloModalUsuarios">👥 Usuarios de la Unidad</h5>
+        <h5 class="modal-title" id="tituloModalUsuarios">Usuarios de la Unidad</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" id="contenidoUsuarios">
@@ -626,118 +658,143 @@ body {
   </div>
 </div>
 
+<!-- Bootstrap Bundle JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
-// Esperar a que el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', function() {
-  
-  // Cargar datos de edición
-  document.querySelectorAll('.btn-editar').forEach(btn => {
-    btn.addEventListener('click', async function() {
-      const id = this.dataset.id;
-      const nombre = this.dataset.nombre;
-      const direccion = this.dataset.direccion;
-      
-      document.getElementById('edit-id').value = id;
-      document.getElementById('edit-nombre').value = nombre;
-      document.getElementById('edit-direccion').value = direccion;
-      
-      // Desmarcar todos los checkboxes
-      document.querySelectorAll('.edit-franq-check').forEach(check => check.checked = false);
-      
-      // Obtener franquiciatarios de la unidad
-      try {
-        const response = await fetch(`obtener_franquiciatarios_unidad.php?id_unidad=${id}`);
-        const data = await response.json();
-        
-        if (data.franquiciatarios) {
-          data.franquiciatarios.forEach(franqId => {
-            const checkbox = document.querySelector(`.edit-franq-check[value="${franqId}"]`);
-            if (checkbox) checkbox.checked = true;
-          });
-        }
-      } catch (error) {
-        console.error('Error al cargar franquiciatarios:', error);
-      }
+$(document).ready(function() {
+  // Inicializar Select2 para el formulario de agregar
+  if ($('#select-franquiciatarios').length) {
+    $('#select-franquiciatarios').select2({
+      placeholder: "Busca y selecciona franquiciatarios...",
+      width: '100%',
+      allowClear: true,
+      templateResult: function (item) {
+        if (!item.id) return item.text;
+        var parts = item.text.split(' — ');
+        return $('<div style="display:flex; flex-direction:column;"><span>'+parts[0]+'</span><small style="color:#6b5b80;">'+parts[1]+'</small></div>');
+      },
+      escapeMarkup: function(m) { return m; }
     });
+  }
+
+  // Inicializar Select2 para el modal de editar
+  if ($('#edit-franquiciatarios-select').length) {
+    $('#edit-franquiciatarios-select').select2({
+      dropdownParent: $('#modalEditar'),
+      placeholder: "Busca y selecciona franquiciatarios...",
+      width: '100%',
+      allowClear: true,
+      templateResult: function (item) {
+        if (!item.id) return item.text;
+        var parts = item.text.split(' — ');
+        return $('<div style="display:flex; flex-direction:column;"><span>'+parts[0]+'</span><small style="color:#6b5b80;">'+parts[1]+'</small></div>');
+      },
+      escapeMarkup: function(m) { return m; }
+    });
+  }
+
+  // Botón editar - cargar datos
+  $('.btn-editar').on('click', async function() {
+    const id = $(this).data('id');
+    const nombre = $(this).data('nombre');
+    const direccion = $(this).data('direccion');
+
+    $('#edit-id').val(id);
+    $('#edit-nombre').val(nombre);
+    $('#edit-direccion').val(direccion);
+
+    // Limpiar selección previa
+    $('#edit-franquiciatarios-select').val(null).trigger('change');
+
+    // Cargar franquiciatarios de la unidad
+    try {
+      const resp = await fetch(`obtener_franquiciatarios_unidad.php?id_unidad=${id}`);
+      const data = await resp.json();
+      
+      if (data && Array.isArray(data.franquiciatarios) && data.franquiciatarios.length) {
+        $('#edit-franquiciatarios-select').val(data.franquiciatarios).trigger('change');
+      }
+    } catch (err) {
+      console.error('Error cargando franquiciatarios:', err);
+    }
+
+    // Mostrar el modal
+    const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
+    modal.show();
   });
 
-  // Ver usuarios de la unidad
-  document.querySelectorAll('.btn-ver-usuarios').forEach(btn => {
-    btn.addEventListener('click', async function() {
-      const idUnidad = this.dataset.id;
-      const nombreUnidad = this.dataset.nombre;
-      
-      console.log('Ver usuarios de unidad:', idUnidad, nombreUnidad); // Debug
-      
-      document.getElementById('tituloModalUsuarios').textContent = `👥 Usuarios de: ${nombreUnidad}`;
-      document.getElementById('contenidoUsuarios').innerHTML = `
-        <div class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-          </div>
+  // Botón ver usuarios
+  $('.btn-ver-usuarios').on('click', async function() {
+    const idUnidad = $(this).data('id');
+    const nombreUnidad = $(this).data('nombre');
+    
+    $('#tituloModalUsuarios').text(`Usuarios de: ${nombreUnidad}`);
+    $('#contenidoUsuarios').html(`
+      <div class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
         </div>
-      `;
+      </div>
+    `);
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalUsuarios'));
+    modal.show();
+    
+    try {
+      const response = await fetch(`obtener_usuarios_unidad.php?id_unidad=${idUnidad}`);
+      const data = await response.json();
       
-      const modal = new bootstrap.Modal(document.getElementById('modalUsuarios'));
-      modal.show();
-      
-      try {
-        const response = await fetch(`obtener_usuarios_unidad.php?id_unidad=${idUnidad}`);
-        const data = await response.json();
-        
-        console.log('Respuesta del servidor:', data); // Debug
-        
-        let html = '';
-        if (data.usuarios && data.usuarios.length > 0) {
-          html = '<div class="table-responsive"><table class="table table-hover"><thead class="table-light"><tr><th>Nombre</th><th>Email</th><th>Área</th></tr></thead><tbody>';
-          data.usuarios.forEach(usuario => {
-            html += `
-              <tr>
-                <td><strong>${usuario.nombre}</strong></td>
-                <td>${usuario.email}</td>
-                <td>${usuario.area_nombre ? '<span class="franq-badge">🪪 ' + usuario.area_nombre + '</span>' : '<span class="text-muted">Sin área</span>'}</td>
-              </tr>
-            `;
-          });
-          html += '</tbody></table></div>';
-        } else {
-          html = '<div class="alert alert-info">Esta unidad no tiene usuarios asignados todavía.</div>';
-        }
-        
-        document.getElementById('contenidoUsuarios').innerHTML = html;
-      } catch (error) {
-        console.error('Error al cargar usuarios:', error); // Debug
-        document.getElementById('contenidoUsuarios').innerHTML = '<div class="alert alert-danger">Error al cargar usuarios: ' + error.message + '</div>';
+      let html = '';
+      if (data.usuarios && data.usuarios.length > 0) {
+        html = '<div class="table-responsive"><table class="table table-hover"><thead class="table-light"><tr><th>Nombre</th><th>Email</th><th>Área</th></tr></thead><tbody>';
+        data.usuarios.forEach(usuario => {
+          html += `
+            <tr>
+              <td><strong>${usuario.nombre}</strong></td>
+              <td>${usuario.email}</td>
+              <td>${usuario.area_nombre ? '<span class="franq-badge">' + usuario.area_nombre + '</span>' : '<span class="text-muted">Sin área</span>'}</td>
+            </tr>
+          `;
+        });
+        html += '</tbody></table></div>';
+      } else {
+        html = '<div class="alert alert-info">Esta unidad no tiene usuarios asignados todavía.</div>';
       }
-    });
+      
+      $('#contenidoUsuarios').html(html);
+    } catch (error) {
+      console.error('Error al cargar usuarios:', error);
+      $('#contenidoUsuarios').html('<div class="alert alert-danger">Error al cargar usuarios: ' + error.message + '</div>');
+    }
   });
 
-  // Eliminar unidad
-  document.querySelectorAll('.btn-delete').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const id = btn.dataset.id;
-      const nombre = btn.dataset.nombre;
-      
-      const result = await Swal.fire({
-        title: '¿Eliminar unidad?',
-        html: `Se eliminará la unidad: <strong>${nombre}</strong><br><br><small>Los usuarios de esta unidad no serán eliminados, solo se desvinculará la unidad.</small>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        confirmButtonColor: '#dc3545',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true
-      });
-
-      if (result.isConfirmed) {
-        window.location.href = `unidades.php?eliminar=${id}`;
-      }
+  // Botón eliminar con SweetAlert2
+  $('.btn-delete').on('click', async function(e) {
+    e.preventDefault();
+    const id = $(this).data('id');
+    const nombre = $(this).data('nombre');
+    
+    const result = await Swal.fire({
+      title: '¿Eliminar unidad?',
+      html: `Se eliminará la unidad: <strong>${nombre}</strong><br><br><small>Los usuarios de esta unidad no serán eliminados, solo se desvinculará la unidad.</small>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      confirmButtonColor: '#dc3545',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
     });
+
+    if (result.isConfirmed) {
+      window.location.href = `unidades.php?eliminar=${id}`;
+    }
   });
-  
 });
 </script>
+
 </body>
 </html>

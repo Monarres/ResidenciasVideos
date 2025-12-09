@@ -1,8 +1,8 @@
 <?php
 // conexion.php
-$host = '127.0.0.1';
-$db   = 'basebbm';
-$user = 'root';
+$host = 'mnz.domcloud.co';
+$db   = 'pitiful-go-tei_basebbm';
+$user = 'pitiful-go-tei';
 $pass = '';
 $charset = 'utf8mb4';
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

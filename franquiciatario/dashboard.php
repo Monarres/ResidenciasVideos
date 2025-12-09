@@ -23,6 +23,9 @@ $areas = $stmt->fetchAll();
 <!doctype html>
 <html lang="es">
 <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Franquiciatario - Dashboard</title>
@@ -167,6 +170,9 @@ body {
   font-weight: 600;
   margin-bottom: 20px;
 }
+.icono-ubicacion:hover {
+    animation: fa-beat 1s infinite;
+}
 </style>
 </head>
 <body>
@@ -179,12 +185,11 @@ body {
       <!-- Usuario -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          👤 <?=htmlspecialchars($_SESSION['nombre'])?> ▼
+        <i class="fa-solid fa-user" style="color: #B197FC; vertical-align: middle;"></i><?=htmlspecialchars($_SESSION['nombre'])?> <i class="fa-solid fa-caret-down" style="color: #B197FC;"></i>    
         </button>
-
         <div class="user-dropdown" id="userDropdown">
-          <a href="usuarios_franquiciatario.php" class="user-dropdown-item" style="color: #9b7cb8;">👥 Mis Usuarios</a>
-          <a href="../logout.php" class="user-dropdown-item">🚪 Cerrar sesión</a>
+          <a href="usuarios_franquiciatario.php" class="user-dropdown-item" style="color: #9b7cb8;"><i class="fas fa-users"></i> Mis Usuarios</a>
+          <a href="../logout.php" class="user-dropdown-item"><i class="fa-solid fa-door-open" style="color: #ef061d;"></i> Cerrar sesión</a>
         </div>
       </div>
     </div>
@@ -196,7 +201,7 @@ body {
     <?php foreach($areas as $a): ?>
       <div class="col-lg-3 col-md-4 col-sm-6 mb-4 area-card">
         <div class="card p-3 text-center" onclick="location.href='area.php?id=<?= $a['id_carpeta'] ?>'">
-          <div class="folder-icon">🪪</div>
+          <div class="folder-icon"><i class="fa-solid fa-location-dot icono-ubicacion" style="color: #B197FC;"></i></div>
           <h5><?=htmlspecialchars($a['nombre'])?></h5>
         </div>
       </div>

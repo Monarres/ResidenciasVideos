@@ -23,11 +23,11 @@ $areas = $stmt->fetchAll();
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin - Dashboard</title>
-    <!-- Agregar meta tags anti-caché -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 * {
@@ -58,18 +58,10 @@ body {
 
 .top-header .container-fluid {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 0 30px;
-}
-.top-header h2 {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.header-right {
-  margin-left: auto;
+  position: relative;
 }
 
 .top-header h2 {
@@ -77,31 +69,41 @@ body {
   font-weight: 600;
   margin: 0;
   font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-200%);
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
   margin-left: auto;
 }
 
-.menu-btn {
-  background: white;
-  border: none;
-  color: #9b7cb8;
+/* Botones del navbar */
+.nav-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
   font-weight: 500;
   border-radius: 25px;
   padding: 8px 20px;
   transition: 0.3s;
   cursor: pointer;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
-.menu-btn:hover {
-  background: #f8f9fa;
+.nav-btn:hover {
+  background: white;
+  color: #9b7cb8;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
@@ -170,48 +172,6 @@ body {
 .user-dropdown-item:hover {
   background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(245, 163, 199, 0.2));
   transform: translateX(5px);
-}
-
-.main-menu-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 10px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(155, 124, 184, 0.3);
-  min-width: 220px;
-  padding: 10px;
-  z-index: 10000;
-  display: none;
-}
-
-.main-menu-dropdown.show {
-  display: block;
-}
-
-.main-menu-item {
-  padding: 12px 20px;
-  transition: 0.3s;
-  border-radius: 10px;
-  margin-bottom: 5px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: #333;
-  cursor: pointer;
-}
-
-.main-menu-item:last-child {
-  margin-bottom: 0;
-}
-
-.main-menu-item:hover {
-  background: linear-gradient(135deg, rgba(245, 163, 199, 0.2), rgba(155, 124, 184, 0.2));
-  transform: translateX(5px);
-  color: #9b7cb8;
 }
 
 .container {
@@ -383,7 +343,7 @@ body {
 .swal2-input:focus { border-color:#9b7cb8 !important; box-shadow:0 0 0 4px rgba(155,124,184,0.15) !important; outline:none !important; }
 .swal2-validation-message { background:#f5c6d9 !important; color:#9b7cb8 !important; border-radius:15px !important; font-weight:500 !important; }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   body {
     padding-top: 90px;
   }
@@ -394,21 +354,31 @@ body {
   }
   
   .top-header .container-fluid {
+    flex-wrap: wrap;
+    gap: 10px;
     padding: 0 15px;
   }
   
   .top-header h2 {
     font-size: 1.2rem;
+    width: 100%;
+    text-align: center;
   }
   
   .header-right {
-    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
   }
   
-  .menu-btn, .user-toggle {
-    padding: 6px 15px;
-    font-size: 0.9rem;
+  .nav-btn, .user-toggle {
+    padding: 6px 12px;
+    font-size: 0.85rem;
   }
+}
+.icono-ubicacion:hover {
+    animation: fa-beat 1s infinite;
 }
 </style>
 </head>
@@ -416,34 +386,36 @@ body {
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>Panel - Áreas</h2>
+    <h2>
+      <i class="fa-solid fa-location-dot fa-beat"></i> 
+      Panel - Áreas
+    </h2>
     
     <div class="header-right">
+      <!-- Botones directos en el navbar -->
+      <a href="usuarios.php" class="nav-btn">
+        <i class="fa-solid fa-users" style="color: #B197FC;"></i> Usuarios
+      </a>
+      
+      <a href="ver_respuestas.php" class="nav-btn">
+        <i class="fa-solid fa-chart-pie" style="color: #B197FC;"></i> Respuestas
+      </a>
+      
+      <a href="unidades.php" class="nav-btn">
+        <i class="fa-solid fa-building-columns" style="color: #B197FC;"></i> Sucursales
+      </a>
+      
       <!-- Sección de Usuario con Cerrar Sesión -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          <span>👤</span> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;">▼</span>
+          <i class="fa-solid fa-user" style="color: #B197FC;"></i>
+          <?=htmlspecialchars($_SESSION['nombre'])?>
+          <i class="fa-solid fa-caret-down" style="color: #B197FC;"></i>
         </button>
         <div class="user-dropdown" id="userDropdown">
           <a href="../logout.php" class="user-dropdown-item">
-            <span>🚪</span> Cerrar sesión
-          </a>
-        </div>
-      </div>
-      
-      <!-- Botón de Menú Principal -->
-      <div style="position: relative;">
-        <button class="menu-btn" id="mainMenuToggle">
-          Menú <span style="font-size: 0.8em;">▼</span>
-        </button>
-        <div class="main-menu-dropdown" id="mainMenuDropdown">
-          <a href="usuarios.php" class="main-menu-item">
-            <span>👤</span> Usuarios
-          </a>
-          <a href="ver_respuestas.php" class="main-menu-item">
-            <span>📊</span> Ver respuestas
-            <a href="unidades.php" class="main-menu-item">
-            <span>🏢</span> Ver unidades
+            <i class="fa-solid fa-door-open" style="color: #ef061d;"></i>
+            Cerrar sesión
           </a>
         </div>
       </div>
@@ -456,7 +428,9 @@ body {
   <div class="card p-4 mb-4">
     <form id="formCrearArea" class="d-flex gap-2">
       <input name="nombre" class="form-control" placeholder="Nueva área (nombre)" required>
-      <button class="btn btn-primary">Crear área</button>
+      <button class="btn btn-primary">
+        Crear área
+      </button>
     </form>
     <div id="areaMsg"></div>
   </div>
@@ -473,15 +447,19 @@ body {
             </button>
             <ul class="dropdown-menu">
               <li>
-                <a href="#" class="dropdown-item btn-edit-area" data-id="<?= $a['id_carpeta'] ?>"><span>✏️</span> Editar</a>
+                <a href="#" class="dropdown-item btn-edit-area" data-id="<?= $a['id_carpeta'] ?>">
+                  <i class="fas fa-edit"></i> Editar
+                </a>
               </li>
               <li>
-                <a href="#" class="dropdown-item text-danger btn-del-area" data-id="<?= $a['id_carpeta'] ?>"><span>🗑️</span> Eliminar</a>
+                <a href="#" class="dropdown-item text-danger btn-del-area" data-id="<?= $a['id_carpeta'] ?>">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </a>
               </li>
             </ul>
           </div>
 
-          <div class="folder-icon">🪪</div>
+          <div class="folder-icon"><i class="fa-solid fa-location-dot icono-ubicacion" style="color: #B197FC;"></i></div>
           <h5><?=htmlspecialchars($a['nombre'])?></h5>
         </div>
       </div>
@@ -491,17 +469,6 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Toggle del menú principal
-const mainMenuToggle = document.getElementById('mainMenuToggle');
-const mainMenuDropdown = document.getElementById('mainMenuDropdown');
-
-mainMenuToggle.addEventListener('click', function(e) {
-  e.stopPropagation();
-  mainMenuDropdown.classList.toggle('show');
-  // Cerrar el menú de usuario si está abierto
-  userDropdown.classList.remove('show');
-});
-
 // Toggle del menú de usuario
 const userToggle = document.getElementById('userToggle');
 const userDropdown = document.getElementById('userDropdown');
@@ -509,15 +476,10 @@ const userDropdown = document.getElementById('userDropdown');
 userToggle.addEventListener('click', function(e) {
   e.stopPropagation();
   userDropdown.classList.toggle('show');
-  // Cerrar el menú principal si está abierto
-  mainMenuDropdown.classList.remove('show');
 });
 
-// Cerrar los menús al hacer clic fuera
+// Cerrar el menú al hacer clic fuera
 document.addEventListener('click', function(e) {
-  if (!mainMenuToggle.contains(e.target) && !mainMenuDropdown.contains(e.target)) {
-    mainMenuDropdown.classList.remove('show');
-  }
   if (!userToggle.contains(e.target) && !userDropdown.contains(e.target)) {
     userDropdown.classList.remove('show');
   }
@@ -591,7 +553,7 @@ document.querySelectorAll('.btn-edit-area').forEach(b=>{
     const currentName = b.closest('.area-card').querySelector('h5').textContent.trim();
     
     const { value: nuevoNombre } = await Swal.fire({
-      title: '✏️ Editar área',
+      title: '<i class="fas fa-edit"></i> Editar área',
       input: 'text',
       inputValue: currentName,
       inputPlaceholder: 'Escribe el nuevo nombre',

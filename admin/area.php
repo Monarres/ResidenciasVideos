@@ -38,6 +38,13 @@ try {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Área - <?= htmlspecialchars($area['nombre']) ?></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -185,28 +192,31 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
   .user-toggle { padding: 6px 15px; font-size: 0.9rem; }
   .btn-logout { padding:6px 15px; font-size:0.9rem; }
 }
+.icono-libro:hover {
+  animation: fa-beat 1s infinite;
+}
 </style>
 </head>
 <body>
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>Área: <?= htmlspecialchars($area['nombre']) ?></h2>
+    <h2> <i class="fa-solid fa-location-dot fa-beat" style="color: #ffffffff;"></i> Área: <?= htmlspecialchars($area['nombre']) ?></h2>
     
     <div class="header-right">
       <!-- Sección de Usuario con Cerrar Sesión -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          <span>👤</span> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;">▼</span>
+          <span><i class="fa-solid fa-user" style="color: #B197FC;"></i> </span> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;"><i class="fa-solid fa-caret-down" style="color: #B197FC;"></i></span>
         </button>
         <div class="user-dropdown" id="userDropdown">
           <a href="../logout.php" class="user-dropdown-item">
-            <span>🚪</span> Cerrar sesión
+            <span><i class="fa-solid fa-door-open" style="color: #ef061d;"></i> </span> Cerrar sesión
           </a>
         </div>
       </div>
       
-      <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
+      <a href="dashboard.php" class="btn-logout"><i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver</a>
     </div>
   </div>
 </div>
@@ -232,11 +242,11 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
           <div class="dropdown" onclick="event.stopPropagation()">
             <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⋮</button>
             <ul class="dropdown-menu">
-              <li><a href="#" class="dropdown-item btn-edit-modulo" data-id="<?= (int)$m['id_carpeta'] ?>"><span>✏️</span> Editar</a></li>
-              <li><a href="#" class="dropdown-item text-danger btn-del-modulo" data-id="<?= (int)$m['id_carpeta'] ?>"><span>🗑️</span> Eliminar</a></li>
+              <li><a href="#" class="dropdown-item btn-edit-modulo" data-id="<?= (int)$m['id_carpeta'] ?>"><span><i class="fas fa-edit"></i></span> Editar</a></li>
+              <li><a href="#" class="dropdown-item text-danger btn-del-modulo" data-id="<?= (int)$m['id_carpeta'] ?>"><span><i class="fas fa-trash-alt"></i></span> Eliminar</a></li>
             </ul>
           </div>
-          <div class="folder-icon">📚</div>
+          <div class="folder-icon"><i class="fa-solid fa-book icono-libro" style="color: #B197FC;"></i></div>
           <h5><?= htmlspecialchars($m['nombre']) ?></h5>
         </div>
       </div>
@@ -345,7 +355,7 @@ document.querySelectorAll('.btn-edit-modulo').forEach(b=>{
     const currentName = b.closest('.area-card').querySelector('h5').textContent.trim();
     
     const { value: nuevoNombre } = await Swal.fire({
-      title: '✏️ Editar módulo',
+      title: '<i class="fas fa-edit"></i> Editar módulo',
       input: 'text',
       inputValue: currentName,
       inputPlaceholder: 'Escribe el nuevo nombre',

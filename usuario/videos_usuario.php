@@ -62,10 +62,14 @@ foreach($videos as $v) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $respondidas_archivos = $result['cnt'] ?? 0;
     
-    // El video está completo si respondió TODAS las preguntas (incisos + archivos)
-    $completo_incisos = ($respondidas_incisos >= $total_incisos);
-    $completo_archivos = ($respondidas_archivos >= $total_archivos);
+    // LÓGICA CORREGIDA: Un video está completo cuando:
+    // - Si tiene incisos: todos están respondidos
+    // - Si tiene archivos: todos están subidos
+    $completo_incisos = ($total_incisos > 0) ? ($respondidas_incisos >= $total_incisos) : true;
+    $completo_archivos = ($total_archivos > 0) ? ($respondidas_archivos >= $total_archivos) : true;
     $completo = $completo_incisos && $completo_archivos;
+    
+  
     
     if (!$completo) {
         $video_actual = $v;
@@ -89,6 +93,8 @@ if ($video_actual) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Videos de Capacitación</title>
@@ -431,6 +437,29 @@ video {
   box-shadow: 0 0 0 0.2rem rgba(155, 124, 184, 0.25);
 }
 
+.file-name-preview {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(155, 124, 184, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #9b7cb8;
+  display: none;
+}
+
+.file-name-preview i {
+  margin-right: 8px;
+  color: #9b7cb8;
+}
+
+.file-name-preview.duplicate {
+  background: rgba(255, 107, 107, 0.1);
+  border-left-color: #ff6b6b;
+}
+
+.file-name-preview.duplicate i {
+  color: #ff6b6b;
+}
+
 .swal2-popup {
   border-radius: 20px !important;
   font-family: 'Poppins', sans-serif !important;
@@ -494,21 +523,19 @@ video {
   
 <div class="top-header">
   <div class="container-fluid">
-    <h2>🎬 Videos de Capacitación</h2>
+    <h2><i class="fa-solid fa-video"></i> Videos de Capacitación</h2>
     <div class="header-right">
-      <!-- Menú de usuario -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          <span>👤</span> <?= htmlspecialchars($nombre) ?> <span style="font-size: 0.8em;">▼</span>
+          <i class="fa-solid fa-user"></i> <?= htmlspecialchars($nombre) ?> <span style="font-size: 0.8em;"><i class="fa-solid fa-caret-down"></i></span>
         </button>
         <div class="user-dropdown" id="userDropdown">
           <a href="../logout.php" class="user-dropdown-item logout">
-            <span>🚪</span> Cerrar sesión
+            <i class="fa-solid fa-door-open"></i> Cerrar sesión
           </a>
         </div>
       </div>
-      <!-- Botón Volver -->
-      <a href="carpetas.php" class="btn-volver">⬅ Volver</a>
+      <a href="carpetas.php" class="btn-volver"><i class="fa-solid fa-angle-left"></i> Volver</a>
     </div>
   </div>
 </div>
@@ -518,37 +545,47 @@ video {
     <div class="card">
       <div class="video-header">
         <h3><?= htmlspecialchars($video_actual['titulo']) ?></h3>
-        <small>📚 <?= htmlspecialchars($video_actual['carpeta_nombre']) ?></small>
+        <small><i class="fa-solid fa-book"></i> <?= htmlspecialchars($video_actual['carpeta_nombre']) ?></small>
       </div>
       
       <div class="card-body" id="videoContainer">
-        <video id="videoPlayer" controls controlsList="nodownload" preload="metadata">
-          <source src="../<?= htmlspecialchars($video_actual['ruta']) ?>" type="video/mp4">
-          Tu navegador no soporta el elemento de video.
-        </video>
+        <?php if ($video_actual['tipo_video'] === 'youtube' || strpos($video_actual['ruta'], 'youtube.com') !== false): ?>
+  <!-- Video de YouTube -->
+  <iframe id="videoPlayer" 
+          src="<?= htmlspecialchars($video_actual['ruta']) ?>" 
+          width="100%" 
+          height="500"
+          style="border-radius: 15px; border: none;"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+  </iframe>
+<?php else: ?>
+  <!-- Video local -->
+  <video id="videoPlayer" controls controlsList="nodownload" preload="metadata">
+    <source src="../<?= htmlspecialchars($video_actual['ruta']) ?>" type="video/mp4">
+    Tu navegador no soporta el elemento de video.
+  </video>
+<?php endif; ?>
         
         <div class="video-info">
-          <p>⏱️ <strong>Instrucción:</strong> Debes ver el video completo para poder acceder al cuestionario</p>
-          <?php if (count($preguntas) > 0): ?>
-            <?php if ($video_actual['total_archivos'] > 0): ?>
-            <?php endif; ?>
-          <?php else: ?>
-            <p>⚠️ Este video no tiene cuestionario asociado</p>
+          <p><i class="fa-solid fa-stopwatch"></i> <strong>Instrucción:</strong> Debes ver el video completo para poder acceder al cuestionario</p>
+          <?php if (count($preguntas) == 0): ?>
+            <p>¡Este video no tiene cuestionario asociado!</p>
           <?php endif; ?>
         </div>
         
         <div class="text-center mt-4">
           <button id="btnMostrarCuestionario" class="btn btn-cuestionario">
-            📝 Contestar Cuestionario
+            Contestar Cuestionario
           </button>
         </div>
       </div>
       
-      <!-- Formulario de cuestionario -->
       <div id="cuestionarioContainer" class="cuestionario-container">
         <?php if (count($preguntas) > 0): ?>
           <div class="cuestionario-header">
-            <h4>📝 Cuestionario del Video</h4>
+            <h4>Cuestionario del Video</h4>
           </div>
           
           <form id="formCuestionario" method="post" action="guardar_respuestas.php" enctype="multipart/form-data">
@@ -566,106 +603,64 @@ video {
                 </h5>
                 
                 <?php if ($tipo_pregunta === 'archivo'): ?>
-                  <!-- Pregunta tipo archivo -->
                   <?php if (!empty($p['instrucciones_archivo'])): ?>
                     <div class="alert alert-info" style="background: rgba(155, 124, 184, 0.1); border-left: 4px solid #9b7cb8; padding: 15px; margin-bottom: 20px;">
-                      <strong>📌 Instrucciones:</strong><br>
+                      <strong><i class="fa-solid fa-thumbtack"></i> Instrucciones:</strong><br>
                       <?= nl2br(htmlspecialchars($p['instrucciones_archivo'])) ?>
                     </div>
                   <?php endif; ?>
                   
                   <div class="file-upload-container">
                     <label class="form-label" style="font-weight: 600; color: #9b7cb8;">
-                      📎 Sube tu archivo:
+                      Sube tu archivo:
                     </label>
                     <input type="file" 
-                           class="form-control" 
+                           class="form-control file-input" 
                            name="archivo[<?= $p['id_cuestionario'] ?>]" 
                            id="archivo_<?= $p['id_cuestionario'] ?>"
                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.zip"
                            required
+                           data-cuestionario-id="<?= $p['id_cuestionario'] ?>"
                            style="border: 2px dashed #9b7cb8; padding: 10px;">
                     <small class="form-text text-muted">
                       Formatos permitidos: PDF, Word, Imágenes (JPG, PNG), ZIP. Máximo 10MB
                     </small>
+                    <div class="file-name-preview" id="preview_<?= $p['id_cuestionario'] ?>">
+                      <i class="fa-solid fa-file"></i>
+                      <span class="filename-text"></span>
+                    </div>
                   </div>
-                  <?php else: ?>
-  <!-- Pregunta tipo multiple choice con OPCIONES DINÁMICAS -->
-  <div class="opciones-container">
-    <?php
-    // Intentar cargar opciones desde JSON (nuevo formato)
-    $opciones = null;
-    if (!empty($p['opciones_json'])) {
-      $opciones = json_decode($p['opciones_json'], true);
-    }
-    
-    if ($opciones && is_array($opciones)) {
-      // NUEVO FORMATO: Mostrar opciones dinámicas desde JSON
-      foreach ($opciones as $letra => $texto) {
-        $id_input = "q" . $p['id_cuestionario'] . strtolower($letra);
-        ?>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" 
-                 name="resp[<?= $p['id_cuestionario'] ?>]" 
-                 value="<?= htmlspecialchars($letra) ?>" 
-                 id="<?= $id_input ?>" 
-                 required>
-          <label class="form-check-label" for="<?= $id_input ?>">
-            <strong><?= htmlspecialchars($letra) ?>)</strong> <?= htmlspecialchars($texto) ?>
-          </label>
-        </div>
-        <?php
-      }
-    } else {
-      // FORMATO VIEJO: Compatibilidad con preguntas antiguas (A, B, C fijos)
-      if (!empty($p['opcion_a'])) {
-        ?>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" 
-                 name="resp[<?= $p['id_cuestionario'] ?>]" 
-                 value="A" 
-                 id="q<?= $p['id_cuestionario'] ?>a" 
-                 required>
-          <label class="form-check-label" for="q<?= $p['id_cuestionario'] ?>a">
-            <strong>A)</strong> <?= htmlspecialchars($p['opcion_a']) ?>
-          </label>
-        </div>
-        <?php
-      }
-      
-      if (!empty($p['opcion_b'])) {
-        ?>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" 
-                 name="resp[<?= $p['id_cuestionario'] ?>]" 
-                 value="B" 
-                 id="q<?= $p['id_cuestionario'] ?>b" 
-                 required>
-          <label class="form-check-label" for="q<?= $p['id_cuestionario'] ?>b">
-            <strong>B)</strong> <?= htmlspecialchars($p['opcion_b']) ?>
-          </label>
-        </div>
-        <?php
-      }
-      
-      if (!empty($p['opcion_c'])) {
-        ?>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" 
-                 name="resp[<?= $p['id_cuestionario'] ?>]" 
-                 value="C" 
-                 id="q<?= $p['id_cuestionario'] ?>c" 
-                 required>
-          <label class="form-check-label" for="q<?= $p['id_cuestionario'] ?>c">
-            <strong>C)</strong> <?= htmlspecialchars($p['opcion_c']) ?>
-          </label>
-        </div>
-        <?php
-      }
-    }
-    ?>
-  </div>
-<?php endif; ?>
+                <?php else: ?>
+                  <div class="opciones-container">
+                    <?php
+                    $opciones = json_decode($p['opciones_json'], true);
+                    
+                    if ($opciones && is_array($opciones)) {
+                      foreach ($opciones as $letra => $texto) {
+                        $id_input = "q" . $p['id_cuestionario'] . strtolower($letra);
+                        ?>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" 
+                                 name="resp[<?= $p['id_cuestionario'] ?>]" 
+                                 value="<?= htmlspecialchars($letra) ?>" 
+                                 id="<?= $id_input ?>" 
+                                 required>
+                          <label class="form-check-label" for="<?= $id_input ?>">
+                            <strong><?= htmlspecialchars($letra) ?>)</strong> <?= htmlspecialchars($texto) ?>
+                          </label>
+                        </div>
+                        <?php
+                      }
+                    } else {
+                      ?>
+                      <div class="alert alert-danger">
+                        <strong>Error:</strong> Esta pregunta no tiene opciones configuradas.
+                      </div>
+                      <?php
+                    }
+                    ?>
+                  </div>
+                <?php endif; ?>
               </div>
             <?php 
             $numero_pregunta++;
@@ -677,19 +672,19 @@ video {
             
             <div class="text-center mt-4">
               <p style="color: #666; margin-bottom: 20px;">
-                ⚠️ Asegúrate de responder todas las preguntas antes de enviar
+                ¡Asegúrate de responder todas las preguntas antes de enviar!
               </p>
               <button type="submit" class="btn btn-enviar">
-                ✅ Enviar Respuestas (<?= count($preguntas) ?> preguntas)
+                Enviar Respuestas
               </button>
             </div>
           </form>
         <?php else: ?>
           <div class="alert alert-warning text-center">
-            <h5>⚠️ Sin Cuestionario</h5>
+            <h5>Sin Cuestionario</h5>
             <p>Este video no tiene cuestionario asociado. Puedes continuar con el siguiente video.</p>
             <a href="videos_usuario.php" class="btn btn-primary-custom mt-3">
-              ➡️ Continuar
+              Continuar
             </a>
           </div>
         <?php endif; ?>
@@ -711,16 +706,72 @@ video {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// MOSTRAR RESULTADO DEL CUESTIONARIO
+const archivosSeleccionados = new Map();
+
+document.querySelectorAll('.file-input').forEach(input => {
+  input.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const cuestionarioId = this.getAttribute('data-cuestionario-id');
+    const preview = document.getElementById('preview_' + cuestionarioId);
+    
+    if (!file) {
+      preview.style.display = 'none';
+      archivosSeleccionados.delete(cuestionarioId);
+      return;
+    }
+    
+    const fileName = file.name;
+    const fileSize = (file.size / 1024 / 1024).toFixed(2);
+    
+    let isDuplicate = false;
+    for (let [id, name] of archivosSeleccionados) {
+      if (id !== cuestionarioId && name === fileName) {
+        isDuplicate = true;
+        break;
+      }
+    }
+    
+    preview.style.display = 'block';
+    preview.querySelector('.filename-text').textContent = `${fileName} (${fileSize} MB)`;
+    
+    if (isDuplicate) {
+      preview.classList.add('duplicate');
+      preview.querySelector('.filename-text').innerHTML = `<strong>ADVERTENCIA:</strong> Ya seleccionaste un archivo con este nombre en otra pregunta<br>${fileName} (${fileSize} MB)`;
+      
+      Swal.fire({
+        title: ' Archivo Duplicado',
+        html: `Ya has seleccionado un archivo con el nombre:<br><br><strong>${fileName}</strong><br><br>¿Estás seguro de que quieres usar el mismo archivo dos veces?<br><br><small style="color: #666;">Si fue un error, por favor selecciona un archivo diferente.</small>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, usar este archivo',
+        cancelButtonText: 'Cambiar archivo',
+        confirmButtonColor: '#ff9800',
+        cancelButtonColor: '#9b7cb8'
+      }).then((result) => {
+        if (!result.isConfirmed) {
+          e.target.value = '';
+          preview.style.display = 'none';
+          archivosSeleccionados.delete(cuestionarioId);
+        } else {
+          archivosSeleccionados.set(cuestionarioId, fileName);
+        }
+      });
+    } else {
+      preview.classList.remove('duplicate');
+      archivosSeleccionados.set(cuestionarioId, fileName);
+    }
+  });
+});
+
 <?php if (isset($_SESSION['resultado_cuestionario'])): ?>
   const resultado = <?= json_encode($_SESSION['resultado_cuestionario']) ?>;
   
   if (resultado.tipo === 'archivo') {
     Swal.fire({
-      title: '📋 Respuestas Enviadas',
+      title: 'Respuestas Enviadas',
       html: `
         <div style="text-align: center; padding: 20px;">
-          <div style="font-size: 4rem; margin: 20px 0;">📝</div>
+          <div style="font-size: 4rem; margin: 20px 0;"><i class="fa-solid fa-clipboard-list"></i></div>
           <h3 style="color: #9b7cb8; margin-bottom: 20px;">Tu calificación será revisada</h3>
           <p style="color: #666; font-size: 1.1rem;">
             Tus respuestas han sido enviadas correctamente.<br>
@@ -740,7 +791,7 @@ video {
     const color = aprobado ? '#28a745' : '#ff6b6b';
     
     Swal.fire({
-      title: aprobado ? '¡Felicidades! 🎉' : 'Resultado 📝',
+      title: aprobado ? '¡Felicidades!' : 'Resultado 📝',
       html: `
         <div style="text-align: center; padding: 20px;">
           <h3 style="color: #9b7cb8; margin-bottom: 20px;">Resultados del Cuestionario</h3>
@@ -751,7 +802,7 @@ video {
           
           <div style="margin-top: 30px; padding: 20px; background: ${aprobado ? 'rgba(40, 167, 69, 0.1)' : 'rgba(255, 107, 107, 0.1)'}; border-radius: 10px; border-left: 4px solid ${color};">
             <strong style="font-size: 1.2rem; color: ${color};">
-              ${aprobado ? '✅ ¡APROBADO!' : '❌ NO APROBADO'}
+              ${aprobado ? '¡APROBADO!' : 'NO APROBADO'}
             </strong>
             <p style="margin-top: 10px; color: #666;">
               ${aprobado ? 'Has superado el 70% mínimo requerido' : 'Necesitas al menos 70% para aprobar'}
@@ -780,85 +831,150 @@ video {
   });
 <?php endif; ?>
 
-// CONTROL DEL VIDEO Y CUESTIONARIO
+// Declarar variables GLOBALES para que YouTube API pueda accederlas
+window.videoCompletado = false;
+window.tienePreguntas = <?= count($preguntas) > 0 ? 'true' : 'false' ?>;
+const totalPreguntas = <?= count($preguntas) ?>;
+const esYoutube = <?= isset($video_actual) && ($video_actual['tipo_video'] === 'youtube' || strpos($video_actual['ruta'], 'youtube.com') !== false) ? 'true' : 'false' ?>;
+
+console.log('Total de preguntas cargadas:', totalPreguntas);
+console.log('Es video de YouTube:', esYoutube);
+
 const videoPlayer = document.getElementById('videoPlayer');
-const btnMostrarCuestionario = document.getElementById('btnMostrarCuestionario');
 const videoContainer = document.getElementById('videoContainer');
 const cuestionarioContainer = document.getElementById('cuestionarioContainer');
 
-let videoCompletado = false;
-const tienePreguntas = <?= count($preguntas) > 0 ? 'true' : 'false' ?>;
-const totalPreguntas = <?= count($preguntas) ?>;
+// Guardar referencia al botón GLOBALMENTE
+window.btnCuestionario = document.getElementById('btnMostrarCuestionario');
+console.log('Botón encontrado:', window.btnCuestionario);
 
-console.log('Total de preguntas cargadas:', totalPreguntas);
-
-videoPlayer.addEventListener('ended', function() {
-  videoCompletado = true;
-  if (tienePreguntas) {
-    btnMostrarCuestionario.style.display = 'inline-block';
+if (videoPlayer) {
+  if (esYoutube) {
+    console.log('=== INICIALIZANDO VIDEO DE YOUTUBE ===');
     
-    Swal.fire({
-      title: '✅ Video Completado',
-      text: 'Ahora puedes contestar el cuestionario',
-      icon: 'success',
-      confirmButtonText: 'Entendido'
-    });
+    // Cargar YouTube IFrame API
+    if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    window.onYouTubeIframeAPIReady = function() {
+      console.log('YouTube API cargada');
+      console.log('Botón disponible en callback:', window.btnCuestionario);
+      
+      const iframeSrc = videoPlayer.src;
+      const videoId = iframeSrc.split('/embed/')[1].split('?')[0];
+      console.log('Video ID:', videoId);
+      
+      const playerDiv = document.createElement('div');
+      playerDiv.id = 'ytplayer';
+      videoPlayer.parentNode.replaceChild(playerDiv, videoPlayer);
+      
+      const player = new YT.Player('ytplayer', {
+        height: '500',
+        width: '100%',
+        videoId: videoId,
+        playerVars: {
+          'playsinline': 1,
+          'rel': 0,
+          'modestbranding': 1
+        },
+        events: {
+          'onStateChange': function(event) {
+            console.log('Estado:', event.data);
+            
+            if (event.data === 0) { // Video terminado
+              console.log('¡VIDEO TERMINADO!');
+              window.videoCompletado = true;
+              
+              console.log('Accediendo a botón global:', window.btnCuestionario);
+              console.log('Tiene preguntas:', window.tienePreguntas);
+              
+              if (window.tienePreguntas && window.btnCuestionario) {
+                window.btnCuestionario.style.display = 'inline-block';
+                console.log('✅ Botón mostrado exitosamente');
+                
+                Swal.fire({
+                  title: '¡Video Completado!',
+                  text: 'Ahora puedes contestar el cuestionario',
+                  icon: 'success',
+                  confirmButtonText: 'Entendido'
+                });
+              } else {
+                console.error('❌ ERROR: No se puede mostrar el botón');
+                console.log('- tienePreguntas:', window.tienePreguntas);
+                console.log('- btnCuestionario:', window.btnCuestionario);
+              }
+            }
+          }
+        }
+      });
+    };
+    
   } else {
-    Swal.fire({
-      title: '✅ Video Completado',
-      text: 'Este video no tiene cuestionario. ¿Deseas continuar?',
-      icon: 'success',
-      showCancelButton: true,
-      confirmButtonText: 'Continuar',
-      cancelButtonText: 'Ver de nuevo'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = 'videos_usuario.php';
+    // Videos locales
+    const btnMostrarCuestionario = window.btnCuestionario;
+    
+    videoPlayer.addEventListener('ended', function() {
+      window.videoCompletado = true;
+      if (window.tienePreguntas && btnMostrarCuestionario) {
+        btnMostrarCuestionario.style.display = 'inline-block';
+        
+        Swal.fire({
+          title: 'Video Completado',
+          text: 'Ahora puedes contestar el cuestionario',
+          icon: 'success',
+          confirmButtonText: 'Entendido'
+        });
+      }
+    });
+
+    videoPlayer.addEventListener('timeupdate', function() {
+      if (!window.videoCompletado && window.tienePreguntas) {
+        const porcentaje = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+        if (porcentaje >= 95) {
+          window.videoCompletado = true;
+          if (btnMostrarCuestionario) {
+            btnMostrarCuestionario.style.display = 'inline-block';
+          }
+        }
       }
     });
   }
-});
-
-videoPlayer.addEventListener('timeupdate', function() {
-  if (!videoCompletado && tienePreguntas) {
-    const porcentaje = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-    if (porcentaje >= 95) {
-      videoCompletado = true;
-      btnMostrarCuestionario.style.display = 'inline-block';
-    }
-  }
-});
-
-if (btnMostrarCuestionario) {
-  btnMostrarCuestionario.addEventListener('click', function() {
-    if (!videoCompletado) {
-      Swal.fire({
-        title: '⚠️ Video Incompleto',
-        text: 'Debes ver el video completo antes de acceder al cuestionario.',
-        icon: 'warning',
-        confirmButtonText: 'Entendido'
-      });
-      return;
-    }
-
-    videoContainer.style.display = 'none';
-    cuestionarioContainer.style.display = 'block';
-
-    setTimeout(() => {
-      cuestionarioContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-
-    Swal.fire({
-      title: '📝 Cuestionario',
-      html: 'Responde todas las preguntas antes de enviar',
-      icon: 'info',
-      timer: 3000,
-      showConfirmButton: false
-    });
-  });
 }
 
-// VALIDACIÓN DEL FORMULARIO
+
+// HACER CLICKEABLE TODA LA OPCIÓN
+document.querySelectorAll('.form-check').forEach(function(formCheck) {
+  const radioInput = formCheck.querySelector('input[type="radio"]');
+  
+  if (!radioInput) return;
+  
+  formCheck.addEventListener('click', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+      return;
+    }
+    
+    radioInput.checked = true;
+    const event = new Event('change', { bubbles: true });
+    radioInput.dispatchEvent(event);
+  });
+  
+  radioInput.addEventListener('change', function() {
+    if (this.checked) {
+      const contenedor = formCheck.closest('.opciones-container');
+      if (contenedor) {
+        contenedor.querySelectorAll('.form-check').forEach(opcion => {
+          opcion.classList.remove('selected');
+        });
+      }
+      formCheck.classList.add('selected');
+    }
+  });
+});
+
 const formCuestionario = document.getElementById('formCuestionario');
 let formularioEnviando = false;
 
@@ -872,6 +988,18 @@ if (formCuestionario) {
     
     const preguntasCards = formCuestionario.querySelectorAll('.pregunta-card');
     let preguntasSinResponder = [];
+    let hayDuplicados = false;
+    
+    const nombresArchivos = [];
+    document.querySelectorAll('.file-input').forEach(input => {
+      if (input.files && input.files[0]) {
+        const fileName = input.files[0].name;
+        if (nombresArchivos.includes(fileName)) {
+          hayDuplicados = true;
+        }
+        nombresArchivos.push(fileName);
+      }
+    });
     
     preguntasCards.forEach((card, index) => {
       const tipoPregunta = card.getAttribute('data-tipo');
@@ -891,7 +1019,7 @@ if (formCuestionario) {
     
     if (preguntasSinResponder.length > 0) {
       Swal.fire({
-        title: '⚠️ Preguntas sin responder',
+        title: 'Preguntas sin responder',
         html: 'Te falta responder ' + preguntasSinResponder.length + ' pregunta' + (preguntasSinResponder.length > 1 ? 's' : '') + '.<br><br>Pregunta' + (preguntasSinResponder.length > 1 ? 's' : '') + ': <strong>' + preguntasSinResponder.join(', ') + '</strong>',
         icon: 'warning',
         confirmButtonText: 'Entendido'
@@ -908,30 +1036,34 @@ if (formCuestionario) {
       return false;
     }
     
+    if (hayDuplicados) {
+      Swal.fire({
+        title: '⚠️ Archivos Duplicados Detectados',
+        html: 'Has seleccionado archivos con el mismo nombre en diferentes preguntas.<br><br><strong>¿Estás seguro de continuar?</strong><br><br><small>Verifica que hayas seleccionado los archivos correctos para cada pregunta.</small>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, enviar',
+        cancelButtonText: 'Revisar archivos',
+        confirmButtonColor: '#ff9800',
+        cancelButtonColor: '#9b7cb8'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          enviarFormulario();
+        }
+      });
+      return false;
+    }
+    
     Swal.fire({
       title: '¿Enviar respuestas?',
-      html: 'Estás enviando las respuestas de <strong>' + totalPreguntas + ' preguntas</strong>.<br><br>Una vez enviadas no podrás modificarlas.',
+      html: 'Una vez enviadas no podrás modificarlas.',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sí, enviar',
       cancelButtonText: 'Revisar de nuevo'
     }).then((result) => {
       if (result.isConfirmed) {
-        permitirSalida = true;
-        
-        Swal.fire({
-          title: 'Enviando...',
-          text: 'Por favor espera',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          showConfirmButton: false,
-          willOpen: () => {
-            Swal.showLoading();
-          }
-        });
-        
-        formularioEnviando = true;
-        formCuestionario.submit();
+        enviarFormulario();
       }
     });
     
@@ -939,7 +1071,61 @@ if (formCuestionario) {
   });
 }
 
-// MENÚ DE USUARIO
+function enviarFormulario() {
+  permitirSalida = true;
+  
+  Swal.fire({
+    title: 'Enviando...',
+    text: 'Por favor espera',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    showConfirmButton: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+  
+  formularioEnviando = true;
+  
+  // DEBUG: Verificar qué se está enviando
+  console.log('=== ENVIANDO FORMULARIO ===');
+  const formData = new FormData(formCuestionario);
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ': ' + pair[1]);
+  }
+  console.log('=========================');
+  
+  formCuestionario.submit();
+}
+// Usar la variable global para el botón
+if (window.btnCuestionario) {
+  window.btnCuestionario.addEventListener('click', function() {
+    if (!window.videoCompletado) {
+      Swal.fire({
+        title: 'Video Incompleto',
+        text: 'Debes ver el video completo antes de acceder al cuestionario.',
+        icon: 'warning',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+
+    videoContainer.style.display = 'none';
+    cuestionarioContainer.style.display = 'block';
+
+    setTimeout(() => {
+      cuestionarioContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+
+    Swal.fire({
+      title: 'Cuestionario',
+      html: 'Responde todas las preguntas antes de enviar',
+      icon: 'info',
+      timer: 3000,
+      showConfirmButton: false
+    });
+  });
+}
 const userToggle = document.getElementById('userToggle');
 const userDropdown = document.getElementById('userDropdown');
 
@@ -960,15 +1146,14 @@ if (userToggle && userDropdown) {
   });
 }
 
-// PREVENIR RECARGA ACCIDENTAL
 let permitirSalida = false;
 
 window.addEventListener('beforeunload', function(e) {
-  if (cuestionarioContainer.style.display === 'block' && !permitirSalida) {
+  if (cuestionarioContainer && cuestionarioContainer.style.display === 'block' && !permitirSalida) {
     e.preventDefault();
     e.returnValue = '';
   }
 });
 </script>
 </body>
-</html> 
+</html>

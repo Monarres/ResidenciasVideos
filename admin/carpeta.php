@@ -50,6 +50,13 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Módulo <?= htmlspecialchars($carpeta['nombre']) ?></title>
@@ -501,24 +508,25 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </style>
 </head>
 <body>
+<body>
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2> <?= htmlspecialchars($carpeta['nombre']) ?></h2>
+    <h2> <i class="fa-solid fa-book fa-beat" style="color: #ffffffff;"></i> <?= htmlspecialchars($carpeta['nombre']) ?></h2>
     <div class="header-right">
   <!-- Sección de Usuario con Cerrar Sesión -->
   <div class="user-section">
     <button class="user-toggle" id="userToggle">
-      <span></span> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;">▼</span>
+      <span></span><i class="fa-solid fa-user" style="color: #B197FC;"></i> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;"><i class="fa-solid fa-caret-down" style="color: #B197FC;"></i></span>
     </button>
     <div class="user-dropdown" id="userDropdown">
       <a href="../logout.php" class="user-dropdown-item">
-        <span></span> Cerrar sesión
+        <span></span> <i class="fa-solid fa-door-open" style="color: #ef061d;"></i>Cerrar sesión
       </a>
     </div>
   </div>
       <a href="area.php?id=<?= $carpeta['id_padre'] ?>" class="btn-volver">
-        Volver
+        <i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver 
       </a>
     </div>
   </div>
@@ -534,12 +542,12 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <div class="btn-add-video-container">
     <button id="btnAddVideo" class="btn-add-video">
-       Añadir Video
+       Añadir Video    <i class="fa-solid fa-circle-plus" style="color: #fafafaff;"></i>
     </button>
   </div>
 
   <div class="section-header">
-    <h4>Videos del <?= htmlspecialchars($carpeta['nombre']) ?>:</h4>
+    <h4><i class="fa-solid fa-video" style="color: #9b7cb8;"></i> Videos de <?= htmlspecialchars($carpeta['nombre']) ?>:</h4>
     <span class="badge">
       <?= count($videos) ?> video<?= count($videos) != 1 ? 's' : '' ?>
     </span>
@@ -563,22 +571,36 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                   <?php endif; ?>
                   
-                  <?php if ($video['ruta'] && file_exists("../" . $video['ruta'])): ?>
-                    <video src="../<?= htmlspecialchars($video['ruta']) ?>" 
-                           width="100%" 
-                           controls 
-                           controlsList="nodownload"
-                           preload="metadata">
-                      Tu navegador no soporta el elemento de video.
-                    </video>
-                  <?php else: ?>
-                    <div class="alert alert-warning mb-0">
-                       Video no encontrado
-                    </div>
-                  <?php endif; ?>
+                  <?php if ($video['ruta']): ?>
+    <?php if ($video['tipo_video'] === 'youtube' || strpos($video['ruta'], 'youtube.com') !== false): ?>
+        <!-- Video de YouTube -->
+        <iframe 
+            src="<?= htmlspecialchars($video['ruta']) ?>" 
+            width="100%" 
+            height="400"
+            style="border-radius: 10px; border: none;"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    <?php else: ?>
+        <!-- Video local -->
+        <video src="../<?= htmlspecialchars($video['ruta']) ?>" 
+               width="100%" 
+               controls 
+               controlsList="nodownload"
+               preload="metadata">
+            Tu navegador no soporta el elemento de video.
+        </video>
+    <?php endif; ?>
+<?php else: ?>
+    <div class="alert alert-warning mb-0">
+       Video no encontrado
+    </div>
+<?php endif; ?>
                   
                   <div class="d-flex justify-content-between align-items-center mt-3">
-                    <small class="text-muted">ID: <?= $video['id_video'] ?></small>
+                    <small> </small>
                     <?php if ($video['num_preguntas'] > 0): ?>
                       <span class="cuestionario-badge completo">
                          <?= $video['num_preguntas'] ?> pregunta<?= $video['num_preguntas'] != 1 ? 's' : '' ?>
@@ -593,13 +615,13 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <div class="d-flex gap-2 mt-3">
                     <button class="btn btn-secondary-custom btn-sm flex-fill btn-edit-completo" 
                             data-id="<?= $video['id_video'] ?>">
-                       Editar
+                       Editar <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-danger btn-sm flex-fill btn-del-video" 
                             data-id="<?= $video['id_video'] ?>"
                             data-title="<?= htmlspecialchars($video['titulo']) ?>"
                             style="border-radius: 12px;">
-                       Eliminar
+                       Eliminar <i class="fas fa-trash-alt"></i>
                     </button>
                   </div>
                 </div>
@@ -607,7 +629,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-6">
                   <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 style="color: #9b7cb8; font-weight: 600; margin: 0;">
-                       Cuestionario
+                       Cuestionario <i class="fas fa-clipboard-list"></i>
                     </h6>
                   </div>
                   
@@ -619,33 +641,32 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   
                   <?php if (count($preguntas) > 0): ?>
                     <div class="preguntas-container">
-                      <?php foreach ($preguntas as $index => $p): ?>
-                        <div class="pregunta-card">
-                          <small style="color: #9b7cb8; font-weight: 600;">Pregunta <?= $index + 1 ?></small>
+                      <?php 
+foreach ($preguntas as $p): 
+  $es_archivo = ($p['tipo_pregunta'] === 'archivo');
+  $etiqueta = $es_archivo ? "📎 Archivo" : "❓ Pregunta";
+?>
+  <div class="pregunta-card">
+    <small style="color: #9b7cb8; font-weight: 600;"><?= $etiqueta ?></small>
                           <p class="mb-2 mt-1" style="font-size: 0.9rem;"><strong><?= htmlspecialchars($p['pregunta']) ?></strong></p>
-                          <?php if ($p['tipo_pregunta'] === 'incisos'): ?>
-                          <?php
-                          // Intentar cargar opciones desde JSON (nuevo formato)
-                          $opciones = null;
+                          
+                          <?php if (!$es_archivo): ?>
+                            <?php
+                            // Opciones dinámicas
+                            $opciones = null;
                             if (!empty($p['opciones_json'])) {
-                               $opciones = json_decode($p['opciones_json'], true);
-                              }
-  
-                             if ($opciones && is_array($opciones)) {
-                                // NUEVO FORMATO: Mostrar opciones dinámicas
-                                foreach ($opciones as $letra => $texto) {
+                              $opciones = json_decode($p['opciones_json'], true);
+                            }
+
+                            if ($opciones && is_array($opciones)) {
+                              foreach ($opciones as $letra => $texto) {
                                 echo "<small class='text-muted d-block'>{$letra}) " . htmlspecialchars($texto) . "</small>";
-                                  }
-                            } else {
-    // FORMATO VIEJO: Compatibilidad con preguntas antiguas
-    if (!empty($p['opcion_a'])) echo "<small class='text-muted d-block'>A) " . htmlspecialchars($p['opcion_a']) . "</small>";
-    if (!empty($p['opcion_b'])) echo "<small class='text-muted d-block'>B) " . htmlspecialchars($p['opcion_b']) . "</small>";
-    if (!empty($p['opcion_c'])) echo "<small class='text-muted d-block'>C) " . htmlspecialchars($p['opcion_c']) . "</small>";
-  }
-  ?>
-  <small class="d-block mt-2" style="color: #28a745; font-weight: 600;">
-     Respuesta: <?= htmlspecialchars($p['respuesta_correcta']) ?>
-  </small>
+                              }
+                            }
+                            ?>
+                            <small class="d-block mt-2" style="color: #28a745; font-weight: 600;">
+                               Respuesta: <?= htmlspecialchars($p['respuesta_correcta']) ?>
+                            </small>
                           <?php else: ?>
                             <small class="d-block mt-2" style="color: #9b7cb8; font-weight: 600;">
                                Pregunta de tipo archivo
@@ -681,26 +702,24 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   // Agregar ANTES de los fetch
 const originalFetch = window.fetch;
 window.fetch = function(...args) {
-    console.log('🔍 Fetch llamado a:', args[0]);
+    console.log('Fetch llamado a:', args[0]);
     return originalFetch.apply(this, args)
         .then(response => {
-            console.log(' Respuesta recibida de:', args[0], 'Status:', response.status);
+            console.log('Respuesta recibida de:', args[0], 'Status:', response.status);
             if (response.status === 404) {
-                console.error(' ERROR 404 en:', args[0]);
+                console.error('ERROR 404 en:', args[0]);
             }
             return response;
         })
         .catch(error => {
-            console.error(' Error en fetch a:', args[0], error);
+            console.error('Error en fetch a:', args[0], error);
             throw error;
         });
 };
-
 
   // Toggle del menú de usuario
 const userToggle = document.getElementById('userToggle');
@@ -726,13 +745,14 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+
+
 // Función para reordenar opciones después de eliminar
 function reordenarOpciones(contenedorOpciones, selectRespuesta) {
   const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const opcionesItems = contenedorOpciones.querySelectorAll('.opcion-item');
   const respuestaSeleccionada = selectRespuesta.value;
   
-  // Crear mapeo de letras antiguas a nuevas
   const mapeoLetras = {};
   const nuevasOpciones = [];
   
@@ -744,13 +764,11 @@ function reordenarOpciones(contenedorOpciones, selectRespuesta) {
     mapeoLetras[letraAntigua] = letraNueva;
     nuevasOpciones.push({ letra: letraNueva, texto: textoOpcion });
     
-    // Actualizar la letra en el DOM
     item.setAttribute('data-letra', letraNueva);
     item.querySelector('.input-group-text').textContent = letraNueva;
     item.querySelector('.opcion-texto').placeholder = `Opción ${letraNueva}`;
   });
   
-  // Reconstruir el select completamente
   selectRespuesta.innerHTML = '<option value="">Selecciona la respuesta correcta</option>';
   
   nuevasOpciones.forEach(opcion => {
@@ -760,7 +778,6 @@ function reordenarOpciones(contenedorOpciones, selectRespuesta) {
     selectRespuesta.appendChild(option);
   });
   
-  // Actualizar la respuesta seleccionada usando el mapeo
   if (respuestaSeleccionada && mapeoLetras[respuestaSeleccionada]) {
     selectRespuesta.value = mapeoLetras[respuestaSeleccionada];
   } else {
@@ -768,10 +785,10 @@ function reordenarOpciones(contenedorOpciones, selectRespuesta) {
   }
 }
 
-// BOTÓN AÑADIR VIDEO - CON INCISOS DINÁMICOS Y ENVÍO COMPLETO
+// BOTÓN AÑADIR VIDEO
 document.getElementById("btnAddVideo").addEventListener("click", async () => {
   const { value: formValues } = await Swal.fire({
-    title: ' Añadir nuevo video',
+    title: 'Añadir nuevo video <i class="fas fa-plus-circle"></i>',
     html: `
       <div style="text-align:left; max-height:70vh; overflow-y:auto; padding: 0 10px;">
         <label class="fw-bold">Título del video:</label>
@@ -780,13 +797,14 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         <label class="fw-bold mt-3">Descripción:</label>
         <textarea id="descripcionVideo" class="swal2-textarea" placeholder="Descripción breve del contenido" style="width:100%; margin-left: -5px;"></textarea>
 
-        <label class="fw-bold mt-3">Archivo de video:</label>
-        <input type="file" id="archivoVideo" accept="video/*" class="form-control" style="border-radius:15px; margin-top: 5px;">
-        <small class="text-muted d-block mt-1">Tamaño máximo: 500MB. Formatos: MP4, AVI, MOV, etc.</small>
-
+        <label class="fw-bold mt-3">🎥 URL de YouTube:</label>
+<input type="url" id="urlYoutube" class="swal2-input" placeholder="https://www.youtube.com/watch?v=..." style="width:100%; margin-top: 5px; margin-left: -5px;">
+<small class="text-muted d-block mt-1">
+  📝 Puedes usar: youtube.com/watch?v=... o youtu.be/...
+</small>
         <hr class="my-4">
 
-        <h6 style="color:#9b7cb8; font-weight:600;"> Cuestionario</h6>
+        <h6 style="color:#9b7cb8; font-weight:600;">Cuestionario:</h6>
         
         <div style="background: linear-gradient(135deg, rgba(245, 163, 199, 0.1), rgba(155, 124, 184, 0.1)); border: 2px solid #9b7cb8; border-radius: 15px; padding: 15px; margin-top: 15px; margin-bottom: 20px;">
           <label class="fw-bold" style="color: #9b7cb8;"> Instrucciones del cuestionario:</label>
@@ -796,32 +814,31 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         <div id="contenedorPreguntas" style="margin-top:10px;"></div>
 
         <button type="button" class="btn mt-3" id="btnAgregarPregunta" style="background: linear-gradient(135deg, #f5a3c7, #9b7cb8); color: white; border:none; border-radius:15px; padding: 10px 20px; font-weight: 600;">
-          Agregar pregunta
+          Añadir pregunta <i class="fas fa-plus-circle"></i>
         </button>
       </div>
     `,
     width: '900px',
     showCancelButton: true,
-    confirmButtonText: ' Guardar y publicar',
+    confirmButtonText: 'Guardar y publicar <i class="fas fa-save"></i>',
     cancelButtonText: 'Cancelar',
     didOpen: () => {
       const cont = document.getElementById("contenedorPreguntas");
       
       document.getElementById("btnAgregarPregunta").addEventListener("click", () => {
-        const num = cont.children.length + 1;
-        const div = document.createElement("div");
-        div.className = "pregunta-item";
-        div.style.marginTop = "15px";
-        div.innerHTML = `
-          <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <label class="fw-bold" style="color: #9b7cb8;">Pregunta ${num}</label>
-              <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.pregunta-item').remove()" style="border-radius: 15px;">Eliminar</button>
+  const div = document.createElement("div");
+  div.className = "pregunta-item";
+  div.style.marginTop = "15px";
+  div.innerHTML = `
+    <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <label class="fw-bold pregunta-label" style="color: #9b7cb8;">❓ Pregunta</label>
+              <button type="button" class="btn btn-sm btn-danger btn-eliminar-pregunta" style="border-radius: 15px;">Eliminar</button>
             </div>
             
             <div class="mt-2 mb-2">
-              <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn active" data-tipo="incisos" style="border-radius: 10px; margin-right: 5px;"> Opción múltiple</button>
-              <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn" data-tipo="archivo" style="border-radius: 10px;">📎 Subir archivo</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn active" data-tipo="incisos" style="border-radius: 10px; margin-right: 5px;">✓ Opción múltiple</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn" data-tipo="archivo" style="border-radius: 10px;"> Subir archivo</button>
             </div>
             
             <div class="pregunta-texto-container mt-2">
@@ -832,12 +849,10 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <small class="fw-bold" style="color: #666;">Opciones de respuesta:</small>
                 <button type="button" class="btn btn-sm btn-agregar-opcion" style="background: #9b7cb8; color: white; border-radius: 10px; padding: 4px 12px;">
-                   Agregar opción
+                  Agregar opción
                 </button>
               </div>
-              <div class="contenedor-opciones">
-                <!-- Inicialmente vacío - se agregan con el botón -->
-              </div>
+              <div class="contenedor-opciones"></div>
               
               <small class="d-block mt-3 fw-bold" style="color: #666;">Respuesta correcta:</small>
               <select class="form-control mt-2 select-respuesta" style="border-radius: 15px;">
@@ -858,23 +873,32 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         const preguntaTextoContainer = div.querySelector('.pregunta-texto-container');
         const opcionesDinamicas = div.querySelector('.opciones-dinamicas');
         const archivoContainer = div.querySelector('.archivo-container');
+        const label = div.querySelector('.pregunta-label');
         
-        tipoBtns.forEach(btn => {
-          btn.addEventListener("click", () => {
-            tipoBtns.forEach(x => x.classList.remove("active"));
-            btn.classList.add("active");
-            const tipo = btn.dataset.tipo;
-            
-            if (tipo === 'incisos') {
-              preguntaTextoContainer.style.display = 'block';
-              opcionesDinamicas.style.display = 'block';
-              archivoContainer.style.display = 'none';
-            } else {
-              preguntaTextoContainer.style.display = 'none';
-              opcionesDinamicas.style.display = 'none';
-              archivoContainer.style.display = 'block';
-            }
-          });
+       tipoBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    tipoBtns.forEach(x => x.classList.remove("active"));
+    btn.classList.add("active");
+    const tipo = btn.dataset.tipo;
+    
+    if (tipo === 'incisos') {
+      preguntaTextoContainer.style.display = 'block';
+      opcionesDinamicas.style.display = 'block';
+      archivoContainer.style.display = 'none';
+      label.innerHTML = '❓ Pregunta';
+    } else {
+      preguntaTextoContainer.style.display = 'none';
+      opcionesDinamicas.style.display = 'none';
+      archivoContainer.style.display = 'block';
+      label.innerHTML = '📎 Archivo';
+    }
+  });
+});
+
+        // Botón eliminar pregunta
+        div.querySelector('.btn-eliminar-pregunta').addEventListener('click', function() {
+          div.remove();
+          actualizarEtiquetasPreguntas();
         });
 
         // Configurar botón agregar opción
@@ -913,13 +937,11 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
           
           contenedorOpciones.appendChild(nuevaOpcion);
           
-          // Agregar opción al select
           const nuevaOption = document.createElement('option');
           nuevaOption.value = siguienteLetra;
           nuevaOption.textContent = siguienteLetra;
           selectRespuesta.appendChild(nuevaOption);
           
-          // Configurar botón eliminar CON REORDENAMIENTO
           nuevaOpcion.querySelector('.btn-eliminar-opcion').addEventListener('click', function() {
             nuevaOpcion.remove();
             reordenarOpciones(contenedorOpciones, selectRespuesta);
@@ -930,7 +952,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
     preConfirm: () => {
       const titulo = document.getElementById("tituloVideo").value.trim();
       const descripcion = document.getElementById("descripcionVideo").value.trim();
-      const archivo = document.getElementById("archivoVideo").files[0];
+      const urlYoutube = document.getElementById("urlYoutube").value.trim();
       const instruccionesCuestionario = document.getElementById("instruccionesCuestionario").value.trim();
 
       if (!titulo) {
@@ -938,17 +960,16 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         return false;
       }
 
-      if (!archivo) {
-        Swal.showValidationMessage("Debes seleccionar un archivo de video");
+      if (!urlYoutube) {
+        Swal.showValidationMessage("Debes ingresar la URL de YouTube");
         return false;
       }
 
-      if (archivo.size > 524288000) {
-        Swal.showValidationMessage("El archivo es demasiado grande. Máximo 500MB");
+      if (!urlYoutube.includes('youtube.com') && !urlYoutube.includes('youtu.be')) {
+        Swal.showValidationMessage("La URL debe ser de YouTube");
         return false;
       }
 
-      // Recolectar preguntas
       const preguntas = [];
       document.querySelectorAll(".pregunta-item").forEach((div, i) => {
         const tipo = div.querySelector(".tipo-btn.active")?.dataset.tipo;
@@ -961,7 +982,6 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
             return false;
           }
 
-          // Recolectar todas las opciones dinámicamente
           const opciones = {};
           const opcionesItems = div.querySelectorAll('.opcion-item');
           
@@ -1016,13 +1036,12 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         return false;
       }
 
-      return { titulo, descripcion, archivo, preguntas, instruccionesCuestionario };
+      return { titulo, descripcion, urlYoutube, preguntas, instruccionesCuestionario };
     }
   });
 
   if (!formValues) return;
 
-  // Mostrar loading con indicador de progreso
   Swal.fire({
     title: 'Subiendo video...',
     html: `
@@ -1039,19 +1058,17 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
     }
   });
 
-  // Subir datos a guardar_video.php CON TIMEOUT
   const formData = new FormData();
   formData.append("id_carpeta", <?= $id_carpeta ?>);
   formData.append("titulo", formValues.titulo);
   formData.append("descripcion", formValues.descripcion);
-  formData.append("video", formValues.archivo);
+  formData.append("url_youtube", formValues.urlYoutube);  
   formData.append("preguntas", JSON.stringify(formValues.preguntas));
   formData.append("instrucciones_cuestionario", formValues.instruccionesCuestionario);
 
   try {
-    // Crear un AbortController para manejar timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minutos
+    const timeoutId = setTimeout(() => controller.abort(), 300000);
 
     console.log("Enviando video...");
     
@@ -1065,7 +1082,6 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
 
     console.log("Respuesta recibida, status:", res.status);
 
-    // Verificar si la respuesta es JSON válida
     const contentType = res.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       const text = await res.text();
@@ -1226,9 +1242,9 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
             <label class="fw-bold mt-3">Descripción:</label>
             <textarea id="descripcionVideo" class="swal2-textarea" style="width:100%; margin-left: -5px;">${escapeHtml(video.descripcion || '')}</textarea>
 
-            <label class="fw-bold mt-3">Cambiar video (opcional):</label>
-            <input type="file" id="archivoVideo" accept="video/*" class="form-control" style="border-radius:15px; margin-top: 5px;">
-            <small class="text-muted d-block mt-1">Deja vacío si no deseas cambiar el video actual</small>
+            <label class="fw-bold mt-3">Cambiar URL de YouTube (opcional):</label>
+<input type="url" id="urlYoutube" class="swal2-input" value="${video.tipo_video === 'youtube' ? escapeHtml(video.ruta) : ''}" placeholder="https://www.youtube.com/watch?v=..." style="width:100%; margin-top: 5px; margin-left: -5px;">
+<small class="text-muted d-block mt-1">Deja vacío si no deseas cambiar el video actual</small>
 
             <hr class="my-4">
 
@@ -1242,7 +1258,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
             <div id="contenedorPreguntas" style="margin-top:10px;"></div>
 
             <button type="button" class="btn mt-3" id="btnAgregarPregunta" style="background: linear-gradient(135deg, #f5a3c7, #9b7cb8); color: white; border:none; border-radius:15px; padding: 10px 20px; font-weight: 600;">
-               Agregar pregunta
+               Añadir pregunta
             </button>
           </div>
         `,
@@ -1261,13 +1277,15 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
             div.className = "pregunta-item";
             div.style.marginTop = "15px";
             
-            const esArchivo = datosPregunta && datosPregunta.tipo_pregunta === 'archivo';
-            const opciones = datosPregunta?.opciones_json ? JSON.parse(datosPregunta.opciones_json) : {};
             
-            div.innerHTML = `
-              <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <label class="fw-bold" style="color: #9b7cb8;">Pregunta ${num}</label>
+            const opciones = datosPregunta?.opciones_json ? JSON.parse(datosPregunta.opciones_json) : {};
+            const esArchivo = datosPregunta && datosPregunta.tipo_pregunta === 'archivo';
+const etiqueta = esArchivo ? '📎 Archivo' : '❓ Pregunta';
+
+div.innerHTML = `
+  <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <label class="fw-bold pregunta-label" style="color: #9b7cb8;">${etiqueta}</label>
                   <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.pregunta-item').remove()" style="border-radius: 15px;">Eliminar</button>
                 </div>
                 
@@ -1275,7 +1293,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
                 
                 <div class="mt-2 mb-2">
                   <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn ${!esArchivo ? 'active' : ''}" data-tipo="incisos" style="border-radius: 10px; margin-right: 5px;"> Opción múltiple</button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn ${esArchivo ? 'active' : ''}" data-tipo="archivo" style="border-radius: 10px;">📎 Subir archivo</button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm tipo-btn ${esArchivo ? 'active' : ''}" data-tipo="archivo" style="border-radius: 10px;"> Subir archivo</button>
                 </div>
                 
                 <div class="pregunta-texto-container mt-2" style="display:${esArchivo ? 'none' : 'block'};">
@@ -1386,15 +1404,19 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
             btn.classList.add("active");
             const tipo = btn.dataset.tipo;
             
-            if (tipo === 'incisos') {
-              preguntaTextoContainer.style.display = 'block';
-              opcionesDinamicas.style.display = 'block';
-              archivoContainer.style.display = 'none';
-            } else {
-              preguntaTextoContainer.style.display = 'none';
-              opcionesDinamicas.style.display = 'none';
-              archivoContainer.style.display = 'block';
-            }
+           const label = div.querySelector('.pregunta-label');
+
+if (tipo === 'incisos') {
+  preguntaTextoContainer.style.display = 'block';
+  opcionesDinamicas.style.display = 'block';
+  archivoContainer.style.display = 'none';
+  if (label) label.innerHTML = '❓ Pregunta';
+} else {
+  preguntaTextoContainer.style.display = 'none';
+  opcionesDinamicas.style.display = 'none';
+  archivoContainer.style.display = 'block';
+  if (label) label.innerHTML = '📎 Archivo';
+}
           });
         });
       }
@@ -1440,7 +1462,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
     preConfirm: () => {
       const titulo = document.getElementById("tituloVideo").value.trim();
       const descripcion = document.getElementById("descripcionVideo").value.trim();
-      const archivo = document.getElementById("archivoVideo").files[0];
+      const urlYoutube = document.getElementById("urlYoutube").value.trim();
       const instruccionesCuestionario = document.getElementById("instruccionesCuestionario").value.trim();
 
       if (!titulo) {
@@ -1448,10 +1470,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
         return false;
       }
 
-      if (archivo && archivo.size > 524288000) {
-        Swal.showValidationMessage("El archivo es demasiado grande. Máximo 500MB");
-        return false;
-      }
+   
 
       // Clasificar preguntas: nuevas, actualizadas y eliminadas
       const preguntasNuevas = [];
@@ -1576,7 +1595,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
       return { 
         titulo, 
         descripcion, 
-        archivo, 
+        urlYoutube, 
         preguntasNuevas, 
         preguntasActualizadas, 
         preguntasEliminadas,
@@ -1619,9 +1638,9 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
     formData.append("preguntas_eliminadas", JSON.stringify(formValues.preguntasEliminadas));
   }
 
-  if (formValues.archivo) {
-    formData.append("video", formValues.archivo);
-  }
+  if (formValues.urlYoutube) { 
+    formData.append("url_youtube", formValues.urlYoutube);
+}
 
   // LOG PARA DEBUGGING
   console.log("=== DATOS A ENVIAR ===");

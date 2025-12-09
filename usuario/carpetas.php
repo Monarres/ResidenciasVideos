@@ -11,7 +11,7 @@ if (!isset($_SESSION['id_usuario'])) {
 $id_usuario = $_SESSION['id_usuario'];
 $nombre = $_SESSION['nombre'] ?? "Usuario";
 
-// ✅ Obtener el área asignada al usuario (por ejemplo, de la sesión o la base de datos)
+//  Obtener el área asignada al usuario
 $id_area_usuario = $_SESSION['id_carpeta'] ?? null;
 
 if (!$id_area_usuario) {
@@ -19,13 +19,13 @@ if (!$id_area_usuario) {
     exit;
 }
 
-// 📁 Obtener el nombre del área
+//  Obtener el nombre del área
 $stmt = $pdo->prepare("SELECT nombre FROM carpetas WHERE id_carpeta = ?");
 $stmt->execute([$id_area_usuario]);
 $area = $stmt->fetch(PDO::FETCH_ASSOC);
 $area_usuario = $area ? $area['nombre'] : 'Área desconocida';
 
-// 📚 Obtener los módulos (carpetas hijas) del área asignada - ORDENADOS
+//  Obtener los módulos (carpetas hijas) del área asignada - ORDENADOS
 $stmt = $pdo->prepare("SELECT * FROM carpetas WHERE id_padre = ? ORDER BY fecha_creacion ASC");
 $stmt->execute([$id_area_usuario]);
 $carpetas = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -33,7 +33,7 @@ $carpetas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $carpetas_con_progreso = [];
 $modulo_anterior_completo = true; // El primer módulo siempre está desbloqueado
 
-// 🔁 Calcular progreso por módulo
+//  Calcular progreso por módulo
 foreach ($carpetas as $index => $carpeta) {
     $id_carpeta = $carpeta['id_carpeta'];
 
@@ -45,6 +45,29 @@ foreach ($carpetas as $index => $carpeta) {
     $total_videos = count($videos);
     $videos_completados = 0;
 
+    // ✅ SI NO HAY VIDEOS, el módulo se considera completado automáticamente
+    if ($total_videos == 0) {
+        $porcentaje = 100;
+        $completo = true;
+        $bloqueado = false; // Los módulos sin videos NUNCA se bloquean
+        
+        $carpetas_con_progreso[] = [
+            'carpeta' => $carpeta,
+            'total_videos' => 0,
+            'videos_completados' => 0,
+            'porcentaje' => 100,
+            'completo' => true,
+            'bloqueado' => false,
+            'numero_modulo' => $index + 1,
+            'sin_videos' => true
+        ];
+        
+        // El módulo sin videos NO afecta el desbloqueo del siguiente
+        // $modulo_anterior_completo sigue siendo true
+        continue;
+    }
+
+    // SI HAY VIDEOS, calcular progreso normal
     foreach ($videos as $video) {
         $id_video = $video['id_video'];
 
@@ -90,7 +113,7 @@ foreach ($carpetas as $index => $carpeta) {
     $porcentaje = $total_videos > 0 ? round(($videos_completados / $total_videos) * 100) : 0;
     $completo = ($total_videos > 0 && $videos_completados >= $total_videos);
     
-    // 🔒 Determinar si el módulo está bloqueado
+    //  Determinar si el módulo está bloqueado (solo si tiene videos)
     $bloqueado = !$modulo_anterior_completo;
 
     $carpetas_con_progreso[] = [
@@ -100,7 +123,8 @@ foreach ($carpetas as $index => $carpeta) {
         'porcentaje' => $porcentaje,
         'completo' => $completo,
         'bloqueado' => $bloqueado,
-        'numero_modulo' => $index + 1
+        'numero_modulo' => $index + 1,
+        'sin_videos' => false
     ];
     
     // Actualizar estado para el siguiente módulo
@@ -114,8 +138,11 @@ foreach ($carpetas as $index => $carpeta) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Módulos de Capacitación</title>
+  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
 * {
   margin: 0;
@@ -310,22 +337,16 @@ body {
   border: 3px solid #28a745;
 }
 
+.modulo-card.sin-videos {
+  border: 3px solid #17a2b8;
+  background: linear-gradient(135deg, rgba(23, 162, 184, 0.05), rgba(155, 124, 184, 0.05));
+}
+
 .modulo-card.bloqueado {
   background: #e0e0e0;
   opacity: 0.6;
   pointer-events: none;
   position: relative;
-}
-
-.modulo-card.bloqueado::before {
-  content: '🔒';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 80px;
-  z-index: 5;
-  opacity: 0.3;
 }
 
 .modulo-card.bloqueado:hover {
@@ -347,6 +368,19 @@ body {
   top: 15px;
   right: 15px;
   background: #757575;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  z-index: 10;
+}
+
+.badge-sin-videos {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #17a2b8;
   color: white;
   padding: 8px 15px;
   border-radius: 20px;
@@ -429,6 +463,22 @@ body {
 
 .videos-count i {
   color: #9b7cb8;
+}
+
+.mensaje-sin-videos {
+  background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(155, 124, 184, 0.1));
+  border: 2px solid #17a2b8;
+  border-radius: 15px;
+  padding: 15px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.mensaje-sin-videos p {
+  margin: 0;
+  color: #0c7b8c;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .btn-modulo {
@@ -553,21 +603,21 @@ body {
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>📚 Módulos de Capacitación</h2>
+    <h2><i class="fa-solid fa-book"></i> Módulos de Capacitación</h2>
     <div class="header-right">
       <!-- Menú de usuario -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          <span>👤</span> <?= htmlspecialchars($nombre) ?> <span style="font-size: 0.8em;">▼</span>
+          <i class="fa-solid fa-user"></i> <?= htmlspecialchars($nombre) ?> <span style="font-size: 0.8em;">▼</span>
         </button>
         <div class="user-dropdown" id="userDropdown">
           <a href="../logout.php" class="user-dropdown-item logout">
-            <span>🚪</span> Cerrar sesión
+            <i class="fa-solid fa-door-open"></i> Cerrar sesión
           </a>
         </div>
       </div>
       
-      <a href="dashboard.php" class="btn-volver">⬅ Volver</a>
+      <a href="dashboard.php" class="btn-volver"><i class="fa-solid fa-angle-left"></i> Volver</a>
     </div>
   </div>
 </div>
@@ -577,7 +627,7 @@ body {
   <!-- Badge del área -->
   <div class="text-center">
     <span class="area-badge">
-      📍 Área: <?= htmlspecialchars($area_usuario) ?>
+       Área: <?= htmlspecialchars($area_usuario) ?>
     </span>
   </div>
 
@@ -593,61 +643,77 @@ body {
           $completo = $item['completo'];
           $bloqueado = $item['bloqueado'];
           $numero_modulo = $item['numero_modulo'];
+          $sin_videos = $item['sin_videos'];
         ?>
         
-        <div class="modulo-card <?= $completo ? 'completado' : '' ?> <?= $bloqueado ? 'bloqueado' : '' ?>">
+        <div class="modulo-card <?= $completo ? 'completado' : '' ?> <?= $bloqueado ? 'bloqueado' : '' ?> <?= $sin_videos ? 'sin-videos' : '' ?>">
           
-          <?php if ($completo): ?>
-            <span class="badge-completado">✓ Completado</span>
+          <?php if ($sin_videos): ?>
+            <span class="badge-sin-videos"><i class="fa-solid fa-circle-info"></i> Sin contenido</span>
+          <?php elseif ($completo): ?>
+            <span class="badge-completado"><i class="fa-solid fa-circle-check"></i> Completado</span>
           <?php elseif ($bloqueado): ?>
-            <span class="badge-bloqueado">🔒 Bloqueado</span>
+            <span class="badge-bloqueado"><i class="fa-solid fa-lock"></i> Bloqueado</span>
           <?php endif; ?>
           
           <div class="modulo-header">
             <div class="modulo-numero"><?= $numero_modulo ?></div>
-            <div class="modulo-icon"><?= $bloqueado ? '🔒' : '📚' ?></div>
+            <div class="modulo-icon">
+              <?php if ($bloqueado): ?>
+                <i class="fa-solid fa-lock"></i>
+              <?php else: ?>
+                <i class="fa-solid fa-book"></i>
+              <?php endif; ?>
+            </div>
             <h3 class="modulo-nombre"><?= htmlspecialchars($carpeta['nombre']) ?></h3>
           </div>
           
           <div class="modulo-body">
             
-            <!-- Información de progreso -->
-            <div class="progreso-info">
-              <div class="progreso-texto">
-                <span>Progreso:</span>
-                <span><strong><?= $porcentaje ?>%</strong></span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" 
-                     style="width: <?= $porcentaje ?>%" 
-                     aria-valuenow="<?= $porcentaje ?>" 
-                     aria-valuemin="0" 
-                     aria-valuemax="100">
-                </div>
-              </div>
-            </div>
-            
-            <!-- Contador de videos -->
-            <div class="videos-count">
-              <span>🎬</span>
-              <span><?= $completados ?> de <?= $total ?> videos completados</span>
-            </div>
-            
-            <?php if ($bloqueado): ?>
-              <!-- Mensaje de módulo bloqueado -->
-              <div class="mensaje-bloqueado">
-                <p>⚠️ Completa el módulo anterior para desbloquear</p>
+            <?php if ($sin_videos): ?>
+              <!-- Mensaje de módulo sin videos -->
+              <div class="mensaje-sin-videos">
+                <p><i class="fa-solid fa-circle-info"></i> Este módulo no tiene contenido disponible actualmente</p>
               </div>
             <?php else: ?>
-              <!-- Botón de acción -->
-              <a href="videos_usuario.php?id_carpeta=<?= $carpeta['id_carpeta'] ?>" 
-                 class="btn-modulo <?= $completo ? 'completado' : '' ?>">
-                <?php if ($completo): ?>
-                  ✓ Revisar Módulo
-                <?php else: ?>
-                  <?= $completados > 0 ? 'Continuar Módulo →' : 'Comenzar Módulo →' ?>
-                <?php endif; ?>
-              </a>
+              <!-- Información de progreso -->
+              <div class="progreso-info">
+                <div class="progreso-texto">
+                  <span>Progreso:</span>
+                  <span><strong><?= $porcentaje ?>%</strong></span>
+                </div>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" 
+                       style="width: <?= $porcentaje ?>%" 
+                       aria-valuenow="<?= $porcentaje ?>" 
+                       aria-valuemin="0" 
+                       aria-valuemax="100">
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Contador de videos -->
+              <div class="videos-count">
+                <i class="fa-solid fa-video"></i>
+                <span><?= $completados ?> de <?= $total ?> videos completados</span>
+              </div>
+              
+              <?php if ($bloqueado): ?>
+                <!-- Mensaje de módulo bloqueado -->
+                <div class="mensaje-bloqueado">
+                  <p>⚠️ Completa el módulo anterior para desbloquear</p>
+                </div>
+              <?php else: ?>
+                <!-- Botón de acción -->
+                <a href="videos_usuario.php?id_carpeta=<?= $carpeta['id_carpeta'] ?>" 
+                   class="btn-modulo <?= $completo ? 'completado' : '' ?>">
+                  <?php if ($completo): ?>
+                    <i class="fa-solid fa-circle-check"></i> Revisar Módulo
+                  <?php else: ?>
+                    <?= $completados > 0 ? 'Continuar Módulo →' : 'Comenzar Módulo →' ?>
+                  <?php endif; ?>
+                </a>
+              <?php endif; ?>
             <?php endif; ?>
             
           </div>
@@ -701,14 +767,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Mensaje de felicitación si se completa un módulo
 <?php 
 $modulos_completados = array_filter($carpetas_con_progreso, function($item) {
-  return $item['completo'];
+  return $item['completo'] && !$item['sin_videos'];
 });
 
 if (count($modulos_completados) > 0 && isset($_GET['completado'])):
 ?>
 Swal.fire({
   icon: 'success',
-  title: '¡Felicitaciones! 🎉',
+  title: '¡Felicitaciones!',
   text: 'Has completado un módulo de capacitación.',
   confirmButtonText: 'Continuar',
   timer: 3000
@@ -723,7 +789,7 @@ document.querySelectorAll('.modulo-card.bloqueado').forEach(card => {
     
     Swal.fire({
       icon: 'warning',
-      title: '🔒 Módulo Bloqueado',
+      title: 'Módulo Bloqueado',
       html: 'Debes completar el módulo anterior antes de acceder a este contenido.',
       confirmButtonText: 'Entendido',
       confirmButtonColor: '#9b7cb8'

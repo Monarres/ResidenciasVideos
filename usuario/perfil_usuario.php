@@ -61,6 +61,12 @@ $usuario_data = $stmt->fetch(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mi Perfil</title>
@@ -344,9 +350,9 @@ body {
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>👤 Mi Perfil</h2>
+    <h2><i class="fa-solid fa-user" style="color: #B197FC;"></i>Mi Perfil</h2>
     <div class="user-info">
-      <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
+      <a href="dashboard.php" class="btn-logout"><i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver</a>
     </div>
   </div>
 </div>
@@ -363,27 +369,28 @@ body {
 
   <!-- Información del perfil -->
   <div class="profile-header">
-    <div class="profile-icon">👤</div>
+    <div class="profile-icon"><i class="fa-solid fa-user" style="color: #B197FC;"></i>
+</div>
     <h3><?= htmlspecialchars($usuario_data['nombre']) ?></h3>
     <p><?= htmlspecialchars($usuario_data['email']) ?></p>
   </div>
 
   <!-- Datos del usuario -->
   <div class="card p-4 mb-4">
-    <h5 class="section-title">📋 Mis Datos</h5>
+    <h5 class="section-title"><i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i> Mis Datos</h5>
     
     <div class="info-row">
-      <div class="info-label">👤 Nombre:</div>
+      <div class="info-label"><i class="fa-solid fa-user" style="color: #B197FC;"></i> Nombre:</div>
       <div class="info-value"><?= htmlspecialchars($usuario_data['nombre']) ?></div>
     </div>
     
     <div class="info-row">
-      <div class="info-label">📧 Correo:</div>
+      <div class="info-label"><i class="fa-solid fa-at" style="color: #B197FC;"></i> Correo:</div>
       <div class="info-value"><?= htmlspecialchars($usuario_data['email']) ?></div>
     </div>
     
     <div class="info-row">
-      <div class="info-label">🪪 Área asignada:</div>
+      <div class="info-label"><i class="fa-solid fa-location-dot" style="color: #B197FC;"></i> Área asignada:</div>
       <div class="info-value">
         <?php if($usuario_data['area_nombre']): ?>
           <span class="badge-custom"><?= htmlspecialchars($usuario_data['area_nombre']) ?></span>
@@ -394,12 +401,12 @@ body {
     </div>
     
     <div class="info-row">
-      <div class="info-label">🏢 Unidad:</div>
+      <div class="info-label"><i class="fa-solid fa-building-columns" style="color: #B197FC;"></i> Sucursal:</div>
       <div class="info-value">
         <?php if($usuario_data['unidad_nombre']): ?>
           <span class="badge-custom"><?= htmlspecialchars($usuario_data['unidad_nombre']) ?></span>
         <?php else: ?>
-          <span class="text-muted">Sin unidad asignada</span>
+          <span class="text-muted">Sin Sucursal asignada</span>
         <?php endif; ?>
       </div>
     </div>
@@ -407,7 +414,7 @@ body {
 
   <!-- Cambiar contraseña -->
   <div class="card p-4">
-    <h5 class="section-title">🔒 Cambiar Contraseña</h5>
+    <h5 class="section-title">Cambiar Contraseña</h5>
     
     <form method="POST">
       <input type="hidden" name="cambiar_password" value="1">
@@ -449,7 +456,7 @@ body {
       </div>
       
       <button type="submit" class="btn btn-primary w-100">
-        🔒 Actualizar Contraseña
+        Actualizar Contraseña
       </button>
     </form>
   </div>

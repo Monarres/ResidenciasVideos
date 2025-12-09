@@ -18,6 +18,10 @@ $nombre = $_SESSION['nombre'] ?? "Usuario";
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Usuario</title>
@@ -273,19 +277,19 @@ body {
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>👤 Panel de Usuario</h2>
+    <h2><i class="fa-solid fa-user" style="color: #fbfbfbff;"></i> Panel de Usuario</h2>
     <div class="header-right">
       <!-- Menú de usuario -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          <span>👤</span> <?= htmlspecialchars($nombre) ?> <span style="font-size: 0.8em;">▼</span>
+          <span><i class="fa-solid fa-user" style="color: #B197FC;"></i></span> <?= htmlspecialchars($nombre) ?> <span style="font-size: 0.8em;">▼</span>
         </button>
         <div class="user-dropdown" id="userDropdown">
           <a href="perfil_usuario.php" class="user-dropdown-item">
-            <span>👤</span> Mi Perfil
+            <span><i class="fa-solid fa-user" style="color: #B197FC;"></i></span> Mi Perfil
           </a>
           <a href="../logout.php" class="user-dropdown-item logout">
-            <span>🚪</span> Cerrar sesión
+            <span><i class="fa-solid fa-door-open" style="color: #ef061d;"></i></span> Cerrar sesión
           </a>
         </div>
       </div>
@@ -306,13 +310,13 @@ body {
     <div class="col-md-6 mb-4">
       <div class="card action-card text-center">
         <div class="card-body">
-          <div class="card-icon">📚</div>
+          <div class="card-icon"><i class="fa-solid fa-book" style="color: #B197FC;"></i></div>
           <h5 class="card-title">Módulos de Capacitación</h5>
           <p class="card-text">
             Explora todos los módulos disponibles de tu área y comienza tu aprendizaje.
           </p>
           <a href="carpetas.php" class="btn btn-primary-custom">
-            Ver Módulos →
+            Ver Módulos <i class="fa-solid fa-arrow-right-long" style="color: #ffffffff;"></i>
           </a>
         </div>
       </div>

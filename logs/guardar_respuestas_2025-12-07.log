@@ -1,0 +1,19 @@
+[2025-12-07 03:39:03] === INICIO GUARDAR_RESPUESTAS.PHP ===
+[2025-12-07 03:39:03] ID Usuario: 7
+[2025-12-07 03:39:03] ID Video: 23
+[2025-12-07 03:39:03] ID Carpeta: 2
+[2025-12-07 03:39:03] Total respuestas POST: 2
+[2025-12-07 03:39:03] Archivos recibidos: SI
+[2025-12-07 03:39:03] Iniciando transacción...
+[2025-12-07 03:39:03] Transacción iniciada correctamente
+[2025-12-07 03:39:03] --- PROCESANDO INCISOS ---
+[2025-12-07 03:39:03] Procesando cuestionario ID: 30, Respuesta: D
+[2025-12-07 03:39:03]   Tipo pregunta: incisos
+[2025-12-07 03:39:03]   Respuesta CORRECTA
+[2025-12-07 03:39:03]   Insertando nueva respuesta
+[2025-12-07 03:39:03] ROLLBACK ejecutado
+[2025-12-07 03:39:03] ERROR EXCEPTION: SQLSTATE[01000]: Warning: 1265 Data truncated for column 'respuesta' at row 1
+[2025-12-07 03:39:03] TRACE: #0 C:\laragon\www\learning\usuario\guardar_respuestas.php(102): PDOStatement->execute(Array)
+#1 {main}
+[2025-12-07 03:39:03] === FIN CON ERROR ===
+

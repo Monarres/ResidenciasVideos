@@ -35,6 +35,9 @@ $mis_unidades = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mis Usuarios</title>
@@ -258,7 +261,7 @@ body {
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>👥 Mis Usuarios</h2>
+    <h2><i class="fas fa-users"></i> Mis Usuarios</h2>
     <div class="user-info">
       <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
     </div>
@@ -269,12 +272,12 @@ body {
   
   <!-- Info de unidades -->
   <div class="info-box">
-    <h6>🏢 Mis Unidades Asignadas:</h6>
+    <h6><i class="fas fa-star"></i>  Mis Unidades Asignadas:</h6>
     <?php if(empty($mis_unidades)): ?>
       <p class="text-muted mb-0">No tienes unidades asignadas. Contacta al administrador.</p>
     <?php else: ?>
       <?php foreach($mis_unidades as $unidad): ?>
-        <span class="unidad-badge">🏢 <?= htmlspecialchars($unidad['nombre']) ?></span>
+        <span class="unidad-badge"><i class="fas fa-star"></i>  <?= htmlspecialchars($unidad['nombre']) ?></span>
       <?php endforeach; ?>
     <?php endif; ?>
   </div>
@@ -282,13 +285,13 @@ body {
   <!-- Tabla de usuarios agrupada por unidad -->
   <div class="card p-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 style="color: #9b7cb8; font-weight: 600; margin: 0;">📋 Usuarios de Mis Unidades</h5>
+      <h5 style="color: #9b7cb8; font-weight: 600; margin: 0;"><i class="fas fa-list"></i> Usuarios de Mis Unidades</h5>
       <span class="badge"><?= count($usuarios) ?> usuarios</span>
     </div>
 
     <?php if(empty($mis_unidades)): ?>
       <div class="alert alert-info" style="border-radius: 15px;">
-        <strong>ℹ️ Sin unidades asignadas</strong><br>
+        <strong>¡Sin unidades asignadas!</strong><br>
         No tienes unidades asignadas. Por favor contacta al administrador para que te asigne unidades.
       </div>
     <?php else: ?>
@@ -297,7 +300,7 @@ body {
       <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="pills-todos-tab" data-bs-toggle="pill" data-bs-target="#pills-todos" type="button" role="tab">
-            📊 Todos
+            <i class="fas fa-chart-bar"></i> Todos
             <span class="badge bg-light text-dark ms-1"><?= count($usuarios) ?></span>
           </button>
         </li>
@@ -312,7 +315,7 @@ body {
                     data-bs-toggle="pill" 
                     data-bs-target="#pills-unidad<?= $unidad['id_unidad'] ?>" 
                     type="button" role="tab">
-              🏢 <?= htmlspecialchars($unidad['nombre']) ?>
+              <i class="fas fa-star"></i> <?= htmlspecialchars($unidad['nombre']) ?>
               <span class="badge bg-light text-dark ms-1"><?= count($usuarios_unidad) ?></span>
             </button>
           </li>
@@ -355,7 +358,7 @@ body {
                     </td>
                     <td>
                       <?php if($u['unidad_nombre']): ?>
-                        <span class="unidad-badge">🏢 <?= htmlspecialchars($u['unidad_nombre']) ?></span>
+                        <span class="unidad-badge"><i class="fas fa-star"></i> <?= htmlspecialchars($u['unidad_nombre']) ?></span>
                       <?php else: ?>
                         <span class="no-area">—</span>
                       <?php endif; ?>

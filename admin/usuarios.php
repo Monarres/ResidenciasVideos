@@ -159,6 +159,9 @@ $unidades_disponibles = $stmt_unidades->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Usuarios</title>
@@ -472,16 +475,16 @@ body {
     margin-bottom: 5px;
   }
 }
-  </style>
+</style>
 </head>
 <body>
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>👥 Gestión de Usuarios</h2>
+    <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
     <div class="user-info">
-      <a href="unidades.php" class="btn-logout">🏢 Unidades</a>
-      <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
+      <a href="unidades.php" class="btn-logout"><i class="fas fa-star"></i> Sucursales</a>
+      <a href="dashboard.php" class="btn-logout"><i class="fas fa-arrow-left"></i> Volver</a>
     </div>
   </div>
 </div>
@@ -497,7 +500,7 @@ body {
 
   <!-- Formulario para agregar -->
   <div class="card p-4 mb-4">
-    <h5 class="mb-3" style="color: #9b7cb8; font-weight: 600;">➕ Agregar Nuevo Usuario</h5>
+    <h5 class="mb-3" style="color: #9b7cb8; font-weight: 600;"><i class="fas fa-plus-circle"></i> Agregar Nuevo Usuario</h5>
     <form method="POST" id="formAgregarUsuario">
       <input type="hidden" name="accion" value="agregar">
       <div class="row g-3">
@@ -530,19 +533,19 @@ body {
       <div id="areaUnidadContainer" class="select-area-container">
         <div class="row g-3">
           <div class="col-md-6">
-            <label class="form-label fw-bold" style="color: #9b7cb8;">🪪 Seleccionar Área de Acceso</label>
+            <label class="form-label fw-bold" style="color: #9b7cb8;"><i class="fas fa-credit-card"></i>  Seleccionar Área de Acceso</label>
             <select name="id_carpeta" id="areaSelect" class="form-select">
               <option value="">-- Seleccionar área --</option>
               <?php foreach($areas as $area): ?>
                 <option value="<?= $area['id_carpeta'] ?>"><?= htmlspecialchars($area['nombre']) ?></option>
               <?php endforeach; ?>
             </select>
-            <small class="text-muted d-block mt-2">ℹ️ Área a la que tendrá acceso el usuario</small>
+            <small class="text-muted d-block mt-2">¡Área a la que tendrá acceso el usuario!</small>
           </div>
           <div class="col-md-6">
-            <label class="form-label fw-bold" style="color: #138496;">🏢 Seleccionar Unidad</label>
+            <label class="form-label fw-bold" style="color: #138496;"><i class="fas fa-star"></i> Seleccionar Sucursal</label>
             <select name="id_unidad" id="unidadSelect" class="form-select">
-              <option value="">-- Seleccionar unidad --</option>
+              <option value="">-- Seleccionar Sucursal --</option>
               <?php foreach($unidades_disponibles as $unidad): ?>
                 <option value="<?= $unidad['id_unidad'] ?>">
                   <?= htmlspecialchars($unidad['nombre']) ?> 
@@ -550,7 +553,7 @@ body {
                 </option>
               <?php endforeach; ?>
             </select>
-            <small class="text-muted d-block mt-2">ℹ️ Unidad a la que pertenece el usuario</small>
+            <small class="text-muted d-block mt-2">¡Sucursal a la que pertenece el usuario!</small>
           </div>
         </div>
       </div>
@@ -559,7 +562,7 @@ body {
 <!-- Tabla de usuarios con pestañas -->
   <div class="card p-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 style="color: #9b7cb8; font-weight: 600; margin: 0;">📋 Lista de Usuarios</h5>
+      <h5 style="color: #9b7cb8; font-weight: 600; margin: 0;"><i class="fas fa-list"></i>  Lista de Usuarios</h5>
       <span class="badge"><?= count($usuarios) ?> usuarios totales</span>
     </div>
     
@@ -567,7 +570,7 @@ body {
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="pills-usuarios-tab" data-bs-toggle="pill" data-bs-target="#pills-usuarios" type="button" role="tab">
-          👤 Usuarios
+          <i class="fas fa-users"></i> Usuarios
           <span class="badge bg-light text-dark ms-1">
             <?php 
             $count_usuarios = count(array_filter($usuarios, function($u) {
@@ -580,7 +583,7 @@ body {
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-franquiciatarios-tab" data-bs-toggle="pill" data-bs-target="#pills-franquiciatarios" type="button" role="tab">
-          🏢 Franquiciatarios
+          <i class="fas fa-star"></i> Franquiciatarios
           <span class="badge bg-light text-dark ms-1">
             <?php 
             $count_franq = count(array_filter($usuarios, function($u) {
@@ -593,7 +596,7 @@ body {
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-admin-tab" data-bs-toggle="pill" data-bs-target="#pills-admin" type="button" role="tab">
-          👑 Administradores
+          <i class="fa-solid fa-crown"></i> Administradores
           <span class="badge bg-light text-dark ms-1">
             <?php 
             $count_admin = count(array_filter($usuarios, function($u) {
@@ -619,7 +622,7 @@ body {
                 <th>Nombre</th>
                 <th>Correo</th>
                 <th>Área</th>
-                <th>Unidad</th>
+                <th>Sucursal</th>
                 <th style="text-align: center;">Acciones</th>
               </tr>
             </thead>
@@ -641,14 +644,14 @@ body {
                   <td><?= htmlspecialchars($u['email']) ?></td>
                   <td>
                     <?php if($u['area_nombre']): ?>
-                      <span class="area-badge">🪪 <?= htmlspecialchars($u['area_nombre']) ?></span>
+                      <span class="area-badge"><i class="fas fa-credit-card"></i> <?= htmlspecialchars($u['area_nombre']) ?></span>
                     <?php else: ?>
                       <span class="no-area">—</span>
                     <?php endif; ?>
                   </td>
                   <td>
                     <?php if($u['unidad_nombre']): ?>
-                      <span class="unidad-badge">🏢 <?= htmlspecialchars($u['unidad_nombre']) ?></span>
+                      <span class="unidad-badge"><i class="fas fa-star"></i> <?= htmlspecialchars($u['unidad_nombre']) ?></span>
                     <?php else: ?>
                       <span class="no-area">—</span>
                     <?php endif; ?>
@@ -663,19 +666,19 @@ body {
                             data-rol="<?= $u['rol'] ?>"
                             data-carpeta="<?= $u['id_carpeta'] ?? '' ?>"
                             data-unidad="<?= $u['id_unidad'] ?? '' ?>">
-                      ✏️Editar
+                      <i class="fas fa-edit"></i> Editar
                     </button>
                     
                     <button class="btn btn-danger btn-sm btn-delete me-1"
                             data-id="<?= $u['id_usuario'] ?>"
                             data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
-                      🗑️Eliminar
+                      <i class="fas fa-trash-alt"></i> Eliminar
                     </button>
                     
                     <button class="btn btn-reset btn-sm"
                             data-id="<?= $u['id_usuario'] ?>"
                             data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
-                      🔄Rehacer
+                      <i class="fa-solid fa-rotate-right"></i> Rehacer
                     </button>
                   </td>
                 </tr>
@@ -695,7 +698,7 @@ body {
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Correo</th>
-                <th>Unidades Asignadas</th>
+                <th>Sucursales Asignadas</th>
                 <th style="text-align: center;">Acciones</th>
               </tr>
             </thead>
@@ -721,10 +724,10 @@ body {
                         $unidades = explode(', ', $u['unidades_franquiciatario']);
                         foreach($unidades as $unidad): 
                       ?>
-                        <span class="unidad-badge">🏢 <?= htmlspecialchars($unidad) ?></span>
+                        <span class="unidad-badge"><i class="fas fa-star"></i> <?= htmlspecialchars($unidad) ?></span>
                       <?php endforeach; ?>
                     <?php else: ?>
-                      <span class="no-area">Sin unidades asignadas</span>
+                      <span class="no-area">Sin Sucursales asignadas</span>
                     <?php endif; ?>
                   </td>
                   <td style="text-align: center;">
@@ -737,13 +740,13 @@ body {
                             data-rol="<?= $u['rol'] ?>"
                             data-carpeta="<?= $u['id_carpeta'] ?? '' ?>"
                             data-unidad="<?= $u['id_unidad'] ?? '' ?>">
-                      ✏️Editar
+                      <i class="fas fa-edit"></i> Editar
                     </button>
                     
                     <button class="btn btn-danger btn-sm btn-delete"
                             data-id="<?= $u['id_usuario'] ?>"
                             data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
-                      🗑️Eliminar
+                      <i class="fas fa-trash-alt"></i> Eliminar
                     </button>
                   </td>
                 </tr>
@@ -792,13 +795,13 @@ body {
                             data-rol="<?= $u['rol'] ?>"
                             data-carpeta="<?= $u['id_carpeta'] ?? '' ?>"
                             data-unidad="<?= $u['id_unidad'] ?? '' ?>">
-                      ✏️Editar
+                      <i class="fas fa-edit"></i> Editar
                     </button>
                     
                     <button class="btn btn-danger btn-sm btn-delete"
                             data-id="<?= $u['id_usuario'] ?>"
                             data-nombre="<?= htmlspecialchars($u['nombre']) ?>">
-                      🗑️Eliminar
+                      <i class="fas fa-trash-alt"></i> Eliminar
                     </button>
                   </td>
                 </tr>
@@ -819,7 +822,7 @@ body {
       <input type="hidden" name="accion" value="editar">
       <input type="hidden" name="id_usuario" id="edit-id">
       <div class="modal-header">
-        <h5 class="modal-title">✏️ Editar Usuario</h5>
+        <h5 class="modal-title"> Editar Usuario</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -851,7 +854,7 @@ body {
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label fw-bold" style="color: #9b7cb8;">
-                🪪 Área de Acceso
+                 Área de Acceso
               </label>
               <select name="id_carpeta" id="edit-area" class="form-select">
                 <option value="">-- Seleccionar área --</option>
@@ -862,10 +865,10 @@ body {
             </div>
             <div class="col-md-6">
               <label class="form-label fw-bold" style="color: #138496;">
-                🏢 Unidad
+                Sucursal
               </label>
               <select name="id_unidad" id="edit-unidad" class="form-select">
-                <option value="">-- Seleccionar unidad --</option>
+                <option value="">-- Seleccionar Sucursal --</option>
                 <?php foreach($unidades_disponibles as $unidad): ?>
                   <option value="<?= $unidad['id_unidad'] ?>">
                     <?= htmlspecialchars($unidad['nombre']) ?>
@@ -889,14 +892,14 @@ body {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">🔄 Resetear Respuestas de Usuario</h5>
+        <h5 class="modal-title"> Resetear Respuestas de Usuario</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="reset-id-usuario">
         
         <div class="alert alert-warning" style="border-radius: 15px;">
-          <strong>⚠️ Advertencia:</strong><br>
+          <strong> ¡Advertencia!:</strong><br>
           Se eliminarán todas las respuestas (cuestionarios y archivos) del módulo seleccionado.
         </div>
         
@@ -906,24 +909,24 @@ body {
         </div>
         
         <div class="mb-3">
-          <label class="form-label fw-bold" style="color: #9b7cb8;">📁 Módulo a Resetear</label>
+          <label class="form-label fw-bold" style="color: #9b7cb8;"><i class="fa-solid fa-book icono-libro" style="color: #B197FC;"></i>Módulo a Resetear</label>
           <select id="reset-modulo" class="form-select" required>
             <option value="">-- Seleccionar módulo --</option>
           </select>
         </div>
         
         <div id="reset-detalles" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 15px;">
-          <strong>📊 Respuestas a eliminar:</strong>
+          <strong>Respuestas a eliminar:</strong>
           <ul style="margin-top: 10px; margin-bottom: 0;">
-            <li>📝 <span id="reset-total-incisos">0</span> respuesta(s) de cuestionarios</li>
-            <li>📎 <span id="reset-total-archivos">0</span> archivo(s) subido(s)</li>
+            <li><i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i> <span id="reset-total-incisos">0</span> respuesta(s) de cuestionarios</li>
+            <li><i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> <span id="reset-total-archivos">0</span> archivo(s) subido(s)</li>
           </ul>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-danger" id="btnConfirmarReset" disabled>
-          🗑️ Eliminar Respuestas
+          <i class="fa-solid fa-trash-can" style="color: #ff0000;"></i> Eliminar Respuestas
         </button>
       </div>
     </div>
@@ -1050,11 +1053,11 @@ document.querySelectorAll('.btn-delete').forEach(btn => {
       
       if (data.tiene_respuestas) {
         mensaje += `<br><br><div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 15px;">
-          <strong>⚠️ ATENCIÓN:</strong><br>
+          <strong><i class="fa-solid fa-triangle-exclamation" style="color: #FFD43B;"></i> ATENCIÓN:</strong><br>
           Este usuario tiene respuestas guardadas:<br>
           <ul style="text-align: left; margin-top: 10px;">
-            <li>📝 ${data.total_incisos} respuesta(s) de cuestionarios</li>
-            <li>📎 ${data.total_archivos} archivo(s) subido(s)</li>
+            <li><i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i> ${data.total_incisos} respuesta(s) de cuestionarios</li>
+            <li><i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> ${data.total_archivos} archivo(s) subido(s)</li>
           </ul>
           <strong style="color: #856404;">Todas estas respuestas serán eliminadas permanentemente.</strong>
         </div>`;
@@ -1217,7 +1220,7 @@ document.getElementById('btnConfirmarReset').addEventListener('click', async fun
       
       if (data.success) {
         Swal.fire({
-          title: '✅ Respuestas eliminadas',
+          title: 'Respuestas eliminadas',
           text: `Se eliminaron ${data.total_eliminadas} respuesta(s) del módulo.`,
           icon: 'success',
           confirmButtonText: 'Aceptar'

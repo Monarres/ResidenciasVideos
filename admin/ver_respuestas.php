@@ -140,6 +140,11 @@ if ($id_usuario) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Respuestas de Usuarios</title>
@@ -462,36 +467,36 @@ body {
 <body>
 <div class="top-header">
   <div class="container-fluid">
-    <h2>📊 Respuestas de Usuarios</h2>
+    <h2>Respuestas de Usuarios</h2>
     <div class="user-info">
-      <a href="dashboard.php" class="btn-logout">⬅ Volver</a>
+      <a href="dashboard.php" class="btn-logout"><i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver</a>
     </div>
   </div>
 </div>
 <div class="container">
   <!-- Filtros -->
   <div class="card filter-card p-4 mb-4">
-    <h5 class="mb-3" style="color: #9b7cb8; font-weight: 600;">🔍 Filtrar Resultados</h5>
+    <h5 class="mb-3" style="color: #9b7cb8; font-weight: 600;"><i class="fa-solid fa-magnifying-glass" style="color: #B197FC;"></i> Filtrar Resultados</h5>
     <form method="get" id="filterForm">
       <div class="row g-3">
         <div class="col-md-5">
-          <label class="form-label fw-bold">1️⃣ Seleccionar Área:</label>
+          <label class="form-label fw-bold">Seleccionar Área:</label>
           <select name="id_area" id="areaSelect" class="form-select" required>
             <option value="">-- Seleccionar área --</option>
             <?php foreach ($areas as $area): ?>
               <option value="<?= $area['id_carpeta'] ?>" <?= $id_area == $area['id_carpeta'] ? 'selected' : '' ?>>
-                🪪 <?= htmlspecialchars($area['nombre']) ?>
+                <?= htmlspecialchars($area['nombre']) ?>
               </option>
             <?php endforeach; ?>
           </select>
         </div>
         <div class="col-md-5">
-          <label class="form-label fw-bold">2️⃣ Seleccionar Usuario:</label>
+          <label class="form-label fw-bold">Seleccionar Usuario:</label>
           <select name="id_usuario" id="usuarioSelect" class="form-select" <?= !$id_area ? 'disabled' : '' ?> required>
             <option value="">-- Seleccionar usuario --</option>
             <?php foreach ($usuarios as $user): ?>
               <option value="<?= $user['id_usuario'] ?>" <?= $id_usuario == $user['id_usuario'] ? 'selected' : '' ?>>
-                👤 <?= htmlspecialchars($user['nombre']) ?>
+              <?= htmlspecialchars($user['nombre']) ?>
               </option>
             <?php endforeach; ?>
           </select>
@@ -532,11 +537,11 @@ body {
       ?>
         <div class="module-section">
           <div class="module-header">
-            <h4>📚 <?= htmlspecialchars($modulo) ?></h4>
+            <h4><i class="fa-solid fa-book icono-libro" style="color: #B197FC;"></i> <?= htmlspecialchars($modulo) ?></h4>
             <div class="stats-badge">
-              ✅ <?= $correctas ?>/<?= $evaluables ?> correctas (<?= $porcentaje ?>%)
+              <i class="fa-solid fa-circle-check" style="color: #02fd38ff;"></i> <?= $correctas ?>/<?= $evaluables ?> correctas (<?= $porcentaje ?>%)
               <?php if ($pendientes > 0): ?>
-                | ⏳ <?= $pendientes ?> pendientes
+                | <i class="fa-solid fa-hourglass-half" style="color: #B197FC;"></i> <?= $pendientes ?> pendientes
               <?php endif; ?>
             </div>
           </div>
@@ -545,7 +550,7 @@ body {
           <div class="module-content">
             <!-- Gráfica del módulo -->
             <div class="chart-container">
-              <h5>📊 Resultados por Pregunta</h5>
+              <h5><i class="fa-solid fa-list" style="color: #B197FC;"></i> Resultados por Pregunta</h5>
               <div class="chart-wrapper">
                 <canvas id="chart<?= $modulo_index ?>"></canvas>
               </div>
@@ -570,7 +575,7 @@ body {
                         <?php if ($r['tipo_respuesta'] === 'cuestionario'): ?>
                           <?php $es_correcto = strtoupper($r['respuesta'] ?? '') === strtoupper($r['respuesta_correcta'] ?? ''); ?>
                           <tr>
-                            <td><strong>🎬 <?= htmlspecialchars($r['video']) ?></strong></td>
+                            <td><strong><i class="fa-solid fa-video" style="color: #B197FC;"></i> <?= htmlspecialchars($r['video']) ?></strong></td>
                             <td><?= htmlspecialchars($r['pregunta']) ?></td>
                             <td><span class="badge bg-primary">Cuestionario</span></td>
                             <td>
@@ -579,25 +584,25 @@ body {
                             </td>
                             <td style="text-align: center;">
                               <span class="<?= $es_correcto ? 'correct' : 'incorrect' ?>">
-                                <?= $es_correcto ? '✅' : '❌' ?>
+                                <?= $es_correcto ? '<i class="fa-solid fa-circle-check" style="color: #02fd38ff;"></i>' : '<i class="fa-solid fa-circle-xmark" style="color: #ff0000;"></i>' ?>
                               </span>
                             </td>
                           </tr>
                         <?php else: ?>
                           <tr class="file-response-row">
-                            <td><strong>🎬 <?= htmlspecialchars($r['video']) ?></strong></td>
+                            <td><strong><i class="fa-solid fa-video" style="color: #B197FC;"></i> <?= htmlspecialchars($r['video']) ?></strong></td>
                             <td>
                               <?= htmlspecialchars($r['pregunta']) ?>
                               <?php if ($r['comentario_calificacion']): ?>
                                 <div class="comentario-box">
-                                  <strong>💬 Comentario:</strong> <?= htmlspecialchars($r['comentario_calificacion']) ?>
+                                  <strong><i class="fa-solid fa-comment" style="color: #B197FC;"></i> Comentario:</strong> <?= htmlspecialchars($r['comentario_calificacion']) ?>
                                 </div>
                               <?php endif; ?>
                             </td>
-                            <td><span class="badge bg-warning text-dark">📎 Archivo</span></td>
+                            <td><span class="badge bg-warning text-dark"><i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo</span></td>
                             <td>
                               <a href="<?= htmlspecialchars($r['archivo']) ?>" target="_blank" class="btn-ver-archivo">
-                                📥 Ver archivo
+                                <i class="fa-solid fa-box-archive" style="color: #B197FC;"></i> Ver archivo
                               </a>
                               <?php if ($r['calificacion'] !== null): ?>
                                 <br><small class="text-muted mt-1 d-block">
@@ -607,7 +612,7 @@ body {
                             </td>
                             <td style="text-align: center;">
                               <?php if ($r['calificacion'] === null): ?>
-                                <span class="pending">⏳ Pendiente</span>
+                                <span class="pending"><i class="fa-solid fa-hourglass-half" style="color: #B197FC;"></i> Pendiente</span>
                                 <br>
                                 <button class="btn btn-calificar mt-2" onclick="abrirModalCalificacion(<?= $r['id_respuesta_archivo'] ?>, '<?= htmlspecialchars($r['pregunta'], ENT_QUOTES) ?>')">
                                   Calificar
@@ -616,7 +621,7 @@ body {
                                 <?php 
                                 $aprobado = $r['calificacion'] >= 7;
                                 $clase = $aprobado ? 'calificacion-aprobado' : 'calificacion-reprobado';
-                                $icono = $aprobado ? '✅' : '❌';
+                                $icono = $aprobado ? '<i class="fa-solid fa-circle-check" style="color: #02fd38ff;"></i>' : '<i class="fa-solid fa-circle-xmark" style="color: #ff0000;"></i>';
                                 ?>
                                 <span class="calificacion-display <?= $clase ?>">
                                   <?= $icono ?> <?= $r['calificacion'] ?>/10
@@ -687,7 +692,7 @@ body {
       </div>
     <?php else: ?>
       <div class="empty-state">
-        <div class="icon">📝</div>
+        <div class="icon"><i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i></div>
         <h4>No hay respuestas registradas</h4>
         <p class="text-muted">Este usuario aún no ha respondido ningún cuestionario</p>
       </div>
@@ -700,7 +705,7 @@ body {
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">📝 Calificar Respuesta</h5>
+        <h5 class="modal-title"><i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i> Calificar Respuesta</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form method="post">
@@ -715,8 +720,15 @@ body {
           
           <div class="mb-3">
             <label for="calificacion" class="form-label fw-bold">Calificación (0-10)</label>
-            <input type="number" class="form-control" id="calificacion" name="calificacion" 
-                   min="0" max="10" step="0.5" required>
+
+            <!-- SELECT CORREGIDO -->
+            <select class="form-select" id="calificacion" name="calificacion" required>
+              <?php for ($i = 0; $i <= 10; $i += 0.5): ?>
+                <option value="<?= $i ?>"><?= $i ?></option>
+              <?php endfor; ?>
+            </select>
+            <!-- FIN CAMBIO -->
+
           </div>
           
           <div class="mb-3">
@@ -727,7 +739,7 @@ body {
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">💾 Guardar Calificación</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk" style="color: #B197FC;"></i> Guardar Calificación</button>
         </div>
       </form>
     </div>
@@ -751,13 +763,14 @@ document.getElementById('areaSelect').addEventListener('change', function() {
 function abrirModalCalificacion(idRespuesta, pregunta, calificacionActual = null, comentarioActual = '') {
   document.getElementById('id_respuesta_archivo').value = idRespuesta;
   document.getElementById('pregunta_texto').textContent = pregunta;
-  
+
+  const select = document.getElementById('calificacion');
   if (calificacionActual !== null) {
-    document.getElementById('calificacion').value = calificacionActual;
+    select.value = calificacionActual;
   } else {
-    document.getElementById('calificacion').value = '';
+    select.value = "";
   }
-  
+
   document.getElementById('comentario').value = comentarioActual || '';
   
   const modal = new bootstrap.Modal(document.getElementById('modalCalificar'));
@@ -805,7 +818,6 @@ function abrirModalCalificacion(idRespuesta, pregunta, calificacionActual = null
                 padding: 15,
                 font: { size: 12 },
                 filter: function(item, chart) {
-                  // Ocultar elementos con valor 0
                   const data = chart.datasets[0].data;
                   const index = chart.labels.indexOf(item.text);
                   return data[index] > 0;
@@ -832,7 +844,6 @@ function abrirModalCalificacion(idRespuesta, pregunta, calificacionActual = null
         }
       });
       <?php else: ?>
-      // Mostrar mensaje cuando no hay datos
       const container = ctx.parentElement;
       container.innerHTML = '<div style="text-align: center; padding: 50px; color: #9b7cb8;"><p>No hay datos para mostrar</p></div>';
       <?php endif; ?>

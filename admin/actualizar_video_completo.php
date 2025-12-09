@@ -17,6 +17,7 @@ try {
     $id_video = intval($_POST['id_video']);
     $titulo = trim($_POST['titulo'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
+    $url_youtube = trim($_POST['url_youtube'] ?? '');
     $instrucciones_cuestionario = trim($_POST['instrucciones_cuestionario'] ?? '');
 
     if (empty($titulo)) {
@@ -27,9 +28,22 @@ try {
     $pdo->beginTransaction();
 
     try {
-        // Actualizar datos del video CON instrucciones del cuestionario
-        $stmt = $pdo->prepare("UPDATE videos SET titulo = ?, descripcion = ?, instrucciones_cuestionario = ? WHERE id_video = ?");
-        $stmt->execute([$titulo, $descripcion, $instrucciones_cuestionario, $id_video]);
+        // Si se proporciona nueva URL de YouTube, validarla y convertirla
+        if (!empty($url_youtube)) {
+            $video_id = extraerIdYoutube($url_youtube);
+            if (!$video_id) {
+                throw new Exception('URL de YouTube inválida');
+            }
+            $url_embed = "https://www.youtube.com/embed/" . $video_id;
+            
+            // Actualizar con nueva URL
+            $stmt = $pdo->prepare("UPDATE videos SET titulo = ?, descripcion = ?, ruta = ?, tipo_video = 'youtube', instrucciones_cuestionario = ? WHERE id_video = ?");
+            $stmt->execute([$titulo, $descripcion, $url_embed, $instrucciones_cuestionario, $id_video]);
+        } else {
+            // Actualizar sin cambiar URL
+            $stmt = $pdo->prepare("UPDATE videos SET titulo = ?, descripcion = ?, instrucciones_cuestionario = ? WHERE id_video = ?");
+            $stmt->execute([$titulo, $descripcion, $instrucciones_cuestionario, $id_video]);
+        }
 
         // Procesar preguntas eliminadas
         if (isset($_POST['preguntas_eliminadas'])) {
@@ -51,7 +65,7 @@ try {
                     }
 
                     if ($p['tipo'] === 'incisos') {
-                        // NUEVO: Validar opciones dinámicas
+                        // Validar opciones dinámicas
                         if (empty($p['pregunta']) || !isset($p['opciones']) || !is_array($p['opciones']) || 
                             count($p['opciones']) < 2 || empty($p['respuesta_correcta'])) {
                             throw new Exception('Pregunta incompleta o con opciones inválidas');
@@ -61,7 +75,7 @@ try {
                         $opciones_json = json_encode($p['opciones'], JSON_UNESCAPED_UNICODE);
 
                         $stmt = $pdo->prepare("UPDATE cuestionarios SET 
-                            pregunta = ?, opciones_json = ?, respuesta_correcta = ?
+                            pregunta = ?, tipo_pregunta = 'incisos', opciones_json = ?, respuesta_correcta = ?, instrucciones_archivo = NULL
                             WHERE id_cuestionario = ?");
                         
                         $stmt->execute([
@@ -77,7 +91,7 @@ try {
                         }
 
                         $stmt = $pdo->prepare("UPDATE cuestionarios SET 
-                            pregunta = ?, instrucciones_archivo = ?
+                            pregunta = ?, tipo_pregunta = 'archivo', opciones_json = NULL, respuesta_correcta = NULL, instrucciones_archivo = ?
                             WHERE id_cuestionario = ?");
                         
                         $stmt->execute([
@@ -100,7 +114,7 @@ try {
                     }
 
                     if ($p['tipo'] === 'incisos') {
-                        // NUEVO: Validar opciones dinámicas
+                        // Validar opciones dinámicas
                         if (empty($p['pregunta']) || !isset($p['opciones']) || !is_array($p['opciones']) || 
                             count($p['opciones']) < 2 || empty($p['respuesta_correcta'])) {
                             throw new Exception('Pregunta nueva incompleta o con opciones inválidas');
@@ -153,9 +167,24 @@ try {
     }
 
 } catch (Exception $e) {
+    error_log("Error en actualizar_video_completo.php: " . $e->getMessage());
     echo json_encode([
         'success' => false,
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
+        'error' => $e->getMessage()
     ]);
+}
+
+/**
+ * Extrae el ID del video de YouTube de diferentes formatos de URL
+ */
+function extraerIdYoutube($url) {
+    $patron = '/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/';
+    
+    if (preg_match($patron, $url, $coincidencias)) {
+        return $coincidencias[1];
+    }
+    
+    return false;
 }
 ?>

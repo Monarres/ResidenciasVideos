@@ -32,6 +32,9 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Módulo <?= htmlspecialchars($carpeta['nombre']) ?></title>
@@ -331,23 +334,23 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2>📚 <?= htmlspecialchars($carpeta['nombre']) ?> </h2>
+    <h2><i class="fa-solid fa-book fa-beat" style="color: #ffffffff;"></i> <?= htmlspecialchars($carpeta['nombre']) ?> </h2>
     <div class="header-actions">
       <!-- Usuario Desplegable -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          👤 <?= htmlspecialchars($_SESSION['nombre'] ?? 'Franquiciatario') ?> ▼
+          <i class="fa-solid fa-user" style="color: #B197FC;"></i> <?= htmlspecialchars($_SESSION['nombre'] ?? 'Franquiciatario') ?> <i class="fa-solid fa-caret-down" style="color: #B197FC;"></i>
         </button>
 
         <div class="user-dropdown" id="userDropdown">
-          <a href="usuarios_franquiciatario.php" class="user-dropdown-item" style="color: #9b7cb8;">👥 Mis Usuarios</a>
-          <a href="../logout.php" class="user-dropdown-item">🚪 Cerrar sesión</a>
+          <a href="usuarios_franquiciatario.php" class="user-dropdown-item" style="color: #9b7cb8;"><i class="fas fa-users"></i> Mis Usuarios</a>
+          <a href="../logout.php" class="user-dropdown-item"><i class="fa-solid fa-door-open" style="color: #ef061d;"></i> Cerrar sesión</a>
         </div>
       </div>
 
       <!-- Botón Volver -->
       <a href="area.php?id=<?= $carpeta['id_padre'] ?>" class="btn-volver">
-        ⬅ Volver
+        <i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver
       </a>
     </div>
   </div>
@@ -357,7 +360,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   
 
   <div class="section-header">
-    <h4>Videos del <?= htmlspecialchars($carpeta['nombre']) ?>:</h4>
+    <h4>Videos de <?= htmlspecialchars($carpeta['nombre']) ?>:</h4>
     <span class="badge">
       <?= count($videos) ?> video<?= count($videos) != 1 ? 's' : '' ?>
     </span>
@@ -391,19 +394,19 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </video>
                   <?php else: ?>
                     <div class="alert alert-warning mb-0">
-                      ⚠️ Video no encontrado
+                      <i class="fas fa-exclamation-triangle"></i> Video no encontrado
                     </div>
                   <?php endif; ?>
                   
                   <div class="d-flex justify-content-between align-items-center mt-3">
-                    <small class="text-muted">ID: <?= $video['id_video'] ?></small>
+                    <small></small>
                     <?php if ($video['num_preguntas'] > 0): ?>
                       <span class="cuestionario-badge completo">
-                        ✅ <?= $video['num_preguntas'] ?> pregunta<?= $video['num_preguntas'] != 1 ? 's' : '' ?>
+                        <i class="fas fa-check-circle"></i> <?= $video['num_preguntas'] ?> pregunta<?= $video['num_preguntas'] != 1 ? 's' : '' ?>
                       </span>
                     <?php else: ?>
                       <span class="cuestionario-badge pendiente">
-                        ⚠️ Sin cuestionario
+                         <i class="fas fa-exclamation-triangle"></i> Sin cuestionario
                       </span>
                     <?php endif; ?>
                   </div>
@@ -412,10 +415,10 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-6">
                   <div class="d-flex justify-content-center align-items-center" style="height: 100%; min-height: 300px;">
                     <div class="text-center" style="color: #9b7cb8;">
-                      <div style="font-size: 60px; opacity: 0.3; margin-bottom: 15px;">🔒</div>
+                      <div style="font-size: 60px; opacity: 0.3; margin-bottom: 15px;"><i class="fas fa-lock"></i> </div>
                       <h5 style="font-weight: 600; margin-bottom: 10px;">Cuestionario Privado</h5>
                       <p class="text-muted" style="font-size: 0.9rem;">
-                        El contenido del cuestionario no está disponible<br>para visualización en modo lectura
+                        El contenido del cuestionario no está disponible.
                       </p>
                       <?php if ($video['num_preguntas'] > 0): ?>
                         <small class="text-muted" style="font-size: 0.85rem;">
@@ -433,7 +436,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   <?php else: ?>
     <div class="empty-state">
-      <div class="icon">🎬</div>
+      <div class="icon"><i class="fas fa-video"></i></div>
       <h4>No hay videos en este módulo</h4>
       <p class="text-muted">Este módulo aún no tiene contenido disponible</p>
     </div>
