@@ -254,7 +254,7 @@ a:hover {
   <div class="login-left">
     <h2>Baby ballet Marbet®</h2>
     <p>International Dancing Corporation</p>
-    <img src="assets/images/mascotas_1.png" alt="login illustration">
+    <img src="assets/images/Mascotas_1.png" alt="login illustration">
   </div>
   <div class="login-right">
     <h3>Login</h3>
