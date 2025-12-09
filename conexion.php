@@ -1,9 +1,9 @@
 <?php
 // conexion.php
-$host = '127.0.0.1';
+$host = 'localhost';
 $db   = 'pitiful_go_tei_basebbm';
 $user = 'pitiful-go-tei'; 
-$pass = '';
+$pass = 'mZ3(BdX7+m3By41Y-h';
 $charset = 'utf8mb4';
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
@@ -15,3 +15,5 @@ try {
 } catch (PDOException $e) {
     die("Error conexión BD: " . $e->getMessage());
 }
+
+
