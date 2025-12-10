@@ -517,6 +517,646 @@ video {
     padding: 15px;
   }
 }
+/* ========== RESPONSIVO ========== */
+
+/* Tablets y dispositivos medianos */
+@media (max-width: 992px) {
+  .top-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .header-right {
+    gap: 12px;
+  }
+  
+  video,
+  iframe {
+    height: 400px !important;
+  }
+  
+  .pregunta-card {
+    padding: 20px;
+  }
+  
+  .pregunta-card h5 {
+    font-size: 1.05rem;
+  }
+  
+  .form-check-label {
+    font-size: 0.95rem;
+  }
+  
+  .btn-cuestionario,
+  .btn-enviar,
+  .btn-primary-custom {
+    padding: 12px 35px;
+    font-size: 1rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  body {
+    padding-top: 140px;
+  }
+  
+  .top-header {
+    margin: 10px;
+    padding: 10px 0;
+    border-radius: 15px;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 10px;
+  }
+  
+  .top-header h2 {
+    font-size: 1.1rem;
+    position: static;
+    transform: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .top-header h2 i {
+    font-size: 1rem;
+  }
+  
+  .header-right {
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+    gap: 10px;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .user-dropdown {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 180px;
+  }
+  
+  .user-dropdown-item {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+  
+  /* Card */
+  .card {
+    border-radius: 15px;
+    margin-bottom: 20px;
+  }
+  
+  /* Video header */
+  .video-header {
+    padding: 15px;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .video-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .video-header small {
+    font-size: 0.85rem;
+  }
+  
+  /* Video player */
+  video,
+  iframe {
+    height: 300px !important;
+    border-radius: 12px;
+  }
+  
+  /* Video info */
+  .video-info {
+    padding: 12px;
+    margin-top: 15px;
+  }
+  
+  .video-info p {
+    font-size: 0.85rem;
+    margin: 3px 0;
+  }
+  
+  /* Cuestionario container */
+  .cuestionario-container {
+    padding: 20px 15px;
+  }
+  
+  .cuestionario-header {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .cuestionario-header h4 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .cuestionario-header p {
+    font-size: 0.9rem;
+  }
+  
+  /* Pregunta card */
+  .pregunta-card {
+    padding: 18px 12px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+  }
+  
+  .pregunta-card h5 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+  
+  .pregunta-card h5 span {
+    padding: 4px 10px;
+    font-size: 0.9rem;
+    margin-right: 8px;
+  }
+  
+  /* Form checks */
+  .form-check {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .form-check-input {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .form-check-label {
+    font-size: 0.9rem;
+    margin-left: 8px;
+  }
+  
+  .form-check-label strong {
+    font-size: 0.95rem;
+  }
+  
+  /* File upload */
+  .file-upload-container {
+    padding: 15px;
+  }
+  
+  .file-upload-container .form-label {
+    font-size: 0.9rem;
+  }
+  
+  .file-upload-container .form-control {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+  
+  .file-upload-container small {
+    font-size: 0.75rem;
+  }
+  
+  .file-name-preview {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+  
+  /* Alert */
+  .alert {
+    padding: 12px;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Botones */
+  .btn-cuestionario,
+  .btn-enviar,
+  .btn-primary-custom {
+    padding: 10px 30px;
+    font-size: 0.95rem;
+    border-radius: 20px;
+  }
+  
+  /* Completado card */
+  .completado-card {
+    padding: 40px 15px;
+  }
+  
+  .completado-card .icon {
+    font-size: 80px;
+    margin-bottom: 15px;
+  }
+  
+  .completado-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+  }
+  
+  .completado-card p {
+    font-size: 1rem;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+  body {
+    padding-top: 150px;
+    padding-bottom: 30px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .user-toggle span:last-child {
+    font-size: 0.7em !important;
+  }
+  
+  .user-dropdown {
+    min-width: 160px;
+  }
+  
+  .user-dropdown-item {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  /* Video header compacto */
+  .video-header {
+    padding: 12px;
+  }
+  
+  .video-header h3 {
+    font-size: 1rem;
+  }
+  
+  .video-header small {
+    font-size: 0.8rem;
+  }
+  
+  /* Video player más pequeño */
+  video,
+  iframe {
+    height: 250px !important;
+    border-radius: 10px;
+  }
+  
+  /* Video info compacto */
+  .video-info {
+    padding: 10px;
+    margin-top: 12px;
+  }
+  
+  .video-info p {
+    font-size: 0.8rem;
+  }
+  
+  /* Cuestionario */
+  .cuestionario-container {
+    padding: 15px 10px;
+  }
+  
+  .cuestionario-header {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .cuestionario-header h4 {
+    font-size: 1.1rem;
+  }
+  
+  .cuestionario-header p {
+    font-size: 0.85rem;
+  }
+  
+  /* Pregunta card compacto */
+  .pregunta-card {
+    padding: 15px 10px;
+    margin-bottom: 15px;
+  }
+  
+  .pregunta-card h5 {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+  
+  .pregunta-card h5 span {
+    padding: 3px 8px;
+    font-size: 0.85rem;
+    margin-right: 6px;
+  }
+  
+  /* Form checks más compactos */
+  .form-check {
+    padding: 8px;
+    margin-bottom: 6px;
+  }
+  
+  .form-check-input {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .form-check-label {
+    font-size: 0.85rem;
+    margin-left: 6px;
+  }
+  
+  .form-check-label strong {
+    font-size: 0.9rem;
+  }
+  
+  /* File upload compacto */
+  .file-upload-container {
+    padding: 12px;
+  }
+  
+  .file-upload-container .form-label {
+    font-size: 0.85rem;
+  }
+  
+  .file-upload-container .form-control {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .file-upload-container small {
+    font-size: 0.7rem;
+  }
+  
+  .file-name-preview {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+  
+  /* Alert compacto */
+  .alert {
+    padding: 10px;
+    font-size: 0.8rem;
+  }
+  
+  .alert strong {
+    font-size: 0.85rem;
+  }
+  
+  /* Botones compactos */
+  .btn-cuestionario,
+  .btn-enviar,
+  .btn-primary-custom {
+    padding: 9px 25px;
+    font-size: 0.9rem;
+  }
+  
+  .btn-cuestionario i,
+  .btn-enviar i,
+  .btn-primary-custom i {
+    font-size: 0.9rem;
+  }
+  
+  /* Completado card compacto */
+  .completado-card {
+    padding: 35px 12px;
+  }
+  
+  .completado-card .icon {
+    font-size: 70px;
+    margin-bottom: 12px;
+  }
+  
+  .completado-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .completado-card p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Móviles muy pequeños (320px) */
+@media (max-width: 400px) {
+  body {
+    padding-top: 160px;
+  }
+  
+  .top-header {
+    margin: 8px;
+  }
+  
+  .top-header h2 {
+    font-size: 0.95rem;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+  
+  .video-header h3 {
+    font-size: 0.95rem;
+  }
+  
+  video,
+  iframe {
+    height: 220px !important;
+  }
+  
+  .video-info p {
+    font-size: 0.75rem;
+  }
+  
+  .pregunta-card {
+    padding: 12px 8px;
+  }
+  
+  .pregunta-card h5 {
+    font-size: 0.9rem;
+  }
+  
+  .form-check {
+    padding: 6px;
+  }
+  
+  .form-check-label {
+    font-size: 0.8rem;
+  }
+  
+  .btn-cuestionario,
+  .btn-enviar,
+  .btn-primary-custom {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Orientación horizontal en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    padding-top: 100px;
+  }
+  
+  .top-header {
+    padding: 8px 0;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+  
+  .header-right {
+    position: static;
+    width: auto;
+    margin-left: auto;
+  }
+  
+  .user-dropdown {
+    right: 0;
+    left: auto;
+    transform: none;
+  }
+  
+  video,
+  iframe {
+    height: 350px !important;
+  }
+  
+  .pregunta-card h5 {
+    font-size: 0.95rem;
+  }
+  
+  .form-check-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* Accesibilidad táctil */
+@media (hover: none) and (pointer: coarse) {
+  .btn-volver,
+  .user-toggle,
+  .user-dropdown-item,
+  .btn-cuestionario,
+  .btn-enviar,
+  .btn-primary-custom,
+  .form-check {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .form-check-input {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Mejora de hover solo en desktop */
+@media (hover: hover) and (pointer: fine) {
+  .btn-volver:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .user-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .user-dropdown-item:hover {
+    background: #f8f9fa;
+  }
+  
+  .form-check:hover {
+    background: rgba(155, 124, 184, 0.1);
+    transform: translateX(5px);
+  }
+  
+  .btn-cuestionario:hover,
+  .btn-primary-custom:hover {
+    background: linear-gradient(135deg, #9b7cb8, #f5a3c7);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(155, 124, 184, 0.4);
+  }
+  
+  .btn-enviar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+  }
+}
+
+/* Ajustes para pantallas muy anchas */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1200px;
+  }
+  
+  video,
+  iframe {
+    height: 600px !important;
+  }
+  
+  .video-header h3 {
+    font-size: 1.7rem;
+  }
+  
+  .pregunta-card h5 {
+    font-size: 1.2rem;
+  }
+  
+  .form-check-label {
+    font-size: 1.05rem;
+  }
+}
+
+/* SweetAlert2 responsivo */
+@media (max-width: 576px) {
+  .swal2-popup {
+    padding: 20px !important;
+    width: 90% !important;
+  }
+  
+  .swal2-title {
+    font-size: 1.3rem !important;
+  }
+  
+  .swal2-html-container {
+    font-size: 0.9rem !important;
+  }
+  
+  .swal2-confirm,
+  .swal2-cancel {
+    padding: 10px 25px !important;
+    font-size: 0.9rem !important;
+  }
+}
   </style>
 </head>
 <body>
@@ -697,7 +1337,7 @@ video {
         <h3>¡Felicitaciones!</h3>
         <p class="text-muted">Has completado todos los videos y cuestionarios disponibles.</p>
         <a href="carpetas.php" class="btn btn-primary-custom mt-3">
-          ← Volver
+          <i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver
         </a>
       </div>
     </div>
@@ -791,7 +1431,7 @@ document.querySelectorAll('.file-input').forEach(input => {
     const color = aprobado ? '#28a745' : '#ff6b6b';
     
     Swal.fire({
-      title: aprobado ? '¡Felicidades!' : 'Resultado 📝',
+      title: aprobado ? '¡Felicidades!' : 'Resultado <i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i>',
       html: `
         <div style="text-align: center; padding: 20px;">
           <h3 style="color: #9b7cb8; margin-bottom: 20px;">Resultados del Cuestionario</h3>
@@ -894,7 +1534,7 @@ if (videoPlayer) {
               
               if (window.tienePreguntas && window.btnCuestionario) {
                 window.btnCuestionario.style.display = 'inline-block';
-                console.log('✅ Botón mostrado exitosamente');
+                console.log('<i class="fa-solid fa-circle-check" style="color: #00fb26ff;"></i> Botón mostrado exitosamente');
                 
                 Swal.fire({
                   title: '¡Video Completado!',
@@ -903,7 +1543,7 @@ if (videoPlayer) {
                   confirmButtonText: 'Entendido'
                 });
               } else {
-                console.error('❌ ERROR: No se puede mostrar el botón');
+                console.error('<i class="fa-solid fa-x" style="color: #ff0000;"></i> ERROR: No se puede mostrar el botón');
                 console.log('- tienePreguntas:', window.tienePreguntas);
                 console.log('- btnCuestionario:', window.btnCuestionario);
               }
@@ -1038,7 +1678,7 @@ if (formCuestionario) {
     
     if (hayDuplicados) {
       Swal.fire({
-        title: '⚠️ Archivos Duplicados Detectados',
+        title: '<i class="fa-solid fa-triangle-exclamation" style="color: #FFD43B;"></i> Archivos Duplicados Detectados',
         html: 'Has seleccionado archivos con el mismo nombre en diferentes preguntas.<br><br><strong>¿Estás seguro de continuar?</strong><br><br><small>Verifica que hayas seleccionado los archivos correctos para cada pregunta.</small>',
         icon: 'warning',
         showCancelButton: true,

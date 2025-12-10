@@ -255,6 +255,409 @@ body {
     margin-bottom: 5px;
   }
 }
+/* ========== RESPONSIVO ========== */
+
+/* Tablets y dispositivos medianos */
+@media (max-width: 992px) {
+  .top-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .btn-logout {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    font-size: 0.85rem;
+    padding: 10px 8px;
+  }
+  
+  .nav-pills .nav-link {
+    font-size: 0.85rem;
+    padding: 8px 15px;
+  }
+  
+  .info-box {
+    padding: 15px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  body {
+    padding-top: 140px;
+  }
+  
+  .top-header {
+    margin: 10px;
+    padding: 10px 0;
+    border-radius: 15px;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 8px;
+  }
+  
+  .top-header h2 {
+    font-size: 1.1rem;
+    position: static;
+    transform: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .user-info {
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .btn-logout {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+  
+  /* Info box */
+  .info-box {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .info-box h6 {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+  
+  /* Card */
+  .card {
+    padding: 15px !important;
+    border-radius: 12px;
+  }
+  
+  .card h5 {
+    font-size: 1rem;
+  }
+  
+  /* Badges */
+  .badge {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .area-badge,
+  .unidad-badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    margin: 2px;
+  }
+  
+  /* Pestañas responsivas */
+  .nav-pills {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .nav-pills .nav-link {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    margin-right: 0;
+    margin-bottom: 5px;
+    white-space: nowrap;
+  }
+  
+  .nav-pills .nav-link .badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+  
+  /* Tabla responsiva */
+  .table {
+    font-size: 0.75rem;
+    min-width: 600px;
+  }
+  
+  .table thead th {
+    padding: 8px 5px;
+    font-size: 0.75rem;
+  }
+  
+  .table tbody td {
+    padding: 8px 5px;
+    font-size: 0.75rem;
+  }
+  
+  /* Alert */
+  .alert {
+    font-size: 0.85rem;
+    padding: 12px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+  body {
+    padding-top: 150px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .btn-logout {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  /* Info box más compacto */
+  .info-box {
+    padding: 12px;
+  }
+  
+  .info-box h6 {
+    font-size: 0.9rem;
+  }
+  
+  /* Card header */
+  .card .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 8px;
+  }
+  
+  .card h5 {
+    font-size: 0.95rem;
+    margin-bottom: 0 !important;
+  }
+  
+  .badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+  
+  /* Pestañas en móviles pequeños */
+  .nav-pills .nav-link {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
+  
+  .nav-pills .nav-link i {
+    font-size: 0.8rem;
+  }
+  
+  .nav-pills .nav-link .badge {
+    font-size: 0.6rem;
+    padding: 1px 5px;
+  }
+  
+  /* Tabla más compacta */
+  .table {
+    min-width: 550px;
+    font-size: 0.7rem;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: 6px 4px;
+  }
+  
+  /* Badges en tabla */
+  .area-badge,
+  .unidad-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+  
+  .no-area {
+    font-size: 0.8rem;
+  }
+  
+  /* Alert más compacto */
+  .alert {
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+}
+
+/* Móviles muy pequeños (320px) */
+@media (max-width: 400px) {
+  body {
+    padding-top: 160px;
+  }
+  
+  .top-header {
+    margin: 8px;
+  }
+  
+  .top-header h2 {
+    font-size: 0.95rem;
+  }
+  
+  .btn-logout {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+  
+  .info-box {
+    padding: 10px;
+  }
+  
+  .info-box h6 {
+    font-size: 0.85rem;
+  }
+  
+  .card {
+    padding: 12px !important;
+  }
+  
+  .card h5 {
+    font-size: 0.9rem;
+  }
+  
+  .nav-pills .nav-link {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+  
+  .table {
+    min-width: 500px;
+    font-size: 0.65rem;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: 5px 3px;
+  }
+  
+  .area-badge,
+  .unidad-badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+}
+
+/* Orientación horizontal en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    padding-top: 100px;
+  }
+  
+  .top-header {
+    padding: 8px 0;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+  
+  .user-info {
+    position: static;
+    width: auto;
+    margin-left: auto;
+  }
+  
+  .nav-pills .nav-link {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+}
+
+/* Mejoras para tablets en orientación vertical */
+@media (min-width: 769px) and (max-width: 992px) {
+  .table thead th,
+  .table tbody td {
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+  
+  .nav-pills .nav-link {
+    font-size: 0.85rem;
+    padding: 8px 15px;
+  }
+}
+
+/* Accesibilidad táctil */
+@media (hover: none) and (pointer: coarse) {
+  .btn-logout,
+  .nav-pills .nav-link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Mejora de hover solo en desktop */
+@media (hover: hover) and (pointer: fine) {
+  .table tbody tr:hover {
+    background: rgba(155, 124, 184, 0.05);
+  }
+  
+  .btn-logout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .nav-pills .nav-link:hover {
+    background: rgba(155, 124, 184, 0.1);
+    border-color: #9b7cb8;
+  }
+}
+
+/* Ajustes para pantallas muy anchas */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  .info-box {
+    padding: 25px;
+  }
+  
+  .info-box h6 {
+    font-size: 1.1rem;
+  }
+  
+  .nav-pills .nav-link {
+    font-size: 1rem;
+    padding: 12px 25px;
+  }
+}
+
+/* Optimización para impresión */
+@media print {
+  body {
+    padding-top: 0;
+  }
+  
+  .top-header,
+  .nav-pills {
+    display: none;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .table {
+    page-break-inside: avoid;
+  }
+}
   </style>
 </head>
 <body>
@@ -351,7 +754,7 @@ body {
                     <td><?= htmlspecialchars($u['email']) ?></td>
                     <td>
                       <?php if($u['area_nombre']): ?>
-                        <span class="area-badge">🪪 <?= htmlspecialchars($u['area_nombre']) ?></span>
+                        <span class="area-badge"><?= htmlspecialchars($u['area_nombre']) ?></span>
                       <?php else: ?>
                         <span class="no-area">—</span>
                       <?php endif; ?>
@@ -403,7 +806,7 @@ body {
                       <td><?= htmlspecialchars($u['email']) ?></td>
                       <td>
                         <?php if($u['area_nombre']): ?>
-                          <span class="area-badge">🪪<?= htmlspecialchars($u['area_nombre']) ?></span>
+                          <span class="area-badge"><?= htmlspecialchars($u['area_nombre']) ?></span>
                         <?php else: ?>
                           <span class="no-area">—</span>
                         <?php endif; ?>

@@ -117,14 +117,15 @@ if (isset($_GET['eliminar'])) {
 if (isset($_GET['msg'])) {
     switch ($_GET['msg']) {
         case 'success':
-            $mensaje = "✅ Unidad agregada correctamente";
+            $mensaje = '<i class="fa-solid fa-circle-check" style="color: #00ff15ff;"></i> Unidad agregada correctamente';
             $tipo_mensaje = "success";
             break;
         case 'updated':
-            $mensaje = "✅ Unidad actualizada correctamente";
+            $mensaje = '<i class="fa-solid fa-circle-check" style="color: #00ff15ff;"></i> Unidad actualizada correctamente';
             $tipo_mensaje = "success";
             break;
         case 'deleted':
+            $mensaje = '<i class="fa-solid fa-circle-check" style="color: #00ff15ff;"></i> Unidad eliminada correctamente';
             $mensaje = "✅ Unidad eliminada correctamente";
             $tipo_mensaje = "success";
             break;
@@ -456,6 +457,226 @@ body {
   
   .top-header h2 {
     font-size: 1.2rem;
+  }
+}
+/* ========== RESPONSIVO ========== */
+
+/* Tablets y dispositivos medianos */
+@media (max-width: 992px) {
+  .table thead th,
+  .table tbody td {
+    font-size: 0.85rem;
+    padding: 10px 8px;
+  }
+  
+  .btn-warning,
+  .btn-danger,
+  .btn-info {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  body {
+    padding-top: 140px;
+  }
+  
+  .top-header {
+    margin: 10px;
+    padding: 10px 0;
+    border-radius: 15px;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 8px;
+  }
+  
+  .top-header h2 {
+    font-size: 1.1rem;
+    position: static;
+    transform: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .user-info {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .btn-logout {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+  
+  .card {
+    padding: 15px !important;
+    border-radius: 12px;
+  }
+  
+  .card h5 {
+    font-size: 1rem;
+  }
+  
+  /* Tabla responsiva */
+  .table {
+    font-size: 0.75rem;
+    min-width: 700px;
+  }
+  
+  .table thead th {
+    padding: 8px 5px;
+    font-size: 0.75rem;
+  }
+  
+  .table tbody td {
+    padding: 8px 5px;
+    font-size: 0.75rem;
+  }
+  
+  /* Botones de acción más compactos */
+  .table tbody td:last-child {
+    white-space: normal;
+    min-width: 120px;
+  }
+  
+  .btn-info,
+  .btn-warning,
+  .btn-danger {
+    padding: 5px 8px;
+    font-size: 0.7rem;
+    margin: 2px 1px;
+    display: inline-block;
+  }
+  
+  /* Badges más pequeños */
+  .franq-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  /* Formularios */
+  .form-label {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+  }
+  
+  .form-control,
+  .form-select {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+  
+  /* Modal responsivo */
+  .modal-dialog {
+    margin: 10px;
+  }
+  
+  .modal-body {
+    padding: 15px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+  body {
+    padding-top: 150px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .btn-logout {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  /* Botones solo con iconos */
+  .btn-info span,
+  .btn-warning span,
+  .btn-danger span {
+    display: none;
+  }
+  
+  .btn-info,
+  .btn-warning,
+  .btn-danger {
+    padding: 8px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .btn-info i,
+  .btn-warning i,
+  .btn-danger i {
+    margin: 0 !important;
+  }
+  
+  .table {
+    min-width: 650px;
+    font-size: 0.7rem;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: 6px 4px;
+  }
+}
+
+/* Orientación horizontal en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    padding-top: 100px;
+  }
+  
+  .top-header {
+    padding: 8px 0;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: row;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Accesibilidad táctil */
+@media (hover: none) and (pointer: coarse) {
+  .btn-info,
+  .btn-warning,
+  .btn-danger,
+  .btn-primary,
+  .btn-logout {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .form-control,
+  .form-select {
+    min-height: 44px;
   }
 }
   </style>

@@ -597,6 +597,600 @@ body {
     padding: 8px 20px;
   }
 }
+/* ========== RESPONSIVO ========== */
+
+/* Tablets y dispositivos medianos */
+@media (max-width: 992px) {
+  .top-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .header-right {
+    gap: 12px;
+  }
+  
+  .modulos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  
+  .area-badge {
+    font-size: 0.95rem;
+    padding: 8px 20px;
+  }
+  
+  .modulo-card {
+    border-radius: 18px;
+  }
+  
+  .modulo-header {
+    padding: 20px;
+  }
+  
+  .modulo-icon {
+    font-size: 50px;
+  }
+  
+  .modulo-nombre {
+    font-size: 1.2rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  body {
+    padding-top: 140px;
+  }
+  
+  .top-header {
+    margin: 10px;
+    padding: 10px 0;
+    border-radius: 15px;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 10px;
+  }
+  
+  .top-header h2 {
+    font-size: 1.1rem;
+    position: static;
+    transform: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .top-header h2 i {
+    font-size: 1rem;
+  }
+  
+  .header-right {
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+    gap: 10px;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .user-dropdown {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 180px;
+  }
+  
+  .user-dropdown-item {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+  
+  /* Area badge */
+  .area-badge {
+    font-size: 0.85rem;
+    padding: 8px 18px;
+    margin-bottom: 20px;
+  }
+  
+  /* Grid de módulos */
+  .modulos-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  /* Módulo card */
+  .modulo-card {
+    border-radius: 15px;
+  }
+  
+  .modulo-header {
+    padding: 20px 15px;
+  }
+  
+  .modulo-numero {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    top: 8px;
+    left: 12px;
+  }
+  
+  .modulo-icon {
+    font-size: 50px;
+    margin-bottom: 8px;
+  }
+  
+  .modulo-nombre {
+    font-size: 1.1rem;
+  }
+  
+  .modulo-body {
+    padding: 20px 15px;
+  }
+  
+  /* Badges */
+  .badge-completado,
+  .badge-bloqueado,
+  .badge-sin-videos {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    top: 12px;
+    right: 12px;
+  }
+  
+  /* Progreso */
+  .progreso-info {
+    margin-bottom: 15px;
+  }
+  
+  .progreso-texto {
+    font-size: 0.85rem;
+  }
+  
+  .progress {
+    height: 8px;
+  }
+  
+  /* Videos count */
+  .videos-count {
+    font-size: 0.85rem;
+    margin: 12px 0;
+  }
+  
+  /* Botones */
+  .btn-modulo {
+    padding: 10px;
+    font-size: 0.9rem;
+    border-radius: 20px;
+  }
+  
+  /* Mensajes */
+  .mensaje-sin-videos,
+  .mensaje-bloqueado {
+    padding: 12px;
+    font-size: 0.85rem;
+    margin-top: 12px;
+  }
+  
+  .mensaje-sin-videos p,
+  .mensaje-bloqueado p {
+    font-size: 0.85rem;
+  }
+  
+  /* Empty state */
+  .empty-state {
+    padding: 40px 15px;
+    border-radius: 15px;
+  }
+  
+  .empty-state .icon {
+    font-size: 80px;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+  }
+  
+  .empty-state p {
+    font-size: 1rem;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+  body {
+    padding-top: 150px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .user-toggle span:last-child {
+    font-size: 0.7em !important;
+  }
+  
+  .user-dropdown {
+    min-width: 160px;
+  }
+  
+  .user-dropdown-item {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  /* Area badge más pequeño */
+  .area-badge {
+    font-size: 0.8rem;
+    padding: 6px 15px;
+    margin-bottom: 15px;
+  }
+  
+  /* Módulo card compacto */
+  .modulo-card {
+    border-radius: 12px;
+  }
+  
+  .modulo-header {
+    padding: 18px 12px;
+  }
+  
+  .modulo-numero {
+    width: 28px;
+    height: 28px;
+    font-size: 0.95rem;
+    top: 8px;
+    left: 10px;
+  }
+  
+  .modulo-icon {
+    font-size: 45px;
+    margin-bottom: 6px;
+  }
+  
+  .modulo-nombre {
+    font-size: 1rem;
+  }
+  
+  .modulo-body {
+    padding: 18px 12px;
+  }
+  
+  /* Badges más pequeños */
+  .badge-completado,
+  .badge-bloqueado,
+  .badge-sin-videos {
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    top: 10px;
+    right: 10px;
+  }
+  
+  /* Progreso compacto */
+  .progreso-info {
+    margin-bottom: 12px;
+  }
+  
+  .progreso-texto {
+    font-size: 0.8rem;
+  }
+  
+  .progress {
+    height: 7px;
+  }
+  
+  .videos-count {
+    font-size: 0.8rem;
+    margin: 10px 0;
+  }
+  
+  .videos-count i {
+    font-size: 0.9rem;
+  }
+  
+  /* Botón más compacto */
+  .btn-modulo {
+    padding: 9px;
+    font-size: 0.85rem;
+    border-radius: 18px;
+  }
+  
+  .btn-modulo i {
+    font-size: 0.9rem;
+  }
+  
+  /* Mensajes compactos */
+  .mensaje-sin-videos,
+  .mensaje-bloqueado {
+    padding: 10px;
+    margin-top: 10px;
+  }
+  
+  .mensaje-sin-videos p,
+  .mensaje-bloqueado p {
+    font-size: 0.8rem;
+  }
+  
+  /* Empty state compacto */
+  .empty-state {
+    padding: 35px 12px;
+  }
+  
+  .empty-state .icon {
+    font-size: 70px;
+    margin-bottom: 15px;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.2rem;
+  }
+  
+  .empty-state p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Móviles muy pequeños (320px) */
+@media (max-width: 400px) {
+  body {
+    padding-top: 160px;
+  }
+  
+  .top-header {
+    margin: 8px;
+  }
+  
+  .top-header h2 {
+    font-size: 0.95rem;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+  
+  .area-badge {
+    font-size: 0.75rem;
+    padding: 5px 12px;
+  }
+  
+  .modulo-header {
+    padding: 15px 10px;
+  }
+  
+  .modulo-numero {
+    width: 26px;
+    height: 26px;
+    font-size: 0.9rem;
+  }
+  
+  .modulo-icon {
+    font-size: 40px;
+  }
+  
+  .modulo-nombre {
+    font-size: 0.95rem;
+  }
+  
+  .modulo-body {
+    padding: 15px 10px;
+  }
+  
+  .badge-completado,
+  .badge-bloqueado,
+  .badge-sin-videos {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+  }
+  
+  .progreso-texto {
+    font-size: 0.75rem;
+  }
+  
+  .videos-count {
+    font-size: 0.75rem;
+  }
+  
+  .btn-modulo {
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+  
+  .mensaje-sin-videos p,
+  .mensaje-bloqueado p {
+    font-size: 0.75rem;
+  }
+}
+
+/* Orientación horizontal en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    padding-top: 100px;
+  }
+  
+  .top-header {
+    padding: 8px 0;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+  
+  .header-right {
+    position: static;
+    width: auto;
+    margin-left: auto;
+  }
+  
+  .user-dropdown {
+    right: 0;
+    left: auto;
+    transform: none;
+  }
+  
+  .modulos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .modulo-icon {
+    font-size: 45px;
+  }
+  
+  .modulo-nombre {
+    font-size: 1rem;
+  }
+}
+
+/* Tablets en orientación vertical */
+@media (min-width: 769px) and (max-width: 992px) {
+  .modulos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Accesibilidad táctil */
+@media (hover: none) and (pointer: coarse) {
+  .btn-volver,
+  .user-toggle,
+  .user-dropdown-item,
+  .btn-modulo {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Mejora de hover solo en desktop */
+@media (hover: hover) and (pointer: fine) {
+  .modulo-card:not(.bloqueado):hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(155, 124, 184, 0.3);
+  }
+  
+  .btn-volver:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .user-toggle:hover {
+    background: white;
+    color: #9b7cb8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .user-dropdown-item:hover {
+    background: linear-gradient(135deg, rgba(245, 163, 199, 0.2), rgba(155, 124, 184, 0.2));
+    transform: translateX(5px);
+  }
+  
+  .btn-modulo:hover {
+    background: linear-gradient(135deg, #9b7cb8, #f5a3c7);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(155, 124, 184, 0.4);
+  }
+}
+
+/* Ajustes para pantallas muy anchas */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  .modulos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+  }
+  
+  .area-badge {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+  }
+  
+  .modulo-header {
+    padding: 30px;
+  }
+  
+  .modulo-icon {
+    font-size: 70px;
+  }
+  
+  .modulo-nombre {
+    font-size: 1.4rem;
+  }
+  
+  .modulo-body {
+    padding: 30px;
+  }
+}
+
+/* Optimización para impresión */
+@media print {
+  body {
+    padding-top: 0;
+    background: white;
+  }
+  
+  .top-header {
+    position: static;
+    margin: 0 0 20px 0;
+    page-break-after: avoid;
+  }
+  
+  .user-dropdown {
+    display: none !important;
+  }
+  
+  .modulos-grid {
+    display: block;
+  }
+  
+  .modulo-card {
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .btn-modulo {
+    display: none;
+  }
+}
 </style>
 </head>
 <body>
@@ -701,7 +1295,7 @@ body {
               <?php if ($bloqueado): ?>
                 <!-- Mensaje de módulo bloqueado -->
                 <div class="mensaje-bloqueado">
-                  <p>⚠️ Completa el módulo anterior para desbloquear</p>
+                  <p><i class="fa-solid fa-triangle-exclamation" style="color: #FFD43B;"></i> Completa el módulo anterior para desbloquear</p>
                 </div>
               <?php else: ?>
                 <!-- Botón de acción -->

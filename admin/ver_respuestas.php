@@ -462,6 +462,358 @@ body {
     text-align: center;
   }
 }
+/* ========== RESPONSIVO ========== */
+
+/* Tablets y pantallas grandes */
+@media (max-width: 1200px) {
+  .module-content {
+    flex-direction: column;
+  }
+  
+  .chart-container {
+    flex: 1;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .table-container {
+    width: 100%;
+  }
+}
+
+/* Tablets medianas */
+@media (max-width: 992px) {
+  .table thead th,
+  .table tbody td {
+    font-size: 0.8rem;
+    padding: 10px 8px;
+  }
+  
+  .btn-calificar,
+  .btn-ver-archivo {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+  }
+  
+  .module-header h4 {
+    font-size: 1.1rem;
+  }
+  
+  .stats-badge {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  body {
+    padding-top: 140px;
+  }
+  
+  .top-header {
+    margin: 10px;
+    padding: 10px 0;
+    border-radius: 15px;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 8px;
+  }
+  
+  .top-header h2 {
+    font-size: 1.1rem;
+    position: static;
+    transform: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .user-info {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .btn-logout {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+  
+  .card {
+    padding: 15px !important;
+    border-radius: 12px;
+  }
+  
+  /* Filtros responsivos */
+  .filter-card .row.g-3 > div {
+    margin-bottom: 10px;
+  }
+  
+  /* Módulos */
+  .module-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    padding: 12px 15px;
+  }
+  
+  .module-header h4 {
+    font-size: 1rem;
+  }
+  
+  .stats-badge {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    width: 100%;
+  }
+  
+  /* Gráfica más compacta */
+  .chart-container {
+    padding: 15px;
+  }
+  
+  .chart-container h5 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .chart-wrapper {
+    height: 250px;
+  }
+  
+  /* Tabla responsiva */
+  .table {
+    font-size: 0.75rem;
+    min-width: 650px;
+  }
+  
+  .table thead th {
+    padding: 8px 5px;
+    font-size: 0.7rem;
+  }
+  
+  .table tbody td {
+    padding: 8px 5px;
+    font-size: 0.75rem;
+  }
+  
+  /* Badges y estados más pequeños */
+  .correct,
+  .incorrect,
+  .pending {
+    font-size: 1rem;
+    padding: 4px 8px;
+  }
+  
+  .calificacion-display {
+    font-size: 0.9rem;
+    padding: 4px 8px;
+  }
+  
+  .badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+  
+  /* Botones de acción */
+  .btn-calificar,
+  .btn-ver-archivo {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    margin-top: 5px;
+  }
+  
+  /* Comentarios */
+  .comentario-box {
+    font-size: 0.75rem;
+    padding: 8px;
+  }
+  
+  /* Resumen general */
+  .row.text-center .col-md-3 {
+    margin-bottom: 15px;
+  }
+  
+  .row.text-center h3 {
+    font-size: 1.5rem;
+  }
+  
+  /* Empty state */
+  .empty-state .icon {
+    font-size: 60px;
+  }
+  
+  .empty-state h4 {
+    font-size: 1.2rem;
+  }
+  
+  /* Modal */
+  .modal-dialog {
+    margin: 10px;
+  }
+  
+  .modal-body {
+    padding: 15px;
+  }
+  
+  .form-label {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+  }
+  
+  .form-control,
+  .form-select {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+  body {
+    padding-top: 150px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .btn-logout {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  /* Ocultar texto en botones, solo iconos */
+  .btn-calificar,
+  .btn-ver-archivo {
+    padding: 6px 8px;
+    font-size: 0.7rem;
+  }
+  
+  .table {
+    min-width: 600px;
+    font-size: 0.7rem;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: 6px 4px;
+  }
+  
+  /* Ajustar anchos de columnas */
+  .table thead th:nth-child(1),
+  .table tbody td:nth-child(1) {
+    width: 15%;
+  }
+  
+  .table thead th:nth-child(2),
+  .table tbody td:nth-child(2) {
+    width: 30%;
+  }
+  
+  .table thead th:nth-child(3),
+  .table tbody td:nth-child(3) {
+    width: 12%;
+  }
+  
+  .table thead th:nth-child(4),
+  .table tbody td:nth-child(4) {
+    width: 20%;
+  }
+  
+  .table thead th:nth-child(5),
+  .table tbody td:nth-child(5) {
+    width: 23%;
+  }
+  
+  /* Resumen general más compacto */
+  .row.text-center h3 {
+    font-size: 1.3rem;
+  }
+  
+  .row.text-center p {
+    font-size: 0.85rem;
+  }
+  
+  /* Chart más pequeño */
+  .chart-wrapper {
+    height: 220px;
+  }
+  
+  /* Estados más compactos */
+  .correct i,
+  .incorrect i,
+  .pending i {
+    font-size: 0.9rem;
+  }
+}
+
+/* Orientación horizontal en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    padding-top: 100px;
+  }
+  
+  .top-header {
+    padding: 8px 0;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: row;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .chart-wrapper {
+    height: 200px;
+  }
+}
+
+/* Accesibilidad táctil */
+@media (hover: none) and (pointer: coarse) {
+  .btn-calificar,
+  .btn-ver-archivo,
+  .btn-primary,
+  .btn-logout {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .form-control,
+  .form-select {
+    min-height: 44px;
+  }
+}
+
+/* Ajuste para impresión */
+@media print {
+  body {
+    padding-top: 0;
+  }
+  
+  .top-header,
+  .filter-card,
+  .btn-calificar,
+  .btn-ver-archivo {
+    display: none;
+  }
+  
+  .module-content {
+    page-break-inside: avoid;
+  }
+}
 </style>
 </head>
 <body>
@@ -670,7 +1022,7 @@ body {
         $porcentaje_general = $evaluables_general > 0 ? round(($correctas_general / $evaluables_general) * 100) : 0;
       ?>
       <div class="card p-4" style="background: linear-gradient(135deg, rgba(245, 163, 199, 0.2), rgba(155, 124, 184, 0.2));">
-        <h5 style="color: #9b7cb8; font-weight: 600; margin-bottom: 20px; text-align: center;">📈 Resumen General</h5>
+        <h5 style="color: #9b7cb8; font-weight: 600; margin-bottom: 20px; text-align: center;"><i class="fa-solid fa-chart-line" style="color: #B197FC;"></i> Resumen General</h5>
         <div class="row text-center">
           <div class="col-md-3">
             <h3 style="color: #9b7cb8; font-weight: 700;"><?= $total_general ?></h3>
@@ -728,7 +1080,6 @@ body {
               <?php endfor; ?>
             </select>
             <!-- FIN CAMBIO -->
-
           </div>
           
           <div class="mb-3">

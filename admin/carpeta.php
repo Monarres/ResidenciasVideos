@@ -50,17 +50,11 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Módulo <?= htmlspecialchars($carpeta['nombre']) ?></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     * {
@@ -76,6 +70,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       padding-top: 100px;
     }
     
+    /* Header Principal */
     .top-header {
       position: fixed;
       top: 0;
@@ -94,7 +89,8 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       justify-content: space-between;
       align-items: center;
       padding: 0 30px;
-      position: relative;
+      gap: 15px;
+      flex-wrap: wrap;
     }
 
     .top-header h2 {
@@ -102,23 +98,84 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       font-weight: 600;
       margin: 0;
       font-size: 1.5rem;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      flex: 1 1 auto;
+      text-align: center;
+      min-width: 200px;
     }
 
     .header-right {
-  gap: 10px;
-}
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
 
-.user-toggle {
-  padding: 6px 15px;
-  font-size: 0.9rem;
-}
+    /* Usuario Section */
+    .user-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
 
-    .user-name {
+    .user-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
       color: white;
       font-weight: 500;
+      border-radius: 25px;
+      padding: 8px 20px;
+      transition: 0.3s;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .user-toggle:hover {
+      background: white;
+      color: #9b7cb8;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 10px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(155, 124, 184, 0.3);
+      min-width: 200px;
+      padding: 10px;
+      z-index: 10000;
+      display: none;
+    }
+
+    .user-dropdown.show {
+      display: block;
+    }
+
+    .user-dropdown-item {
+      padding: 12px 20px;
+      transition: 0.3s;
+      border-radius: 10px;
+      margin-bottom: 5px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #dc3545;
+      cursor: pointer;
+      background: linear-gradient(135deg, rgba(220, 53, 69, 0.05), rgba(245, 163, 199, 0.1));
+    }
+
+    .user-dropdown-item:hover {
+      background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(245, 163, 199, 0.2));
+      transform: translateX(5px);
     }
 
     .btn-volver {
@@ -130,7 +187,10 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       padding: 8px 20px;
       transition: 0.3s;
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
     }
 
     .btn-volver:hover {
@@ -139,79 +199,8 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       color: #9b7cb8;
     }
-    .header-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-left: auto;
-}
 
-.user-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-}
-
-.user-toggle {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid white;
-  color: white;
-  font-weight: 500;
-  border-radius: 25px;
-  padding: 8px 20px;
-  transition: 0.3s;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.user-toggle:hover {
-  background: white;
-  color: #9b7cb8;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.user-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 10px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(155, 124, 184, 0.3);
-  min-width: 200px;
-  padding: 10px;
-  z-index: 10000;
-  display: none;
-}
-
-.user-dropdown.show {
-  display: block;
-}
-
-.user-dropdown-item {
-  padding: 12px 20px;
-  transition: 0.3s;
-  border-radius: 10px;
-  margin-bottom: 5px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: #dc3545;
-  cursor: pointer;
-  background: linear-gradient(135deg, rgba(220, 53, 69, 0.05), rgba(245, 163, 199, 0.1));
-}
-
-.user-dropdown-item:hover {
-  background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(245, 163, 199, 0.2));
-  transform: translateX(5px);
-}
-
+    /* Contenedor Principal */
     .container {
       max-width: 1200px;
       padding: 20px 15px;
@@ -238,6 +227,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       resize: vertical;
     }
 
+    /* Botón Añadir Video */
     .btn-add-video-container {
       display: flex;
       justify-content: center;
@@ -254,6 +244,9 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       font-size: 1.1rem;
       box-shadow: 0 4px 15px rgba(155, 124, 184, 0.3);
       transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .btn-add-video:hover {
@@ -262,6 +255,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       box-shadow: 0 6px 20px rgba(155, 124, 184, 0.4);
     }
 
+    /* Video Cards */
     .video-card {
       transition: all 0.3s ease;
       margin-bottom: 30px;
@@ -275,6 +269,8 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     .video-card h5 {
       color: #9b7cb8;
       font-weight: 600;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .video-descripcion {
@@ -285,13 +281,17 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));
       border-radius: 10px;
       border-left: 3px solid #9b7cb8;
+      word-wrap: break-word;
     }
 
-    video {
+    video, iframe {
       border-radius: 10px;
       background: #000;
+      width: 100%;
+      max-width: 100%;
     }
 
+    /* Empty State */
     .empty-state {
       text-align: center;
       padding: 60px 20px;
@@ -303,11 +303,13 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       opacity: 0.3;
     }
 
+    /* Alert */
     .alert {
       border-radius: 15px;
       border: none;
     }
 
+    /* Badge */
     .badge {
       background: linear-gradient(135deg, #f5a3c7, #9b7cb8);
       font-weight: 500;
@@ -315,19 +317,24 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       border-radius: 20px;
     }
 
+    /* Section Header */
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .section-header h4 {
       color: #9b7cb8;
       font-weight: 600;
       margin: 0;
+      word-wrap: break-word;
     }
 
+    /* Cuestionario Badge */
     .cuestionario-badge {
       display: inline-block;
       padding: 5px 15px;
@@ -347,6 +354,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       color: white;
     }
 
+    /* Preguntas Container */
     .preguntas-container {
       background: white;
       border-radius: 15px;
@@ -377,6 +385,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       padding: 15px;
       margin-bottom: 12px;
       transition: all 0.2s ease;
+      word-wrap: break-word;
     }
 
     .pregunta-card:hover {
@@ -384,6 +393,23 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       box-shadow: 0 2px 8px rgba(155, 124, 184, 0.2);
     }
 
+    /* Botones */
+    .btn-secondary-custom {
+      background: white;
+      border: 2px solid #9b7cb8;
+      color: #9b7cb8;
+      font-weight: 500;
+      border-radius: 25px;
+      padding: 8px 20px;
+      transition: 0.3s;
+    }
+
+    .btn-secondary-custom:hover {
+      background: #9b7cb8;
+      color: white;
+    }
+
+    /* SweetAlert2 Styles */
     .swal2-popup {
       border-radius: 20px !important;
       font-family: 'Poppins', sans-serif !important;
@@ -463,70 +489,343 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       outline: none !important;
     }
 
-    .btn-secondary-custom {
-      background: white;
-      border: 2px solid #9b7cb8;
-      color: #9b7cb8;
-      font-weight: 500;
-      border-radius: 25px;
-      padding: 8px 20px;
-      transition: 0.3s;
+    /* Media Queries */
+
+    /* Tablets grandes */
+    @media (max-width: 992px) {
+      .top-header h2 {
+        font-size: 1.3rem;
+      }
+
+      .btn-add-video {
+        font-size: 1rem;
+        padding: 12px 30px;
+      }
+
+      .video-card h5 {
+        font-size: 1.1rem;
+      }
+
+      .container {
+        padding: 15px 10px;
+      }
     }
 
-    .btn-secondary-custom:hover {
-      background: #9b7cb8;
-      color: white;
-    }
-
+    /* Tablets pequeñas */
     @media (max-width: 768px) {
       body {
-        padding-top: 90px;
+        padding-top: 140px;
       }
 
       .top-header {
         margin: 10px;
+        padding: 15px 0;
         border-radius: 15px;
       }
 
       .top-header .container-fluid {
+        flex-direction: column;
         padding: 0 15px;
+        gap: 10px;
       }
 
       .top-header h2 {
         font-size: 1.2rem;
+        text-align: center;
+        width: 100%;
       }
 
-      .user-name {
-        display: none;
+      .header-right {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .user-toggle {
+        padding: 6px 15px;
+        font-size: 0.9rem;
       }
 
       .btn-volver {
         padding: 6px 15px;
         font-size: 0.9rem;
       }
+
+      .btn-add-video {
+        font-size: 0.95rem;
+        padding: 12px 25px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .section-header h4 {
+        font-size: 1rem;
+      }
+
+      /* Video responsivo en dos columnas */
+      .video-card .row {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .video-card .col-md-6 {
+        max-width: 100%;
+        margin-bottom: 20px;
+      }
+
+      video, iframe {
+        height: 250px;
+      }
+
+      .preguntas-container {
+        max-height: 300px;
+      }
+
+      /* Botones en video card */
+      .video-card .d-flex.gap-2 {
+        flex-direction: column;
+        gap: 10px !important;
+      }
+
+      .video-card .btn {
+        width: 100%;
+      }
+
+      /* SweetAlert2 responsivo */
+      .swal2-popup {
+        padding: 20px !important;
+        max-width: 95% !important;
+      }
+
+      .swal2-title {
+        font-size: 1.4rem !important;
+      }
+
+      .swal2-html-container {
+        font-size: 0.9rem !important;
+        max-height: 400px !important;
+      }
+    }
+
+    /* Móviles */
+    @media (max-width: 576px) {
+      body {
+        padding-top: 160px;
+      }
+
+      .top-header {
+        margin: 8px;
+        padding: 12px 0;
+      }
+
+      .top-header .container-fluid {
+        padding: 0 10px;
+      }
+
+      .top-header h2 {
+        font-size: 1rem;
+        line-height: 1.4;
+      }
+
+      .header-right {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .user-section {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .user-toggle {
+        width: 100%;
+        justify-content: center;
+        padding: 8px 15px;
+        font-size: 0.85rem;
+      }
+
+      .btn-volver {
+        width: 100%;
+        justify-content: center;
+        padding: 8px 15px;
+        font-size: 0.85rem;
+      }
+
+      .user-dropdown {
+        right: 50%;
+        transform: translateX(50%);
+        min-width: 180px;
+      }
+
+      .container {
+        padding: 10px 8px;
+      }
+
+      .btn-add-video {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+        width: 90%;
+      }
+
+      .btn-add-video-container {
+        margin: 20px 0;
+      }
+
+      .section-header h4 {
+        font-size: 0.95rem;
+      }
+
+      .badge {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+
+      .video-card {
+        margin-bottom: 20px;
+      }
+
+      .video-card h5 {
+        font-size: 1rem;
+      }
+
+      .video-descripcion {
+        font-size: 0.85rem;
+        padding: 8px;
+      }
+
+      video, iframe {
+        height: 200px;
+      }
+
+      .cuestionario-badge {
+        font-size: 0.8rem;
+        padding: 4px 12px;
+      }
+
+      .preguntas-container {
+        padding: 15px;
+        max-height: 250px;
+      }
+
+      .pregunta-card {
+        padding: 12px;
+        font-size: 0.85rem;
+      }
+
+      .btn-secondary-custom,
+      .btn-danger {
+        font-size: 0.85rem;
+        padding: 6px 15px;
+      }
+
+      /* SweetAlert2 móvil */
+      .swal2-popup {
+        padding: 15px !important;
+        width: 95% !important;
+      }
+
+      .swal2-title {
+        font-size: 1.2rem !important;
+      }
+
+      .swal2-html-container {
+        font-size: 0.85rem !important;
+        max-height: 350px !important;
+      }
+
+      .swal2-confirm,
+      .swal2-cancel {
+        padding: 10px 25px !important;
+        font-size: 0.9rem !important;
+      }
+
+      .swal2-input,
+      .swal2-textarea {
+        font-size: 0.9rem !important;
+        padding: 10px 15px !important;
+      }
+    }
+
+    /* Móviles muy pequeños */
+    @media (max-width: 380px) {
+      .top-header h2 {
+        font-size: 0.9rem;
+      }
+
+      .user-toggle,
+      .btn-volver {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+      }
+
+      .btn-add-video {
+        font-size: 0.85rem;
+        padding: 8px 15px;
+      }
+
+      .section-header h4 {
+        font-size: 0.9rem;
+      }
+
+      video, iframe {
+        height: 180px;
+      }
+
+      .pregunta-card {
+        font-size: 0.8rem;
+        padding: 10px;
+      }
+    }
+
+    /* Landscape en móviles */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        padding-top: 100px;
+      }
+
+      .top-header {
+        padding: 10px 0;
+      }
+
+      .btn-add-video-container {
+        margin: 15px 0;
+      }
+
+      video, iframe {
+        height: 150px;
+      }
+
+      .preguntas-container {
+        max-height: 200px;
+      }
     }
   </style>
 </head>
 <body>
-<body>
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2> <i class="fa-solid fa-book fa-beat" style="color: #ffffffff;"></i> <?= htmlspecialchars($carpeta['nombre']) ?></h2>
+    <h2><i class="fa-solid fa-book fa-beat"></i> <?= htmlspecialchars($carpeta['nombre']) ?></h2>
     <div class="header-right">
-  <!-- Sección de Usuario con Cerrar Sesión -->
-  <div class="user-section">
-    <button class="user-toggle" id="userToggle">
-      <span></span><i class="fa-solid fa-user" style="color: #B197FC;"></i> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;"><i class="fa-solid fa-caret-down" style="color: #B197FC;"></i></span>
-    </button>
-    <div class="user-dropdown" id="userDropdown">
-      <a href="../logout.php" class="user-dropdown-item">
-        <span></span> <i class="fa-solid fa-door-open" style="color: #ef061d;"></i>Cerrar sesión
-      </a>
-    </div>
-  </div>
+      <div class="user-section">
+        <button class="user-toggle" id="userToggle">
+          <i class="fa-solid fa-user" style="color: #B197FC;"></i>
+          <span><?=htmlspecialchars($_SESSION['nombre'])?></span>
+          <i class="fa-solid fa-caret-down" style="color: #B197FC;"></i>
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <a href="../logout.php" class="user-dropdown-item">
+            <i class="fa-solid fa-door-open" style="color: #ef061d;"></i>
+            <span>Cerrar sesión</span>
+          </a>
+        </div>
+      </div>
       <a href="area.php?id=<?= $carpeta['id_padre'] ?>" class="btn-volver">
-        <i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver 
+        <i class="fa-solid fa-angle-left" style="color: #B197FC;"></i>
+        <span>Volver</span>
       </a>
     </div>
   </div>
@@ -542,7 +841,8 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <div class="btn-add-video-container">
     <button id="btnAddVideo" class="btn-add-video">
-       Añadir Video    <i class="fa-solid fa-circle-plus" style="color: #fafafaff;"></i>
+      <span>Añadir Video</span>
+      <i class="fa-solid fa-circle-plus"></i>
     </button>
   </div>
 
@@ -572,42 +872,38 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <?php endif; ?>
                   
                   <?php if ($video['ruta']): ?>
-    <?php if ($video['tipo_video'] === 'youtube' || strpos($video['ruta'], 'youtube.com') !== false): ?>
-        <!-- Video de YouTube -->
-        <iframe 
-            src="<?= htmlspecialchars($video['ruta']) ?>" 
-            width="100%" 
-            height="400"
-            style="border-radius: 10px; border: none;"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-        </iframe>
-    <?php else: ?>
-        <!-- Video local -->
-        <video src="../<?= htmlspecialchars($video['ruta']) ?>" 
-               width="100%" 
-               controls 
-               controlsList="nodownload"
-               preload="metadata">
-            Tu navegador no soporta el elemento de video.
-        </video>
-    <?php endif; ?>
-<?php else: ?>
-    <div class="alert alert-warning mb-0">
-       Video no encontrado
-    </div>
-<?php endif; ?>
+                    <?php if ($video['tipo_video'] === 'youtube' || strpos($video['ruta'], 'youtube.com') !== false): ?>
+                      <iframe 
+                        src="<?= htmlspecialchars($video['ruta']) ?>" 
+                        width="100%" 
+                        height="400"
+                        style="border-radius: 10px; border: none;"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                      </iframe>
+                    <?php else: ?>
+                      <video src="../<?= htmlspecialchars($video['ruta']) ?>" 
+                             width="100%" 
+                             controls 
+                             controlsList="nodownload"
+                             preload="metadata">
+                        Tu navegador no soporta el elemento de video.
+                      </video>
+                    <?php endif; ?>
+                  <?php else: ?>
+                    <div class="alert alert-warning mb-0">Video no encontrado</div>
+                  <?php endif; ?>
                   
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <small> </small>
+                  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+                    <small></small>
                     <?php if ($video['num_preguntas'] > 0): ?>
                       <span class="cuestionario-badge completo">
-                         <?= $video['num_preguntas'] ?> pregunta<?= $video['num_preguntas'] != 1 ? 's' : '' ?>
+                        <?= $video['num_preguntas'] ?> pregunta<?= $video['num_preguntas'] != 1 ? 's' : '' ?>
                       </span>
                     <?php else: ?>
                       <span class="cuestionario-badge pendiente">
-                         Sin cuestionario
+                        Sin cuestionario
                       </span>
                     <?php endif; ?>
                   </div>
@@ -615,13 +911,13 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <div class="d-flex gap-2 mt-3">
                     <button class="btn btn-secondary-custom btn-sm flex-fill btn-edit-completo" 
                             data-id="<?= $video['id_video'] ?>">
-                       Editar <i class="fas fa-edit"></i>
+                      <span>Editar</span> <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-danger btn-sm flex-fill btn-del-video" 
                             data-id="<?= $video['id_video'] ?>"
                             data-title="<?= htmlspecialchars($video['titulo']) ?>"
                             style="border-radius: 12px;">
-                       Eliminar <i class="fas fa-trash-alt"></i>
+                      <span>Eliminar</span> <i class="fas fa-trash-alt"></i>
                     </button>
                   </div>
                 </div>
@@ -629,7 +925,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-6">
                   <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6 style="color: #9b7cb8; font-weight: 600; margin: 0;">
-                       Cuestionario <i class="fas fa-clipboard-list"></i>
+                      <span>Cuestionario</span> <i class="fas fa-clipboard-list"></i>
                     </h6>
                   </div>
                   
@@ -644,7 +940,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                       <?php 
 foreach ($preguntas as $p): 
   $es_archivo = ($p['tipo_pregunta'] === 'archivo');
-  $etiqueta = $es_archivo ? "📎 Archivo" : "❓ Pregunta";
+  $etiqueta = $es_archivo ? "Archivo" : "Pregunta";
 ?>
   <div class="pregunta-card">
     <small style="color: #9b7cb8; font-weight: 600;"><?= $etiqueta ?></small>
@@ -797,10 +1093,10 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         <label class="fw-bold mt-3">Descripción:</label>
         <textarea id="descripcionVideo" class="swal2-textarea" placeholder="Descripción breve del contenido" style="width:100%; margin-left: -5px;"></textarea>
 
-        <label class="fw-bold mt-3">🎥 URL de YouTube:</label>
+        <label class="fw-bold mt-3"><i class="fa-solid fa-video" style="color: #B197FC;"></i> URL de YouTube:</label>
 <input type="url" id="urlYoutube" class="swal2-input" placeholder="https://www.youtube.com/watch?v=..." style="width:100%; margin-top: 5px; margin-left: -5px;">
 <small class="text-muted d-block mt-1">
-  📝 Puedes usar: youtube.com/watch?v=... o youtu.be/...
+  <i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i> Puedes usar: youtube.com/watch?v=... o youtu.be/...
 </small>
         <hr class="my-4">
 
@@ -832,7 +1128,8 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
   div.innerHTML = `
     <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <label class="fw-bold pregunta-label" style="color: #9b7cb8;">❓ Pregunta</label>
+        <label class="fw-bold pregunta-label" style="color: #9b7cb8;"><i class="fa-solid fa-question" style="color: #B197FC;"></i>
+ Pregunta</label>
               <button type="button" class="btn btn-sm btn-danger btn-eliminar-pregunta" style="border-radius: 15px;">Eliminar</button>
             </div>
             
@@ -885,12 +1182,12 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
       preguntaTextoContainer.style.display = 'block';
       opcionesDinamicas.style.display = 'block';
       archivoContainer.style.display = 'none';
-      label.innerHTML = '❓ Pregunta';
+      label.innerHTML = '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
     } else {
       preguntaTextoContainer.style.display = 'none';
       opcionesDinamicas.style.display = 'none';
       archivoContainer.style.display = 'block';
-      label.innerHTML = '📎 Archivo';
+      label.innerHTML = '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo';
     }
   });
 });
@@ -1280,7 +1577,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
             
             const opciones = datosPregunta?.opciones_json ? JSON.parse(datosPregunta.opciones_json) : {};
             const esArchivo = datosPregunta && datosPregunta.tipo_pregunta === 'archivo';
-const etiqueta = esArchivo ? '📎 Archivo' : '❓ Pregunta';
+const etiqueta = esArchivo ? '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo' : '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
 
 div.innerHTML = `
   <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
@@ -1410,12 +1707,12 @@ if (tipo === 'incisos') {
   preguntaTextoContainer.style.display = 'block';
   opcionesDinamicas.style.display = 'block';
   archivoContainer.style.display = 'none';
-  if (label) label.innerHTML = '❓ Pregunta';
+  if (label) label.innerHTML = '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
 } else {
   preguntaTextoContainer.style.display = 'none';
   opcionesDinamicas.style.display = 'none';
   archivoContainer.style.display = 'block';
-  if (label) label.innerHTML = '📎 Archivo';
+  if (label) label.innerHTML = '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo';
 }
           });
         });
@@ -1639,7 +1936,7 @@ if (tipo === 'incisos') {
   }
 
   if (formValues.urlYoutube) { 
-    formData.append("url_youtube", formValues.urlYoutube);
+    formData.append("url_youtube",  formValues.urlYoutube);
 }
 
   // LOG PARA DEBUGGING

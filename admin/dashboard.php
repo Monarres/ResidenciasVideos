@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -21,13 +22,17 @@ $areas = $stmt->fetchAll();
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Admin - Dashboard</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 * {
@@ -43,6 +48,9 @@ body {
   padding-top: 100px;
 }
 
+/* ============================================
+   TOP HEADER - NAVBAR
+   ============================================ */
 .top-header {
   position: fixed;
   top: 0;
@@ -82,6 +90,47 @@ body {
   align-items: center;
   gap: 15px;
   margin-left: auto;
+}
+
+/* Menú hamburguesa para móvil */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 8px;
+  transition: 0.3s;
+}
+
+.menu-toggle:hover {
+  background: white;
+}
+
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.menu-toggle:hover span {
+  background: #9b7cb8;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
 }
 
 /* Botones del navbar */
@@ -152,6 +201,18 @@ body {
 
 .user-dropdown.show {
   display: block;
+  animation: fadeInDown 0.3s;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .user-dropdown-item {
@@ -174,6 +235,9 @@ body {
   transform: translateX(5px);
 }
 
+/* ============================================
+   CONTENEDOR PRINCIPAL
+   ============================================ */
 .container {
   max-width: 1200px;
   padding: 20px 15px;
@@ -190,6 +254,12 @@ body {
   border-radius: 25px;
   padding: 10px 20px;
   border: 1px solid #ddd;
+  transition: all 0.3s;
+}
+
+.form-control:focus {
+  border-color: #9b7cb8;
+  box-shadow: 0 0 0 0.2rem rgba(155, 124, 184, 0.25);
 }
 
 .btn-primary {
@@ -209,6 +279,9 @@ body {
   box-shadow: 0 5px 15px rgba(155, 124, 184, 0.3);
 }
 
+/* ============================================
+   GRID DE ÁREAS
+   ============================================ */
 .area-card .card {
   cursor: pointer;
   transition: all 0.3s ease;
@@ -230,6 +303,7 @@ body {
   color: #9b7cb8;
   font-weight: 600;
   margin-bottom: 20px;
+  word-break: break-word;
 }
 
 .dropdown {
@@ -304,28 +378,18 @@ body {
   color: #dc3545;
 }
 
-.modal-content {
-  border-radius: 15px;
-  border: none;
-}
-
-.modal-content h5 {
-  color: #9b7cb8;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.btn-secondary {
-  border-radius: 25px;
-  padding: 8px 20px;
-}
-
 #areaMsg .alert {
   border-radius: 15px;
   margin-top: 15px;
 }
 
-/* Estilos personalizados para SweetAlert2 */
+.icono-ubicacion:hover {
+  animation: fa-beat 1s infinite;
+}
+
+/* ============================================
+   ESTILOS SWEETALERT2
+   ============================================ */
 .swal2-popup { border-radius:20px !important; font-family:'Poppins',sans-serif !important; padding:30px !important; background:#ffffff !important; box-shadow:0 10px 40px rgba(0,0,0,0.2) !important; }
 .swal2-title { color:#9b7cb8 !important; font-weight:700 !important; font-size:1.8rem !important; margin-bottom:20px !important; }
 .swal2-html-container { color:#666 !important; font-size:1rem !important; font-weight:500 !important; }
@@ -343,42 +407,290 @@ body {
 .swal2-input:focus { border-color:#9b7cb8 !important; box-shadow:0 0 0 4px rgba(155,124,184,0.15) !important; outline:none !important; }
 .swal2-validation-message { background:#f5c6d9 !important; color:#9b7cb8 !important; border-radius:15px !important; font-weight:500 !important; }
 
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablets (992px y menores) */
 @media (max-width: 992px) {
+  body {
+    padding-top: 140px;
+  }
+  
+  .top-header {
+    margin: 10px;
+    padding: 15px 0;
+    border-radius: 15px;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 15px;
+  }
+  
+  .top-header h2 {
+    font-size: 1.3rem;
+    position: static;
+    transform: none;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .menu-toggle {
+    display: flex;
+  }
+  
+  .header-right {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .header-right.active {
+    max-height: 500px;
+  }
+  
+  .nav-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 20px;
+  }
+  
+  .user-section {
+    width: 100%;
+  }
+  
+  .user-toggle {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 20px;
+  }
+  
+  .user-dropdown {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+  
+  .folder-icon {
+    font-size: 3.5rem;
+  }
+}
+
+/* Tablets pequeñas (768px y menores) */
+@media (max-width: 768px) {
+  body {
+    padding-top: 160px;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+  
+  .card {
+    border-radius: 12px;
+  }
+  
+  .card.p-4 {
+    padding: 1rem !important;
+  }
+  
+  #formCrearArea {
+    flex-direction: column;
+  }
+  
+  #formCrearArea .form-control,
+  #formCrearArea .btn-primary {
+    width: 100%;
+  }
+  
+  .area-card h5 {
+    font-size: 1rem;
+  }
+  
+  .folder-icon {
+    font-size: 3rem;
+    margin: 15px 0 8px 0;
+  }
+  
+  .dropdown-menu {
+    transform: translate(-150px, 30px) !important;
+  }
+}
+
+/* Móviles (576px y menores) */
+@media (max-width: 576px) {
+  body {
+    padding-top: 180px;
+  }
+  
+  .top-header {
+    margin: 5px;
+    padding: 12px 0;
+  }
+  
+  .top-header h2 {
+    font-size: 1.1rem;
+    gap: 8px;
+  }
+  
+  .top-header h2 i {
+    font-size: 1rem;
+  }
+  
+  .menu-toggle {
+    padding: 6px;
+  }
+  
+  .menu-toggle span {
+    width: 22px;
+  }
+  
+  .nav-btn,
+  .user-toggle {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+  
+  .container {
+    padding: 10px 8px;
+  }
+  
+  .card.p-4 {
+    padding: 0.75rem !important;
+  }
+  
+  .form-control {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .btn-primary {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .area-card h5 {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+  }
+  
+  .folder-icon {
+    font-size: 2.5rem;
+    margin: 12px 0 6px 0;
+  }
+  
+  .dropdown-menu {
+    min-width: 180px;
+    transform: translate(-140px, 30px) !important;
+  }
+  
+  .dropdown-item {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .user-dropdown-item {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+  
+  #areaMsg .alert {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+}
+
+/* Móviles muy pequeños (360px y menores) */
+@media (max-width: 360px) {
+  body {
+    padding-top: 200px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .nav-btn,
+  .user-toggle {
+    font-size: 0.85rem;
+    padding: 7px 12px;
+  }
+  
+  .folder-icon {
+    font-size: 2.2rem;
+  }
+  
+  .area-card h5 {
+    font-size: 0.9rem;
+  }
+  
+  .dropdown-menu {
+    transform: translate(-130px, 30px) !important;
+  }
+  
+  /* SweetAlert responsive */
+  .swal2-popup {
+    padding: 20px !important;
+    width: 90% !important;
+  }
+  
+  .swal2-title {
+    font-size: 1.3rem !important;
+  }
+  
+  .swal2-html-container {
+    font-size: 0.9rem !important;
+  }
+  
+  .swal2-confirm,
+  .swal2-cancel {
+    padding: 10px 25px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* Landscape en móvil */
+@media (max-height: 500px) and (orientation: landscape) {
   body {
     padding-top: 90px;
   }
   
   .top-header {
-    margin: 10px;
-    border-radius: 15px;
-  }
-  
-  .top-header .container-fluid {
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 0 15px;
+    margin: 5px;
+    padding: 8px 0;
   }
   
   .top-header h2 {
-    font-size: 1.2rem;
-    width: 100%;
-    text-align: center;
+    font-size: 1rem;
   }
   
-  .header-right {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
+  .folder-icon {
+    font-size: 2rem;
+    margin: 8px 0 5px 0;
   }
   
-  .nav-btn, .user-toggle {
-    padding: 6px 12px;
+  .area-card h5 {
     font-size: 0.85rem;
+    margin-bottom: 10px;
   }
 }
-.icono-ubicacion:hover {
-    animation: fa-beat 1s infinite;
+
+/* Grid responsivo mejorado */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  .area-card {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
 }
 </style>
 </head>
@@ -391,7 +703,14 @@ body {
       Panel - Áreas
     </h2>
     
-    <div class="header-right">
+    <!-- Botón hamburguesa -->
+    <div class="menu-toggle" id="menuToggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    
+    <div class="header-right" id="headerRight">
       <!-- Botones directos en el navbar -->
       <a href="usuarios.php" class="nav-btn">
         <i class="fa-solid fa-users" style="color: #B197FC;"></i> Usuarios
@@ -469,7 +788,42 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Toggle del menú de usuario
+// ============================================
+// MENÚ HAMBURGUESA RESPONSIVO
+// ============================================
+const menuToggle = document.getElementById('menuToggle');
+const headerRight = document.getElementById('headerRight');
+
+menuToggle.addEventListener('click', function() {
+  this.classList.toggle('active');
+  headerRight.classList.toggle('active');
+});
+
+// Cerrar menú al hacer clic en un link
+document.querySelectorAll('.nav-btn, .user-toggle').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (window.innerWidth <= 992) {
+      menuToggle.classList.remove('active');
+      headerRight.classList.remove('active');
+    }
+  });
+});
+
+// Cerrar menú al redimensionar ventana
+let resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() {
+    if (window.innerWidth > 992) {
+      menuToggle.classList.remove('active');
+      headerRight.classList.remove('active');
+    }
+  }, 250);
+});
+
+// ============================================
+// TOGGLE DEL MENÚ DE USUARIO
+// ============================================
 const userToggle = document.getElementById('userToggle');
 const userDropdown = document.getElementById('userDropdown');
 
@@ -485,6 +839,9 @@ document.addEventListener('click', function(e) {
   }
 });
 
+// ============================================
+// CREAR ÁREA
+// ============================================
 document.getElementById('formCrearArea').addEventListener('submit', async e=>{
   e.preventDefault();
   const fd = new FormData(e.target);
@@ -495,7 +852,9 @@ document.getElementById('formCrearArea').addEventListener('submit', async e=>{
   if(j.success) setTimeout(()=>location.reload(), 1000);
 });
 
-// Eliminar área con SweetAlert2
+// ============================================
+// ELIMINAR ÁREA
+// ============================================
 document.querySelectorAll('.btn-del-area').forEach(btn=>{
   btn.addEventListener('click', async (e)=> {
     e.preventDefault();

@@ -328,6 +328,478 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         font-size: 0.9rem;
       }
     }
+    /* ========== RESPONSIVO ========== */
+
+/* Tablets y dispositivos medianos */
+@media (max-width: 992px) {
+  .top-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .btn-volver {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .user-toggle {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .header-actions {
+    gap: 10px;
+  }
+  
+  .readonly-badge {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+  
+  .video-card h5 {
+    font-size: 1.1rem;
+  }
+  
+  .section-header h4 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  body {
+    padding-top: 140px;
+  }
+  
+  .top-header {
+    margin: 10px;
+    padding: 10px 0;
+    border-radius: 15px;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 10px;
+  }
+  
+  .top-header h2 {
+    font-size: 1.1rem;
+    position: static;
+    transform: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .top-header h2 i {
+    font-size: 1rem;
+  }
+  
+  .header-actions {
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .btn-volver {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .user-toggle {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    gap: 5px;
+  }
+  
+  .user-dropdown {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 180px;
+  }
+  
+  .user-dropdown-item {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+  
+  /* Badge de solo lectura */
+  .readonly-badge {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    gap: 6px;
+    margin: 20px 0;
+  }
+  
+  /* Section header */
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .section-header h4 {
+    font-size: 1.1rem;
+  }
+  
+  .badge {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  
+  /* Video cards */
+  .video-card {
+    margin-bottom: 20px;
+  }
+  
+  .video-card .card-body {
+    padding: 15px;
+  }
+  
+  .video-card h5 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  .video-descripcion {
+    font-size: 0.85rem;
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+  
+  /* Videos en columna única */
+  .video-card .row {
+    flex-direction: column;
+  }
+  
+  .video-card .col-md-6 {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .video-card .col-md-6:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Ajustar altura mínima del cuestionario privado */
+  .video-card .col-md-6 .d-flex {
+    min-height: 200px !important;
+  }
+  
+  .video-card .col-md-6 .d-flex div[style*="font-size: 60px"] {
+    font-size: 40px !important;
+  }
+  
+  .video-card .col-md-6 h5 {
+    font-size: 1rem;
+  }
+  
+  /* Cuestionario badges */
+  .cuestionario-badge {
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    margin-top: 8px;
+  }
+  
+  /* Empty state */
+  .empty-state {
+    padding: 40px 15px;
+  }
+  
+  .empty-state .icon {
+    font-size: 60px;
+  }
+  
+  .empty-state h4 {
+    font-size: 1.2rem;
+  }
+  
+  /* Preguntas container */
+  .preguntas-container {
+    padding: 15px;
+    max-height: 400px;
+  }
+  
+  .pregunta-card {
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+  body {
+    padding-top: 150px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .top-header h2 i {
+    font-size: 0.9rem;
+  }
+  
+  .btn-volver {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .user-toggle {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .user-toggle i:last-child {
+    display: none; /* Ocultar flecha */
+  }
+  
+  .header-actions {
+    gap: 8px;
+  }
+  
+  .user-dropdown {
+    min-width: 160px;
+  }
+  
+  .user-dropdown-item {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .readonly-badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .section-header h4 {
+    font-size: 1rem;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  /* Video cards más compactas */
+  .video-card .card-body {
+    padding: 12px;
+  }
+  
+  .video-card h5 {
+    font-size: 0.95rem;
+  }
+  
+  .video-descripcion {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+  
+  video {
+    border-radius: 8px;
+  }
+  
+  /* Cuestionario privado más compacto */
+  .video-card .col-md-6 .d-flex {
+    min-height: 180px !important;
+  }
+  
+  .video-card .col-md-6 .d-flex div[style*="font-size: 60px"] {
+    font-size: 35px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .video-card .col-md-6 h5 {
+    font-size: 0.95rem;
+    margin-bottom: 8px !important;
+  }
+  
+  .video-card .col-md-6 p {
+    font-size: 0.8rem !important;
+  }
+  
+  .video-card .col-md-6 small {
+    font-size: 0.75rem !important;
+  }
+  
+  .cuestionario-badge {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+  }
+  
+  /* Alert más compacto */
+  .alert {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+  
+  /* Empty state */
+  .empty-state {
+    padding: 30px 10px;
+  }
+  
+  .empty-state .icon {
+    font-size: 50px;
+  }
+  
+  .empty-state h4 {
+    font-size: 1.1rem;
+  }
+  
+  .empty-state p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Móviles muy pequeños (320px) */
+@media (max-width: 400px) {
+  body {
+    padding-top: 160px;
+  }
+  
+  .top-header {
+    margin: 8px;
+  }
+  
+  .top-header h2 {
+    font-size: 0.95rem;
+  }
+  
+  .header-actions {
+    flex-wrap: wrap;
+  }
+  
+  .btn-volver,
+  .user-toggle {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+  
+  .readonly-badge {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .section-header h4 {
+    font-size: 0.95rem;
+  }
+  
+  .video-card h5 {
+    font-size: 0.9rem;
+  }
+  
+  .video-descripcion {
+    font-size: 0.75rem;
+  }
+  
+  .video-card .col-md-6 .d-flex div[style*="font-size: 60px"] {
+    font-size: 30px !important;
+  }
+}
+
+/* Orientación horizontal en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    padding-top: 100px;
+  }
+  
+  .top-header {
+    padding: 8px 0;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+  
+  .header-actions {
+    position: static;
+    width: auto;
+    margin-left: auto;
+  }
+  
+  .user-dropdown {
+    right: 0;
+    left: auto;
+    transform: none;
+  }
+  
+  /* Videos en grid de 2 columnas en landscape */
+  .video-card .row {
+    flex-direction: row;
+  }
+  
+  .video-card .col-md-6 {
+    width: 50%;
+    margin-bottom: 0;
+  }
+  
+  .video-card .col-md-6 .d-flex {
+    min-height: 250px !important;
+  }
+}
+
+/* Accesibilidad táctil */
+@media (hover: none) and (pointer: coarse) {
+  .btn-volver,
+  .user-toggle,
+  .user-dropdown-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Mejora de hover solo en desktop */
+@media (hover: hover) and (pointer: fine) {
+  .video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(155, 124, 184, 0.3);
+  }
+  
+  .btn-volver:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .user-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .user-dropdown-item:hover {
+    background: #f8f9fa;
+  }
+}
+
+/* Ajustes para pantallas muy anchas */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  .readonly-badge {
+    padding: 14px 30px;
+    font-size: 1.2rem;
+  }
+  
+  .section-header h4 {
+    font-size: 1.5rem;
+  }
+}
   </style>
 </head>
 <body>

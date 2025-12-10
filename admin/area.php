@@ -38,36 +38,53 @@ try {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Área - <?= htmlspecialchars($area['nombre']) ?></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; padding-top:100px; }
-.top-header { position:fixed; top:0; left:0; right:0; background:linear-gradient(135deg,#b893cc,#f5a3c7); box-shadow:0 2px 10px rgba(0,0,0,0.15); z-index:1000; padding:20px 0; margin:15px; border-radius:20px; }
-.top-header .container-fluid { display:flex; justify-content:center; align-items:center; padding:0 30px; }
-.top-header h2 { color:white; font-weight:600; margin:0; font-size:1.5rem; }
-.top-header h2 {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+
+/* Header Principal */
+.top-header { 
+  position:fixed; 
+  top:0; 
+  left:0; 
+  right:0; 
+  background:linear-gradient(135deg,#b893cc,#f5a3c7); 
+  box-shadow:0 2px 10px rgba(0,0,0,0.15); 
+  z-index:1000; 
+  padding:20px 0; 
+  margin:15px; 
+  border-radius:20px; 
 }
 
-.header-right {
-  margin-left: auto;
+.top-header .container-fluid { 
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center; 
+  padding:0 30px; 
+  gap: 15px;
+  flex-wrap: wrap;
 }
+
+.top-header h2 { 
+  color:white; 
+  font-weight:600; 
+  margin:0; 
+  font-size:1.5rem; 
+  flex: 1 1 auto;
+  text-align: center;
+  min-width: 200px;
+}
+
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
-  margin-left: auto;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
+/* Usuario Section */
 .user-section {
   display: flex;
   align-items: center;
@@ -87,6 +104,7 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
 .user-toggle:hover {
@@ -134,66 +152,520 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
   transform: translateX(5px);
 }
 
-.btn-logout { background:white; border:none; color:#9b7cb8; font-weight:500; border-radius:25px; padding:8px 20px; transition:0.3s; text-decoration:none; display:inline-block; }
-.btn-logout:hover { background:#f8f9fa; transform:translateY(-2px); box-shadow:0 5px 15px rgba(0,0,0,0.2); color:#9b7cb8; }
+.btn-logout { 
+  background:white; 
+  border:none; 
+  color:#9b7cb8; 
+  font-weight:500; 
+  border-radius:25px; 
+  padding:8px 20px; 
+  transition:0.3s; 
+  text-decoration:none; 
+  display:inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
 
+.btn-logout:hover { 
+  background:#f8f9fa; 
+  transform:translateY(-2px); 
+  box-shadow:0 5px 15px rgba(0,0,0,0.2); 
+  color:#9b7cb8; 
+}
+
+/* Contenedor Principal */
 .container { max-width:1200px; padding:20px 15px; }
-.card { border:none; border-radius:15px; box-shadow:0 2px 10px rgba(0,0,0,0.1); background:white; }
-.form-control { border-radius:25px; padding:10px 20px; border:1px solid #ddd; }
+
+.card { 
+  border:none; 
+  border-radius:15px; 
+  box-shadow:0 2px 10px rgba(0,0,0,0.1); 
+  background:white; 
+}
+
+/* Formulario */
+.form-control { 
+  border-radius:25px; 
+  padding:10px 20px; 
+  border:1px solid #ddd; 
+}
+
 .btn-primary {
   background: linear-gradient(135deg,#f5a3c7,#9b7cb8);
-  border:none; color:white; font-weight:500; border-radius:25px; padding:10px 25px; transition:0.3s; white-space:nowrap;
+  border:none; 
+  color:white; 
+  font-weight:500; 
+  border-radius:25px; 
+  padding:10px 25px; 
+  transition:0.3s; 
+  white-space:nowrap;
 }
-.btn-primary:hover { background: linear-gradient(135deg,#9b7cb8,#f5a3c7); transform:translateY(-2px); box-shadow:0 5px 15px rgba(155,124,184,0.3); }
 
-.folder-icon { font-size:4rem; margin:20px 0 10px 0; }
-.area-card .card { cursor:pointer; transition:all 0.3s ease; height:100%; position:relative; }
-.area-card .card:hover { transform:translateY(-5px); box-shadow:0 5px 20px rgba(155,124,184,0.3); }
-.area-card h5 { color:#9b7cb8; font-weight:600; margin-bottom:20px; }
-.dropdown { position:absolute; top:10px; right:10px; }
-.dropdown-toggle { background:transparent !important; border:none !important; color:#9b7cb8 !important; font-size:1.5rem; font-weight:bold; width:30px; height:30px; padding:0 !important; line-height:1; box-shadow:none !important; }
-.dropdown-toggle::after { display:none !important; }
-.dropdown-menu { border-radius:15px; border:none; box-shadow:0 5px 20px rgba(155,124,184,0.3); min-width:200px; padding:10px; background:white !important; z-index:10000 !important; position:absolute !important; inset:0px auto auto 0px !important; transform:translate(-170px, 30px) !important; }.dropdown-item { padding:12px 20px; transition:0.3s; border-radius:10px; margin-bottom:5px; font-weight:500; display:flex; align-items:center; gap:10px; }
-.dropdown-item:last-child { margin-bottom:0; }
-.dropdown-item:hover { background:linear-gradient(135deg,rgba(245,163,199,0.2),rgba(155,124,184,0.2)); transform:translateX(5px); color:#9b7cb8; }
-.dropdown-item.text-danger:hover { background:linear-gradient(135deg,rgba(220,53,69,0.1),rgba(245,163,199,0.2)); color:#dc3545; }
-.dropdown-divider { border-top:2px solid #f5c6d9; margin:10px 0; }
-
-#modulosGrid .col-md-3 { display:flex; }
-.folder-card { flex:1; }
-.modal-content { border-radius:15px; border:none; }
-.modal-content h5 { color:#9b7cb8; font-weight:600; margin-bottom:12px; }
-.btn-secondary { border-radius:25px; padding:8px 20px; }
-
-/* Estilos personalizados para SweetAlert2 */
-.swal2-popup { border-radius:20px !important; font-family:'Poppins',sans-serif !important; padding:30px !important; background:#ffffff !important; box-shadow:0 10px 40px rgba(0,0,0,0.2) !important; }
-.swal2-title { color:#9b7cb8 !important; font-weight:700 !important; font-size:1.8rem !important; margin-bottom:20px !important; }
-.swal2-html-container { color:#666 !important; font-size:1rem !important; font-weight:500 !important; }
-.swal2-icon.swal2-warning { border-color:#f5a3c7 !important; color:#f5a3c7 !important; }
-.swal2-icon.swal2-success { border-color:#9b7cb8 !important; }
-.swal2-icon.swal2-success [class^='swal2-success-line'] { background-color:#9b7cb8 !important; }
-.swal2-icon.swal2-success .swal2-success-ring { border-color:rgba(155,124,184,0.3) !important; }
-.swal2-icon.swal2-error { border-color:#f5a3c7 !important; color:#f5a3c7 !important; }
-.swal2-actions { gap:10px !important; margin-top:25px !important; }
-.swal2-confirm { background:linear-gradient(135deg,#f5a3c7,#9b7cb8) !important; border:none !important; border-radius:25px !important; padding:12px 35px !important; font-weight:600 !important; font-size:1rem !important; box-shadow:0 4px 15px rgba(155,124,184,0.4) !important; transition:all 0.3s ease !important; }
-.swal2-confirm:hover { background:linear-gradient(135deg,#9b7cb8,#f5a3c7) !important; transform:translateY(-2px) !important; box-shadow:0 6px 20px rgba(155,124,184,0.5) !important; }
-.swal2-cancel { background:white !important; border:2px solid #9b7cb8 !important; border-radius:25px !important; padding:12px 35px !important; font-weight:600 !important; font-size:1rem !important; color:#9b7cb8 !important; transition:all 0.3s ease !important; }
-.swal2-cancel:hover { background:#f8f9fa !important; transform:translateY(-2px) !important; box-shadow:0 4px 15px rgba(0,0,0,0.1) !important; }
-.swal2-input { border-radius:25px !important; border:2px solid #ddd !important; padding:12px 20px !important; font-family:'Poppins',sans-serif !important; font-size:1rem !important; transition:all 0.3s ease !important; }
-.swal2-input:focus { border-color:#9b7cb8 !important; box-shadow:0 0 0 4px rgba(155,124,184,0.15) !important; outline:none !important; }
-.swal2-validation-message { background:#f5c6d9 !important; color:#9b7cb8 !important; border-radius:15px !important; font-weight:500 !important; }
-
-@media (max-width:768px){
-  body { padding-top:90px; }
-  .top-header { margin:10px; border-radius:15px; }
-  .top-header .container-fluid { padding:0 15px; }
-  .top-header h2 { font-size:1.2rem; }
-  .header-right { gap: 10px; }
-  .user-toggle { padding: 6px 15px; font-size: 0.9rem; }
-  .btn-logout { padding:6px 15px; font-size:0.9rem; }
+.btn-primary:hover { 
+  background: linear-gradient(135deg,#9b7cb8,#f5a3c7); 
+  transform:translateY(-2px); 
+  box-shadow:0 5px 15px rgba(155,124,184,0.3); 
 }
+
+/* Cards de Módulos */
+.folder-icon { 
+  font-size:4rem; 
+  margin:20px 0 10px 0; 
+}
+
+.area-card .card { 
+  cursor:pointer; 
+  transition:all 0.3s ease; 
+  height:100%; 
+  position:relative; 
+  min-height: 200px;
+}
+
+.area-card .card:hover { 
+  transform:translateY(-5px); 
+  box-shadow:0 5px 20px rgba(155,124,184,0.3); 
+}
+
+.area-card h5 { 
+  color:#9b7cb8; 
+  font-weight:600; 
+  margin-bottom:20px; 
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Dropdown Menu */
+.dropdown { 
+  position:absolute; 
+  top:10px; 
+  right:10px; 
+}
+
+.dropdown-toggle { 
+  background:transparent !important; 
+  border:none !important; 
+  color:#9b7cb8 !important; 
+  font-size:1.5rem; 
+  font-weight:bold; 
+  width:30px; 
+  height:30px; 
+  padding:0 !important; 
+  line-height:1; 
+  box-shadow:none !important; 
+}
+
+.dropdown-toggle::after { 
+  display:none !important; 
+}
+
+.dropdown-menu { 
+  border-radius:15px; 
+  border:none; 
+  box-shadow:0 5px 20px rgba(155,124,184,0.3); 
+  min-width:200px; 
+  padding:10px; 
+  background:white !important; 
+  z-index:10000 !important; 
+  position:absolute !important; 
+  inset:0px auto auto 0px !important; 
+  transform:translate(-170px, 30px) !important; 
+}
+
+.dropdown-item { 
+  padding:12px 20px; 
+  transition:0.3s; 
+  border-radius:10px; 
+  margin-bottom:5px; 
+  font-weight:500; 
+  display:flex; 
+  align-items:center; 
+  gap:10px; 
+}
+
+.dropdown-item:last-child { 
+  margin-bottom:0; 
+}
+
+.dropdown-item:hover { 
+  background:linear-gradient(135deg,rgba(245,163,199,0.2),rgba(155,124,184,0.2)); 
+  transform:translateX(5px); 
+  color:#9b7cb8; 
+}
+
+.dropdown-item.text-danger:hover { 
+  background:linear-gradient(135deg,rgba(220,53,69,0.1),rgba(245,163,199,0.2)); 
+  color:#dc3545; 
+}
+
+/* Grid Responsivo */
+#modulosGrid .col-md-3,
+#modulosGrid .col-lg-3,
+#modulosGrid .col-md-4,
+#modulosGrid .col-sm-6 { 
+  display:flex; 
+}
+
+.folder-card { 
+  flex:1; 
+}
+
+/* Modal */
+.modal-content { 
+  border-radius:15px; 
+  border:none; 
+}
+
+.modal-content h5 { 
+  color:#9b7cb8; 
+  font-weight:600; 
+  margin-bottom:12px; 
+}
+
+.btn-secondary { 
+  border-radius:25px; 
+  padding:8px 20px; 
+}
+
+/* Estilos SweetAlert2 */
+.swal2-popup { 
+  border-radius:20px !important; 
+  font-family:'Poppins',sans-serif !important; 
+  padding:30px !important; 
+  background:#ffffff !important; 
+  box-shadow:0 10px 40px rgba(0,0,0,0.2) !important; 
+}
+
+.swal2-title { 
+  color:#9b7cb8 !important; 
+  font-weight:700 !important; 
+  font-size:1.8rem !important; 
+  margin-bottom:20px !important; 
+}
+
+.swal2-html-container { 
+  color:#666 !important; 
+  font-size:1rem !important; 
+  font-weight:500 !important; 
+}
+
+.swal2-icon.swal2-warning { 
+  border-color:#f5a3c7 !important; 
+  color:#f5a3c7 !important; 
+}
+
+.swal2-icon.swal2-success { 
+  border-color:#9b7cb8 !important; 
+}
+
+.swal2-icon.swal2-success [class^='swal2-success-line'] { 
+  background-color:#9b7cb8 !important; 
+}
+
+.swal2-icon.swal2-success .swal2-success-ring { 
+  border-color:rgba(155,124,184,0.3) !important; 
+}
+
+.swal2-icon.swal2-error { 
+  border-color:#f5a3c7 !important; 
+  color:#f5a3c7 !important; 
+}
+
+.swal2-actions { 
+  gap:10px !important; 
+  margin-top:25px !important; 
+}
+
+.swal2-confirm { 
+  background:linear-gradient(135deg,#f5a3c7,#9b7cb8) !important; 
+  border:none !important; 
+  border-radius:25px !important; 
+  padding:12px 35px !important; 
+  font-weight:600 !important; 
+  font-size:1rem !important; 
+  box-shadow:0 4px 15px rgba(155,124,184,0.4) !important; 
+  transition:all 0.3s ease !important; 
+}
+
+.swal2-confirm:hover { 
+  background:linear-gradient(135deg,#9b7cb8,#f5a3c7) !important; 
+  transform:translateY(-2px) !important; 
+  box-shadow:0 6px 20px rgba(155,124,184,0.5) !important; 
+}
+
+.swal2-cancel { 
+  background:white !important; 
+  border:2px solid #9b7cb8 !important; 
+  border-radius:25px !important; 
+  padding:12px 35px !important; 
+  font-weight:600 !important; 
+  font-size:1rem !important; 
+  color:#9b7cb8 !important; 
+  transition:all 0.3s ease !important; 
+}
+
+.swal2-cancel:hover { 
+  background:#f8f9fa !important; 
+  transform:translateY(-2px) !important; 
+  box-shadow:0 4px 15px rgba(0,0,0,0.1) !important; 
+}
+
+.swal2-input { 
+  border-radius:25px !important; 
+  border:2px solid #ddd !important; 
+  padding:12px 20px !important; 
+  font-family:'Poppins',sans-serif !important; 
+  font-size:1rem !important; 
+  transition:all 0.3s ease !important; 
+}
+
+.swal2-input:focus { 
+  border-color:#9b7cb8 !important; 
+  box-shadow:0 0 0 4px rgba(155,124,184,0.15) !important; 
+  outline:none !important; 
+}
+
+.swal2-validation-message { 
+  background:#f5c6d9 !important; 
+  color:#9b7cb8 !important; 
+  border-radius:15px !important; 
+  font-weight:500 !important; 
+}
+
+/* Animación */
 .icono-libro:hover {
   animation: fa-beat 1s infinite;
+}
+
+/* Media Queries Mejoradas */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 992px) {
+  .top-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .folder-icon {
+    font-size: 3.5rem;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+}
+
+/* Tablets pequeñas */
+@media (max-width: 768px) {
+  body { 
+    padding-top: 140px; 
+  }
+  
+  .top-header { 
+    margin: 10px; 
+    padding: 15px 0;
+    border-radius: 15px; 
+  }
+  
+  .top-header .container-fluid { 
+    flex-direction: column;
+    padding: 0 15px; 
+    gap: 10px;
+  }
+  
+  .top-header h2 { 
+    font-size: 1.2rem;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .header-right { 
+    width: 100%;
+    justify-content: center;
+    gap: 10px; 
+  }
+  
+  .user-toggle { 
+    padding: 6px 15px; 
+    font-size: 0.9rem; 
+  }
+  
+  .btn-logout { 
+    padding: 6px 15px; 
+    font-size: 0.9rem; 
+  }
+  
+  .folder-icon {
+    font-size: 3rem;
+  }
+  
+  .area-card h5 {
+    font-size: 1rem;
+  }
+  
+  .area-card .card {
+    min-height: 180px;
+  }
+  
+  /* Ajustar formulario en móviles */
+  #formCrearModulo {
+    flex-direction: column !important;
+  }
+  
+  #formCrearModulo .form-control,
+  #formCrearModulo .btn-primary {
+    width: 100%;
+  }
+}
+
+/* Móviles */
+@media (max-width: 576px) {
+  body {
+    padding-top: 160px;
+  }
+  
+  .top-header {
+    margin: 8px;
+    padding: 12px 0;
+  }
+  
+  .top-header .container-fluid {
+    padding: 0 10px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  
+  .header-right {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .user-section {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .user-toggle {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .btn-logout {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .user-dropdown {
+    right: 50%;
+    transform: translateX(50%);
+    min-width: 180px;
+  }
+  
+  .container {
+    padding: 10px 8px;
+  }
+  
+  .card {
+    border-radius: 12px;
+  }
+  
+  .folder-icon {
+    font-size: 2.5rem;
+    margin: 15px 0 8px 0;
+  }
+  
+  .area-card .card {
+    min-height: 160px;
+    padding: 15px 10px !important;
+  }
+  
+  .area-card h5 {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  
+  .dropdown-menu {
+    transform: translate(-140px, 30px) !important;
+    min-width: 180px;
+  }
+  
+  .dropdown-item {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+  
+  /* SweetAlert2 responsivo */
+  .swal2-popup {
+    padding: 20px !important;
+    width: 90% !important;
+  }
+  
+  .swal2-title {
+    font-size: 1.4rem !important;
+  }
+  
+  .swal2-html-container {
+    font-size: 0.9rem !important;
+  }
+  
+  .swal2-confirm,
+  .swal2-cancel {
+    padding: 10px 25px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 380px) {
+  .top-header h2 {
+    font-size: 0.9rem;
+  }
+  
+  .user-toggle,
+  .btn-logout {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  
+  .folder-icon {
+    font-size: 2rem;
+  }
+  
+  .area-card h5 {
+    font-size: 0.85rem;
+  }
+  
+  .dropdown-toggle {
+    font-size: 1.2rem;
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* Landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding-top: 100px;
+  }
+  
+  .top-header {
+    padding: 10px 0;
+  }
+  
+  .folder-icon {
+    font-size: 2rem;
+    margin: 10px 0 5px 0;
+  }
+  
+  .area-card .card {
+    min-height: 140px;
+  }
 }
 </style>
 </head>
@@ -201,22 +673,27 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
 
 <div class="top-header">
   <div class="container-fluid">
-    <h2> <i class="fa-solid fa-location-dot fa-beat" style="color: #ffffffff;"></i> Área: <?= htmlspecialchars($area['nombre']) ?></h2>
+    <h2><i class="fa-solid fa-location-dot fa-beat"></i> Área: <?= htmlspecialchars($area['nombre']) ?></h2>
     
     <div class="header-right">
-      <!-- Sección de Usuario con Cerrar Sesión -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
-          <span><i class="fa-solid fa-user" style="color: #B197FC;"></i> </span> <?=htmlspecialchars($_SESSION['nombre'])?> <span style="font-size: 0.8em;"><i class="fa-solid fa-caret-down" style="color: #B197FC;"></i></span>
+          <i class="fa-solid fa-user" style="color: #B197FC;"></i>
+          <span><?=htmlspecialchars($_SESSION['nombre'])?></span>
+          <i class="fa-solid fa-caret-down" style="color: #B197FC;"></i>
         </button>
         <div class="user-dropdown" id="userDropdown">
           <a href="../logout.php" class="user-dropdown-item">
-            <span><i class="fa-solid fa-door-open" style="color: #ef061d;"></i> </span> Cerrar sesión
+            <i class="fa-solid fa-door-open" style="color: #ef061d;"></i>
+            <span>Cerrar sesión</span>
           </a>
         </div>
       </div>
       
-      <a href="dashboard.php" class="btn-logout"><i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver</a>
+      <a href="dashboard.php" class="btn-logout">
+        <i class="fa-solid fa-angle-left" style="color: #B197FC;"></i>
+        <span>Volver</span>
+      </a>
     </div>
   </div>
 </div>
@@ -242,8 +719,8 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
           <div class="dropdown" onclick="event.stopPropagation()">
             <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⋮</button>
             <ul class="dropdown-menu">
-              <li><a href="#" class="dropdown-item btn-edit-modulo" data-id="<?= (int)$m['id_carpeta'] ?>"><span><i class="fas fa-edit"></i></span> Editar</a></li>
-              <li><a href="#" class="dropdown-item text-danger btn-del-modulo" data-id="<?= (int)$m['id_carpeta'] ?>"><span><i class="fas fa-trash-alt"></i></span> Eliminar</a></li>
+              <li><a href="#" class="dropdown-item btn-edit-modulo" data-id="<?= (int)$m['id_carpeta'] ?>"><i class="fas fa-edit"></i> Editar</a></li>
+              <li><a href="#" class="dropdown-item text-danger btn-del-modulo" data-id="<?= (int)$m['id_carpeta'] ?>"><i class="fas fa-trash-alt"></i> Eliminar</a></li>
             </ul>
           </div>
           <div class="folder-icon"><i class="fa-solid fa-book icono-libro" style="color: #B197FC;"></i></div>
@@ -346,7 +823,6 @@ document.querySelectorAll('.btn-del-modulo').forEach(btn=>{
 });
 
 // Editar módulo con SweetAlert2
-let editingId=null;
 document.querySelectorAll('.btn-edit-modulo').forEach(b=>{
   b.addEventListener('click', async (e)=>{
     e.preventDefault();

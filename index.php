@@ -9,13 +9,24 @@ if (isset($_SESSION['id_usuario'])) {
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Login - eLearning</title>
 <!-- Meta tags anti-caché -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   background: linear-gradient(135deg, #f5c6d9, #e8b4d4);
   font-family: 'Poppins', sans-serif;
@@ -160,7 +171,7 @@ body {
 .login-container {
   background: #fff;
   border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  box-shadow: 0 0 30px rgba(0,0,0,0.15);
   display: flex;
   overflow: hidden;
   width: 850px;
@@ -168,7 +179,20 @@ body {
   margin: auto;
   position: relative;
   z-index: 1;
+  animation: fadeIn 0.5s ease-in;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .login-left {
   background: linear-gradient(135deg, #9b7cb8, #b893cc);
   color: white;
@@ -180,15 +204,35 @@ body {
   padding: 40px 20px;
   text-align: center;
 }
+
 .login-left h2 {
   font-size: 28px;
   font-weight: 600;
+  margin-bottom: 10px;
 }
+
+.login-left p {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
 .login-left img {
   width: 80%;
   max-width: 240px;
   margin-top: 20px;
+  animation: float 3s ease-in-out infinite;
 }
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .login-right {
   width: 55%;
   padding: 50px;
@@ -196,17 +240,28 @@ body {
   flex-direction: column;
   justify-content: center;
 }
+
 .login-right h3 {
   color: #9b7cb8;
   font-weight: 600;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   text-align: center;
+  font-size: 26px;
 }
+
 .form-control {
   border-radius: 25px;
   padding: 12px 20px;
   border: 1px solid #ddd;
+  transition: all 0.3s;
+  font-size: 15px;
 }
+
+.form-control:focus {
+  border-color: #9b7cb8;
+  box-shadow: 0 0 0 0.2rem rgba(155, 124, 184, 0.25);
+}
+
 .btn-login {
   background: linear-gradient(135deg, #f5a3c7, #9b7cb8);
   border: none;
@@ -214,23 +269,264 @@ body {
   font-weight: 500;
   border-radius: 25px;
   padding: 12px;
-  transition: 0.3s;
+  transition: all 0.3s;
+  font-size: 16px;
+  cursor: pointer;
 }
+
 .btn-login:hover {
   background: linear-gradient(135deg, #9b7cb8, #f5a3c7);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(155, 124, 184, 0.3);
+  box-shadow: 0 5px 15px rgba(155, 124, 184, 0.4);
 }
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
 a {
   text-decoration: none;
   color: #9b7cb8;
   font-size: 0.9em;
 }
+
 a:hover {
   text-decoration: underline;
 }
+
 #msg {
   margin-bottom: 15px;
+}
+
+.alert {
+  border-radius: 15px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablets y móviles grandes (768px y menores) */
+@media screen and (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+  
+  .login-container {
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .login-left {
+    width: 100%;
+    padding: 30px 20px;
+    order: 1;
+  }
+  
+  .login-left h2 {
+    font-size: 24px;
+  }
+  
+  .login-left p {
+    font-size: 13px;
+  }
+  
+  .login-left img {
+    max-width: 180px;
+    margin-top: 15px;
+  }
+  
+  .login-right {
+    width: 100%;
+    padding: 30px;
+    order: 2;
+  }
+  
+  .login-right h3 {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
+  
+  /* Reducir tamaño de burbujas en tablets */
+  .bubble {
+    transform: scale(0.8);
+  }
+}
+
+/* Móviles pequeños (480px y menores) */
+@media screen and (max-width: 480px) {
+  body {
+    padding: 5px;
+  }
+  
+  .login-container {
+    border-radius: 10px;
+    max-width: 100%;
+  }
+  
+  .login-left {
+    padding: 25px 15px;
+  }
+  
+  .login-left h2 {
+    font-size: 20px;
+  }
+  
+  .login-left p {
+    font-size: 12px;
+  }
+  
+  .login-left img {
+    max-width: 150px;
+    margin-top: 10px;
+  }
+  
+  .login-right {
+    padding: 25px 20px;
+  }
+  
+  .login-right h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .form-control {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+  
+  .btn-login {
+    padding: 10px;
+    font-size: 15px;
+  }
+  
+  .mb-3 {
+    margin-bottom: 15px !important;
+  }
+  
+  /* Reducir más las burbujas en móvil */
+  .bubble {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  
+  .alert {
+    font-size: 13px;
+    padding: 10px;
+  }
+}
+
+/* Móviles muy pequeños (360px y menores) */
+@media screen and (max-width: 360px) {
+  .login-left {
+    padding: 20px 10px;
+  }
+  
+  .login-left h2 {
+    font-size: 18px;
+  }
+  
+  .login-left img {
+    max-width: 120px;
+  }
+  
+  .login-right {
+    padding: 20px 15px;
+  }
+  
+  .login-right h3 {
+    font-size: 18px;
+  }
+  
+  .form-control {
+    padding: 9px 15px;
+    font-size: 13px;
+  }
+  
+  .btn-login {
+    font-size: 14px;
+  }
+}
+
+/* Landscape móviles */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding: 10px;
+    align-items: flex-start;
+  }
+  
+  .login-container {
+    flex-direction: row;
+    margin: 10px auto;
+  }
+  
+  .login-left {
+    width: 40%;
+    padding: 20px 15px;
+  }
+  
+  .login-left h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .login-left p {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  
+  .login-left img {
+    max-width: 100px;
+    margin-top: 10px;
+  }
+  
+  .login-right {
+    width: 60%;
+    padding: 20px;
+  }
+  
+  .login-right h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  
+  .form-control {
+    padding: 8px 15px;
+  }
+  
+  .btn-login {
+    padding: 8px;
+  }
+  
+  .mb-3 {
+    margin-bottom: 10px !important;
+  }
+}
+
+/* Pantallas grandes (1200px y mayores) */
+@media screen and (min-width: 1200px) {
+  .login-container {
+    width: 900px;
+  }
+  
+  .login-left h2 {
+    font-size: 30px;
+  }
+  
+  .login-left img {
+    max-width: 260px;
+  }
+  
+  .login-right {
+    padding: 60px;
+  }
+  
+  .login-right h3 {
+    font-size: 28px;
+  }
 }
 </style>
 </head>

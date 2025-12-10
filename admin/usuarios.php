@@ -445,36 +445,122 @@ body {
   color: #9b7cb8 !important;
 }
 
+/* ========== RESPONSIVO ========== */
+
+@media (max-width: 992px) {
+  .table thead th,
+  .table tbody td {
+    font-size: 0.85rem;
+    padding: 10px 8px;
+  }
+  
+  .btn-warning,
+  .btn-danger,
+  .btn-reset {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+}
+
 @media (max-width: 768px) {
   body {
-    padding-top: 90px;
+    padding-top: 140px;
   }
   
   .top-header {
     margin: 10px;
-    border-radius: 15px;
+    padding: 10px 0;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 8px;
   }
   
   .top-header h2 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    position: static;
+    transform: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .user-info {
+    justify-content: center;
+    width: 100%;
   }
   
   .btn-logout {
-    padding: 6px 15px;
-    font-size: 0.9rem;
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
   
   .table {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    min-width: 650px;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: 8px 5px;
+    font-size: 0.75rem;
+  }
+  
+  .btn-warning,
+  .btn-danger,
+  .btn-reset {
+    padding: 5px 8px;
+    font-size: 0.7rem;
+    margin: 2px;
   }
   
   .nav-pills .nav-link {
-    font-size: 0.85rem;
-    padding: 8px 15px;
-    margin-right: 5px;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    margin-right: 0;
     margin-bottom: 5px;
   }
+  
+  .area-badge,
+  .unidad-badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+  }
 }
+
+@media (max-width: 576px) {
+  body {
+    padding-top: 150px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .btn-warning,
+  .btn-danger,
+  .btn-reset {
+    padding: 8px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .btn-warning span,
+  .btn-danger span,
+  .btn-reset span {
+    display: none;
+  }
+  
+  .table {
+    min-width: 600px;
+  }
+}
+
 </style>
 </head>
 <body>

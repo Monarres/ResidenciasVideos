@@ -171,6 +171,363 @@ body { background:#f0d5e8; font-family:'Poppins',sans-serif; min-height:100vh; p
 .icono-libro:hover {
   animation: fa-beat 1s infinite;
 }
+/* ========== RESPONSIVO ========== */
+
+/* Tablets y dispositivos medianos */
+@media (max-width: 992px) {
+  .top-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .btn-logout {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .user-toggle {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .folder-icon {
+    font-size: 3.5rem;
+  }
+  
+  .area-card h5 {
+    font-size: 1rem;
+  }
+  
+  .readonly-badge {
+    padding: 6px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  body {
+    padding-top: 140px;
+  }
+  
+  .top-header {
+    margin: 10px;
+    padding: 10px 0;
+    border-radius: 15px;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: column;
+    padding: 0 15px;
+    gap: 10px;
+  }
+  
+  .top-header h2 {
+    font-size: 1.1rem;
+    position: static;
+    transform: none;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .user-info {
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .btn-logout {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .user-toggle {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    gap: 5px;
+  }
+  
+  .user-dropdown {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 180px;
+  }
+  
+  .user-dropdown-item {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+  
+  .container {
+    padding: 15px 10px;
+  }
+  
+  /* Badge de solo lectura */
+  .readonly-badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    gap: 5px;
+  }
+  
+  /* Cards de módulos */
+  .area-card .card {
+    padding: 15px !important;
+    border-radius: 12px;
+  }
+  
+  .folder-icon {
+    font-size: 3rem;
+    margin: 15px 0 8px 0;
+  }
+  
+  .area-card h5 {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Grid de módulos más compacto */
+  .col-sm-6 {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  
+  .area-card {
+    margin-bottom: 15px !important;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+  body {
+    padding-top: 150px;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+  }
+  
+  .top-header h2 i {
+    font-size: 0.9rem;
+  }
+  
+  .btn-logout {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .user-toggle {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .user-toggle i:last-child {
+    display: none; /* Ocultar flecha en móviles muy pequeños */
+  }
+  
+  .user-info {
+    gap: 8px;
+  }
+  
+  .user-dropdown {
+    min-width: 160px;
+  }
+  
+  .user-dropdown-item {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .readonly-badge {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .folder-icon {
+    font-size: 2.5rem;
+    margin: 10px 0 5px 0;
+  }
+  
+  .area-card h5 {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  
+  .area-card .card {
+    padding: 12px !important;
+  }
+  
+  /* Ajustar grid para móviles pequeños */
+  .area-card {
+    margin-bottom: 12px !important;
+  }
+  
+  .col-sm-6 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  /* Card vacío */
+  .card.p-3 {
+    padding: 15px !important;
+    font-size: 0.9rem;
+  }
+}
+
+/* Móviles muy pequeños (320px) */
+@media (max-width: 400px) {
+  body {
+    padding-top: 160px;
+  }
+  
+  .top-header {
+    margin: 8px;
+  }
+  
+  .top-header h2 {
+    font-size: 0.95rem;
+  }
+  
+  .user-info {
+    flex-wrap: wrap;
+  }
+  
+  .btn-logout,
+  .user-toggle {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+  
+  .readonly-badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+  
+  .folder-icon {
+    font-size: 2.2rem;
+  }
+  
+  .area-card h5 {
+    font-size: 0.85rem;
+  }
+  
+  .area-card .card {
+    padding: 10px !important;
+  }
+}
+
+/* Orientación horizontal en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    padding-top: 100px;
+  }
+  
+  .top-header {
+    padding: 8px 0;
+  }
+  
+  .top-header .container-fluid {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .top-header h2 {
+    font-size: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+  
+  .user-info {
+    position: static;
+    width: auto;
+    margin-left: auto;
+  }
+  
+  .user-dropdown {
+    right: 0;
+    left: auto;
+    transform: none;
+  }
+  
+  .folder-icon {
+    font-size: 2.5rem;
+    margin: 10px 0 5px 0;
+  }
+}
+
+/* Tablets en orientación vertical */
+@media (min-width: 769px) and (max-width: 992px) {
+  .col-md-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+}
+
+/* Accesibilidad táctil */
+@media (hover: none) and (pointer: coarse) {
+  .btn-logout,
+  .user-toggle,
+  .user-dropdown-item,
+  .area-card .card {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .area-card .card {
+    padding: 20px !important;
+  }
+}
+
+/* Mejora de hover solo en desktop */
+@media (hover: hover) and (pointer: fine) {
+  .area-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(155,124,184,0.3);
+  }
+  
+  .btn-logout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .user-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .user-dropdown-item:hover {
+    background: #f8f9fa;
+  }
+}
+
+/* Ajustes para pantallas muy anchas */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  .folder-icon {
+    font-size: 4.5rem;
+  }
+  
+  .area-card h5 {
+    font-size: 1.1rem;
+  }
+  
+  .readonly-badge {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}
+
+/* Sin módulos - mensaje */
+@media (max-width: 576px) {
+  .col-12 .card.p-3 {
+    text-align: center;
+    padding: 20px !important;
+  }
+}
 </style>
 </head>
 <body>
