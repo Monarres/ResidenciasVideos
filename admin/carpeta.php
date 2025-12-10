@@ -1369,7 +1369,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
 
     console.log("Enviando video...");
     
-    const res = await fetch("/learning/admin/guardar_video.php", { 
+    const res = await fetch("guardar_video.php", {
       method: "POST", 
       body: formData,
       signal: controller.signal

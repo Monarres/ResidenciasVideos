@@ -1,5 +1,6 @@
 <?php
 // conexion.php
+
 $host = 'localhost';
 $db   = 'pitiful_go_tei_basebbm';
 $user = 'pitiful-go-tei'; 
@@ -17,3 +18,10 @@ try {
 }
 
 
+
+
+
+//$host = 'localhost';
+//$db   = 'pitiful_go_tei_basebbm';
+//$user = 'pitiful-go-tei'; 
+//$pass = 'mZ3(BdX7+m3By41Y-h';
