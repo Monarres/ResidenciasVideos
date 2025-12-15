@@ -1518,7 +1518,7 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
 
     try {
       // Obtener datos del video y preguntas
-      const res = await fetch(`/learning/admin/obtener_video.php?id=${idVideo}`);
+      const res = await fetch(`obtener_video.php?id=${idVideo}`);
       const data = await res.json();
       
       if (!data.success) {
@@ -1951,7 +1951,7 @@ if (tipo === 'incisos') {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 300000);
 
-    const updateRes = await fetch("/learning/admin/actualizar_video_completo.php", {
+    const updateRes = await fetch("actualizar_video_completo.php", {
       method: "POST",
       body: formData,
       signal: controller.signal

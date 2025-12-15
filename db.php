@@ -20,3 +20,9 @@ if ($conn->connect_error) {
 $user = "pitiful-go-tei"; 
 $pass = "mZ3(BdX7+m3By41Y-h"; 
 $dbname = "pitiful_go_tei_basebbm";  -->
+
+
+<!-- $host = "localhost"; 
+$user = "pitiful-go-tei"; 
+$pass = "mZ3(BdX7+m3By41Y-h"; 
+$dbname = "pitiful_go_tei_basebbm"; -->
