@@ -12,7 +12,7 @@ if (isset($_SESSION['id_usuario'])) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Login - eLearning</title>
-<!-- Meta tags anti-caché -->
+<!--anti-caché-->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -304,11 +304,8 @@ a:hover {
   font-size: 14px;
 }
 
-/* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
+/* responcivo */
 
-/* Tablets y móviles grandes (768px y menores) */
 @media screen and (max-width: 768px) {
   body {
     padding: 10px;
@@ -532,7 +529,7 @@ a:hover {
 </head>
 <body>
 
-<!-- Burbujas animadas -->
+<!-- Burbujas -->
 <div class="bubbles">
   <div class="bubble"></div>
   <div class="bubble"></div>
@@ -553,16 +550,16 @@ a:hover {
     <img src="assets/images/Mascotas_1.png" alt="login illustration">
   </div>
   <div class="login-right">
-    <h3>Login</h3>
+    <h3>LOGIN</h3>
     <div id="msg"></div>
     <form id="loginForm" autocomplete="off">
       <div class="mb-3">
-        <input name="email" type="email" class="form-control" placeholder="Username" required autocomplete="off" value="">
+        <input name="email" type="email" class="form-control" placeholder="correo" required autocomplete="off" value="">
       </div>
       <div class="mb-3">
-        <input name="password" type="password" class="form-control" placeholder="Password" required autocomplete="new-password" value="">
+        <input name="password" type="password" class="form-control" placeholder="contraseña" required autocomplete="new-password" value="">
       </div>
-      <button class="btn-login w-100" type="submit">Login</button>
+      <button class="btn-login w-100" type="submit">Entrar</button>
     </form>
   </div>
 </div>
@@ -582,17 +579,17 @@ document.getElementById('loginForm').addEventListener('submit', async e=>{
   }
 });
 
-// Limpiar formulario al cargar la página
+// Limpiar formulario
 window.onload = function() {
     const form = document.getElementById('loginForm');
     form.reset();
-    // Limpiar cada campo individualmente
+    // Limpiar campo
     document.querySelectorAll('input').forEach(input => {
         input.value = '';
     });
 };
 
-// Limpiar cuando viene del historial (botón atrás)
+// Limpiar historial
 window.addEventListener('pageshow', function(event) {
     if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
         const form = document.getElementById('loginForm');

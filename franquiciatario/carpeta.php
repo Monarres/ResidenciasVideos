@@ -808,19 +808,15 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="container-fluid">
     <h2><i class="fa-solid fa-book fa-beat" style="color: #ffffffff;"></i> <?= htmlspecialchars($carpeta['nombre']) ?> </h2>
     <div class="header-actions">
-      <!-- Usuario Desplegable -->
       <div class="user-section">
         <button class="user-toggle" id="userToggle">
           <i class="fa-solid fa-user" style="color: #B197FC;"></i> <?= htmlspecialchars($_SESSION['nombre'] ?? 'Franquiciatario') ?> <i class="fa-solid fa-caret-down" style="color: #B197FC;"></i>
         </button>
-
         <div class="user-dropdown" id="userDropdown">
           <a href="usuarios_franquiciatario.php" class="user-dropdown-item" style="color: #9b7cb8;"><i class="fas fa-users"></i> Mis Usuarios</a>
           <a href="../logout.php" class="user-dropdown-item"><i class="fa-solid fa-door-open" style="color: #ef061d;"></i> Cerrar sesión</a>
         </div>
       </div>
-
-      <!-- Botón Volver -->
       <a href="area.php?id=<?= $carpeta['id_padre'] ?>" class="btn-volver">
         <i class="fa-solid fa-angle-left" style="color: #B197FC;"></i> Volver
       </a>
@@ -829,7 +825,6 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <div class="container">
-  
 
   <div class="section-header">
     <h4>Videos de <?= htmlspecialchars($carpeta['nombre']) ?>:</h4>
@@ -856,14 +851,32 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                   <?php endif; ?>
                   
-                  <?php if ($video['ruta'] && file_exists("../" . $video['ruta'])): ?>
-                    <video src="../<?= htmlspecialchars($video['ruta']) ?>" 
-                           width="100%" 
-                           controls 
-                           controlsList="nodownload"
-                           preload="metadata">
-                      Tu navegador no soporta el elemento de video.
-                    </video>
+                  <?php if ($video['ruta']): ?>
+                    <?php if ($video['tipo_video'] === 'youtube' || strpos($video['ruta'], 'youtube.com') !== false): ?>
+                      <iframe 
+                        src="<?= htmlspecialchars($video['ruta']) ?>" 
+                        width="100%" 
+                        height="400"
+                        style="border-radius: 10px; border: none;"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                      </iframe>
+                    <?php else: ?>
+                      <?php if (file_exists("../" . $video['ruta'])): ?>
+                        <video src="../<?= htmlspecialchars($video['ruta']) ?>" 
+                               width="100%" 
+                               controls 
+                               controlsList="nodownload"
+                               preload="metadata">
+                          Tu navegador no soporta el elemento de video.
+                        </video>
+                      <?php else: ?>
+                        <div class="alert alert-warning mb-0">
+                          <i class="fas fa-exclamation-triangle"></i> Video no encontrado
+                        </div>
+                      <?php endif; ?>
+                    <?php endif; ?>
                   <?php else: ?>
                     <div class="alert alert-warning mb-0">
                       <i class="fas fa-exclamation-triangle"></i> Video no encontrado
@@ -878,7 +891,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                       </span>
                     <?php else: ?>
                       <span class="cuestionario-badge pendiente">
-                         <i class="fas fa-exclamation-triangle"></i> Sin cuestionario
+                        <i class="fas fa-exclamation-triangle"></i> Sin cuestionario
                       </span>
                     <?php endif; ?>
                   </div>
@@ -887,7 +900,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-6">
                   <div class="d-flex justify-content-center align-items-center" style="height: 100%; min-height: 300px;">
                     <div class="text-center" style="color: #9b7cb8;">
-                      <div style="font-size: 60px; opacity: 0.3; margin-bottom: 15px;"><i class="fas fa-lock"></i> </div>
+                      <div style="font-size: 60px; opacity: 0.3; margin-bottom: 15px;"><i class="fas fa-lock"></i></div>
                       <h5 style="font-weight: 600; margin-bottom: 10px;">Cuestionario Privado</h5>
                       <p class="text-muted" style="font-size: 0.9rem;">
                         El contenido del cuestionario no está disponible.
@@ -900,6 +913,7 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>

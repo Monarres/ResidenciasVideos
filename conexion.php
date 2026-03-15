@@ -2,9 +2,9 @@
 // conexion.php
 
 $host = 'localhost';
-$db   = 'pitiful_go_tei_basebbm';
-$user = 'pitiful-go-tei'; 
-$pass = 'mZ3(BdX7+m3By41Y-h';
+$db   = 'basebbm';
+$user = 'root'; 
+$pass = '';
 $charset = 'utf8mb4';
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
