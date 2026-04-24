@@ -89,6 +89,14 @@ if ($video_actual) {
     $stmtQ->execute([$video_actual['id_video']]);
     $preguntas = $stmtQ->fetchAll(PDO::FETCH_ASSOC);
 }
+
+// Obtener diapositivas del video actual
+$diapositivas = [];
+if ($video_actual) {
+    $stmtD = $pdo->prepare("SELECT * FROM presentaciones WHERE id_carpeta = ? ORDER BY orden ASC");
+    $stmtD->execute([$video_actual['id_video']]);
+    $diapositivas = $stmtD->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -1215,6 +1223,60 @@ video {
           <?php endif; ?>
         </div>
         
+        <?php if (!empty($diapositivas)): ?>
+        <div class="mt-4" style="border-top: 2px solid #f0e4f3; padding-top: 25px;">
+            <h5 style="color: #9b7cb8; font-weight: 600; margin-bottom: 20px;">
+                <i class="fa-solid fa-file-powerpoint" style="color: #B197FC;"></i> Material de apoyo
+            </h5>
+
+            <?php foreach ($diapositivas as $slide): ?>
+
+                <?php if ($slide['tipo'] === 'pdf'): ?>
+                    <div class="mb-4">
+                        <iframe
+                            src="../<?= htmlspecialchars($slide['archivo']) ?>"
+                            width="100%" height="600"
+                            style="border-radius: 15px; border: 2px solid #f0e4f3;">
+                        </iframe>
+                        <div class="text-center mt-2">
+                            <a href="../<?= htmlspecialchars($slide['archivo']) ?>"
+                               target="_blank"
+                               class="btn btn-sm"
+                               style="background: #9b7cb8; color: white; border-radius: 10px; padding: 8px 20px;">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir PDF
+                            </a>
+                        </div>
+                    </div>
+
+                <?php elseif ($slide['tipo'] === 'pptx'): ?>
+                    <div class="mb-4 text-center">
+                        <div style="background: linear-gradient(135deg, rgba(245,163,199,0.1), rgba(155,124,184,0.1));
+                                    border: 2px solid #f0e4f3; border-radius: 15px; padding: 30px;">
+                            <i class="fa-solid fa-file-powerpoint" style="font-size: 3rem; color: #B197FC;"></i>
+                            <p class="mt-3" style="color: #9b7cb8; font-weight: 600;">Presentación PowerPoint</p>
+                            <a href="../<?= htmlspecialchars($slide['archivo']) ?>"
+                               download
+                               class="btn"
+                               style="background: #9b7cb8; color: white; border-radius: 10px; padding: 10px 25px;">
+                                <i class="fa-solid fa-download"></i> Descargar presentación
+                            </a>
+                        </div>
+                    </div>
+
+                <?php else: ?>
+                    <div class="mb-3 text-center">
+                        <img src="../<?= htmlspecialchars($slide['archivo']) ?>"
+                             alt="Diapositiva"
+                             class="img-fluid"
+                             style="max-height: 500px; border-radius: 15px; border: 2px solid #f0e4f3;">
+                    </div>
+
+                <?php endif; ?>
+
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
         <div class="text-center mt-4">
           <button id="btnMostrarCuestionario" class="btn btn-cuestionario">
             Contestar Cuestionario

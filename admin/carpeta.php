@@ -839,11 +839,19 @@ $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   <?php endif; ?>
 
-  <div class="btn-add-video-container">
+  <div class="btn-add-video-container" style="display: flex; gap: 12px; flex-wrap: wrap;">
     <button id="btnAddVideo" class="btn-add-video">
       <span>Añadir Video</span>
       <i class="fa-solid fa-circle-plus"></i>
     </button>
+    <a href="cuestionario_modulo.php?id=<?= $id_carpeta ?>" class="btn-add-video" style="text-decoration: none;">
+      <span>Cuestionario del módulo</span>
+      <i class="fa-solid fa-clipboard-list"></i>
+    </a>
+    <a href="presentaciones_modulo.php?id=<?= $id_carpeta ?>" class="btn-add-video" style="text-decoration:none;">
+  <span>Presentaciones</span>
+  <i class="fa-solid fa-file-powerpoint"></i>
+</a>
   </div>
 
   <div class="section-header">
@@ -948,7 +956,6 @@ foreach ($preguntas as $p):
                           
                           <?php if (!$es_archivo): ?>
                             <?php
-                            // Opciones dinámicas
                             $opciones = null;
                             if (!empty($p['opciones_json'])) {
                               $opciones = json_decode($p['opciones_json'], true);
@@ -1041,8 +1048,6 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-
-
 // Función para reordenar opciones después de eliminar
 function reordenarOpciones(contenedorOpciones, selectRespuesta) {
   const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -1094,10 +1099,24 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         <textarea id="descripcionVideo" class="swal2-textarea" placeholder="Descripción breve del contenido" style="width:100%; margin-left: -5px;"></textarea>
 
         <label class="fw-bold mt-3"><i class="fa-solid fa-video" style="color: #B197FC;"></i> URL de YouTube:</label>
-<input type="url" id="urlYoutube" class="swal2-input" placeholder="https://www.youtube.com/watch?v=..." style="width:100%; margin-top: 5px; margin-left: -5px;">
-<small class="text-muted d-block mt-1">
-  <i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i> Puedes usar: youtube.com/watch?v=... o youtu.be/...
-</small>
+        <input type="url" id="urlYoutube" class="swal2-input" placeholder="https://www.youtube.com/watch?v=..." style="width:100%; margin-top: 5px; margin-left: -5px;">
+        <small class="text-muted d-block mt-1">
+          <i class="fa-solid fa-clipboard-list" style="color: #B197FC;"></i> Puedes usar: youtube.com/watch?v=... o youtu.be/...
+        </small>
+
+        <hr class="my-3">
+        <label class="fw-bold mt-2">
+          <i class="fa-solid fa-file-powerpoint" style="color: #B197FC;"></i> Presentación
+          <small class="text-muted fw-normal">(opcional)</small>
+        </label>
+        <input type="file" id="archivoDiapositivas" class="swal2-input"
+          accept=".pdf,.pptx,.ppt,.jpg,.jpeg,.png" multiple
+          style="width:100%; margin-top:5px; margin-left:-5px; padding:8px;">
+        <small class="text-muted d-block mt-1">
+          <i class="fa-solid fa-circle-info" style="color: #B197FC;"></i>
+          PDF, PowerPoint o imágenes — aparecerán debajo del video
+        </small>
+
         <hr class="my-4">
 
         <h6 style="color:#9b7cb8; font-weight:600;">Cuestionario:</h6>
@@ -1113,7 +1132,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
           Añadir pregunta <i class="fas fa-plus-circle"></i>
         </button>
       </div>
-    `,
+    `, 
     width: '900px',
     showCancelButton: true,
     confirmButtonText: 'Guardar y publicar <i class="fas fa-save"></i>',
@@ -1122,14 +1141,13 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
       const cont = document.getElementById("contenedorPreguntas");
       
       document.getElementById("btnAgregarPregunta").addEventListener("click", () => {
-  const div = document.createElement("div");
-  div.className = "pregunta-item";
-  div.style.marginTop = "15px";
-  div.innerHTML = `
-    <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <label class="fw-bold pregunta-label" style="color: #9b7cb8;"><i class="fa-solid fa-question" style="color: #B197FC;"></i>
- Pregunta</label>
+        const div = document.createElement("div");
+        div.className = "pregunta-item";
+        div.style.marginTop = "15px";
+        div.innerHTML = `
+          <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="fw-bold pregunta-label" style="color: #9b7cb8;"><i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta</label>
               <button type="button" class="btn btn-sm btn-danger btn-eliminar-pregunta" style="border-radius: 15px;">Eliminar</button>
             </div>
             
@@ -1165,40 +1183,36 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
 
         cont.appendChild(div);
 
-        // Configurar botones de tipo
         const tipoBtns = div.querySelectorAll(".tipo-btn");
         const preguntaTextoContainer = div.querySelector('.pregunta-texto-container');
         const opcionesDinamicas = div.querySelector('.opciones-dinamicas');
         const archivoContainer = div.querySelector('.archivo-container');
         const label = div.querySelector('.pregunta-label');
         
-       tipoBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    tipoBtns.forEach(x => x.classList.remove("active"));
-    btn.classList.add("active");
-    const tipo = btn.dataset.tipo;
-    
-    if (tipo === 'incisos') {
-      preguntaTextoContainer.style.display = 'block';
-      opcionesDinamicas.style.display = 'block';
-      archivoContainer.style.display = 'none';
-      label.innerHTML = '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
-    } else {
-      preguntaTextoContainer.style.display = 'none';
-      opcionesDinamicas.style.display = 'none';
-      archivoContainer.style.display = 'block';
-      label.innerHTML = '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo';
-    }
-  });
-});
-
-        // Botón eliminar pregunta
-        div.querySelector('.btn-eliminar-pregunta').addEventListener('click', function() {
-          div.remove();
-          actualizarEtiquetasPreguntas();
+        tipoBtns.forEach(btn => {
+          btn.addEventListener("click", () => {
+            tipoBtns.forEach(x => x.classList.remove("active"));
+            btn.classList.add("active");
+            const tipo = btn.dataset.tipo;
+            
+            if (tipo === 'incisos') {
+              preguntaTextoContainer.style.display = 'block';
+              opcionesDinamicas.style.display = 'block';
+              archivoContainer.style.display = 'none';
+              label.innerHTML = '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
+            } else {
+              preguntaTextoContainer.style.display = 'none';
+              opcionesDinamicas.style.display = 'none';
+              archivoContainer.style.display = 'block';
+              label.innerHTML = '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo';
+            }
+          });
         });
 
-        // Configurar botón agregar opción
+        div.querySelector('.btn-eliminar-pregunta').addEventListener('click', function() {
+          div.remove();
+        });
+
         const btnAgregarOpcion = div.querySelector('.btn-agregar-opcion');
         const contenedorOpciones = div.querySelector('.contenedor-opciones');
         const selectRespuesta = div.querySelector('.select-respuesta');
@@ -1247,6 +1261,14 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
       });
     },
     preConfirm: () => {
+      window._diapositivasFiles = [];
+      const inputSlides = document.getElementById('archivoDiapositivas');
+      if (inputSlides && inputSlides.files.length > 0) {
+          for (let i = 0; i < inputSlides.files.length; i++) {
+              window._diapositivasFiles.push(inputSlides.files[i]);
+          }
+      }
+
       const titulo = document.getElementById("tituloVideo").value.trim();
       const descripcion = document.getElementById("descripcionVideo").value.trim();
       const urlYoutube = document.getElementById("urlYoutube").value.trim();
@@ -1257,12 +1279,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
         return false;
       }
 
-      if (!urlYoutube) {
-        Swal.showValidationMessage("Debes ingresar la URL de YouTube");
-        return false;
-      }
-
-      if (!urlYoutube.includes('youtube.com') && !urlYoutube.includes('youtu.be')) {
+      if (urlYoutube && !urlYoutube.includes('youtube.com') && !urlYoutube.includes('youtu.be')) {
         Swal.showValidationMessage("La URL debe ser de YouTube");
         return false;
       }
@@ -1273,65 +1290,30 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
 
         if (tipo === "incisos") {
           const pregunta = div.querySelector('.pregunta-input').value.trim();
-          
-          if (!pregunta) {
-            Swal.showValidationMessage(`La pregunta ${i+1} no puede estar vacía`);
-            return false;
-          }
+          if (!pregunta) { Swal.showValidationMessage(`La pregunta ${i+1} no puede estar vacía`); return false; }
 
           const opciones = {};
           const opcionesItems = div.querySelectorAll('.opcion-item');
-          
           opcionesItems.forEach(item => {
             const letra = item.getAttribute('data-letra');
             const texto = item.querySelector('.opcion-texto').value.trim();
-            
-            if (!texto) {
-              Swal.showValidationMessage(`La opción ${letra} de la pregunta ${i+1} no puede estar vacía`);
-              return false;
-            }
-            
+            if (!texto) { Swal.showValidationMessage(`La opción ${letra} de la pregunta ${i+1} no puede estar vacía`); return false; }
             opciones[letra] = texto;
           });
 
-          if (Object.keys(opciones).length < 2) {
-            Swal.showValidationMessage(`La pregunta ${i+1} debe tener al menos 2 opciones`);
-            return false;
-          }
+          if (Object.keys(opciones).length < 2) { Swal.showValidationMessage(`La pregunta ${i+1} debe tener al menos 2 opciones`); return false; }
 
           const resp = div.querySelector('.select-respuesta').value;
-          
-          if (!resp) {
-            Swal.showValidationMessage(`Debes seleccionar la respuesta correcta de la pregunta ${i+1}`);
-            return false;
-          }
+          if (!resp) { Swal.showValidationMessage(`Debes seleccionar la respuesta correcta de la pregunta ${i+1}`); return false; }
 
-          preguntas.push({
-            tipo,
-            pregunta,
-            opciones,
-            respuesta_correcta: resp
-          });
+          preguntas.push({ tipo, pregunta, opciones, respuesta_correcta: resp });
+
         } else if (tipo === "archivo") {
           const instrucciones = div.querySelector('.instrucciones-archivo').value.trim();
-          
-          if (!instrucciones) {
-            Swal.showValidationMessage(`La pregunta ${i+1} de tipo archivo debe tener instrucciones`);
-            return false;
-          }
-
-          preguntas.push({
-            tipo,
-            pregunta: instrucciones,
-            instrucciones: instrucciones
-          });
+          if (!instrucciones) { Swal.showValidationMessage(`La pregunta ${i+1} de tipo archivo debe tener instrucciones`); return false; }
+          preguntas.push({ tipo, pregunta: instrucciones, instrucciones: instrucciones });
         }
       });
-
-      if (preguntas.length === 0) {
-        Swal.showValidationMessage("Debes agregar al menos una pregunta al cuestionario");
-        return false;
-      }
 
       return { titulo, descripcion, urlYoutube, preguntas, instruccionesCuestionario };
     }
@@ -1350,9 +1332,7 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
     allowOutsideClick: false,
     allowEscapeKey: false,
     showConfirmButton: false,
-    didOpen: () => {
-      Swal.showLoading();
-    }
+    didOpen: () => { Swal.showLoading(); }
   });
 
   const formData = new FormData();
@@ -1363,73 +1343,38 @@ document.getElementById("btnAddVideo").addEventListener("click", async () => {
   formData.append("preguntas", JSON.stringify(formValues.preguntas));
   formData.append("instrucciones_cuestionario", formValues.instruccionesCuestionario);
 
+  if (window._diapositivasFiles && window._diapositivasFiles.length > 0) {
+      for (let i = 0; i < window._diapositivasFiles.length; i++) {
+          formData.append('diapositivas[]', window._diapositivasFiles[i]);
+      }
+  }
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 300000);
 
-    console.log("Enviando video...");
-    
-    const res = await fetch("guardar_video.php", {
-      method: "POST", 
-      body: formData,
-      signal: controller.signal
-    });
-    
+    const res = await fetch("guardar_video.php", { method: "POST", body: formData, signal: controller.signal });
     clearTimeout(timeoutId);
-
-    console.log("Respuesta recibida, status:", res.status);
 
     const contentType = res.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       const text = await res.text();
-      console.error("Respuesta no JSON:", text);
       throw new Error("El servidor no devolvió una respuesta válida. Respuesta: " + text.substring(0, 200));
     }
 
     const data = await res.json();
-    console.log("Datos recibidos:", data);
 
     if (data.success) {
-      await Swal.fire({ 
-        icon: 'success', 
-        title: '¡Video publicado!', 
-        text: data.message, 
-        confirmButtonText: 'Aceptar'
-      });
+      await Swal.fire({ icon: 'success', title: '¡Video publicado!', text: data.message, confirmButtonText: 'Aceptar' });
       location.reload();
     } else {
-      Swal.fire({ 
-        icon: 'error', 
-        title: 'Error', 
-        html: `<p>${data.message}</p><small class="text-muted">Si el problema persiste, verifica el tamaño del video y la configuración del servidor.</small>`
-      });
+      Swal.fire({ icon: 'error', title: 'Error', html: `<p>${data.message}</p><small class="text-muted">Si el problema persiste, verifica el tamaño del video y la configuración del servidor.</small>` });
     }
   } catch (error) {
-    console.error("Error completo:", error);
-    
     if (error.name === 'AbortError') {
-      Swal.fire({
-        icon: 'error',
-        title: 'Tiempo agotado',
-        html: `
-          <p>La subida del video tomó demasiado tiempo.</p>
-          <small class="text-muted">Sugerencias:</small>
-          <ul style="text-align: left; font-size: 0.9rem;">
-            <li>Intenta con un video más pequeño</li>
-            <li>Comprime el video antes de subirlo</li>
-            <li>Verifica tu conexión a internet</li>
-          </ul>
-        `
-      });
+      Swal.fire({ icon: 'error', title: 'Tiempo agotado', html: `<p>La subida del video tomó demasiado tiempo.</p>` });
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de conexión',
-        html: `
-          <p>No se pudo conectar con el servidor.</p>
-          <small class="text-muted">${error.message}</small>
-        `
-      });
+      Swal.fire({ icon: 'error', title: 'Error de conexión', html: `<p>No se pudo conectar con el servidor.</p><small class="text-muted">${error.message}</small>` });
     }
   }
 });
@@ -1452,50 +1397,25 @@ document.querySelectorAll('.btn-del-video').forEach(btn => {
     });
 
     if (result.isConfirmed) {
-      Swal.fire({
-        title: 'Eliminando...',
-        text: 'Por favor espera',
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
+      Swal.fire({ title: 'Eliminando...', text: 'Por favor espera', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
       try {
         const res = await fetch('eliminar_video.php', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            id: id,
-            carpeta: <?= $id_carpeta ?>
-          })
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ id: id, carpeta: <?= $id_carpeta ?> })
         });
         
         const json = await res.json();
         
         if (json.success) {
-          await Swal.fire({
-            icon: 'success',
-            title: '¡Eliminado!',
-            text: json.message
-          });
+          await Swal.fire({ icon: 'success', title: '¡Eliminado!', text: json.message });
           location.reload();
         } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: json.message
-          });
+          Swal.fire({ icon: 'error', title: 'Error', text: json.message });
         }
       } catch (err) {
-        console.error("Error:", err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de conexión',
-          text: 'No se pudo conectar con el servidor'
-        });
+        Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor' });
       }
     }
   });
@@ -1507,28 +1427,17 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
     e.preventDefault();
     const idVideo = btn.dataset.id;
     
-    // Mostrar loading mientras se cargan los datos
-    Swal.fire({
-      title: 'Cargando datos...',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
+    Swal.fire({ title: 'Cargando datos...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
     try {
-      // Obtener datos del video y preguntas
       const res = await fetch(`obtener_video.php?id=${idVideo}`);
       const data = await res.json();
       
-      if (!data.success) {
-        throw new Error(data.message || 'Error al cargar los datos');
-      }
+      if (!data.success) throw new Error(data.message || 'Error al cargar los datos');
 
       const video = data.video;
       const preguntas = data.preguntas || [];
       
-      // Mostrar formulario de edición
       const { value: formValues } = await Swal.fire({
         title: ' Editar video',
         html: `
@@ -1540,8 +1449,8 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
             <textarea id="descripcionVideo" class="swal2-textarea" style="width:100%; margin-left: -5px;">${escapeHtml(video.descripcion || '')}</textarea>
 
             <label class="fw-bold mt-3">Cambiar URL de YouTube (opcional):</label>
-<input type="url" id="urlYoutube" class="swal2-input" value="${video.tipo_video === 'youtube' ? escapeHtml(video.ruta) : ''}" placeholder="https://www.youtube.com/watch?v=..." style="width:100%; margin-top: 5px; margin-left: -5px;">
-<small class="text-muted d-block mt-1">Deja vacío si no deseas cambiar el video actual</small>
+            <input type="url" id="urlYoutube" class="swal2-input" value="${video.tipo_video === 'youtube' ? escapeHtml(video.ruta) : ''}" placeholder="https://www.youtube.com/watch?v=..." style="width:100%; margin-top: 5px; margin-left: -5px;">
+            <small class="text-muted d-block mt-1">Deja vacío si no deseas cambiar el video actual</small>
 
             <hr class="my-4">
 
@@ -1566,23 +1475,20 @@ document.querySelectorAll('.btn-edit-completo').forEach(btn => {
         didOpen: () => {
           const cont = document.getElementById("contenedorPreguntas");
           
-          // Función para crear una pregunta
           function crearPregunta(datosPregunta = null, num = null) {
             if (!num) num = cont.children.length + 1;
-            
             const div = document.createElement("div");
             div.className = "pregunta-item";
             div.style.marginTop = "15px";
             
-            
             const opciones = datosPregunta?.opciones_json ? JSON.parse(datosPregunta.opciones_json) : {};
             const esArchivo = datosPregunta && datosPregunta.tipo_pregunta === 'archivo';
-const etiqueta = esArchivo ? '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo' : '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
+            const etiqueta = esArchivo ? '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo' : '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
 
-div.innerHTML = `
-  <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <label class="fw-bold pregunta-label" style="color: #9b7cb8;">${etiqueta}</label>
+            div.innerHTML = `
+              <div style="border:2px solid #f0e4f3; border-radius:15px; padding:15px; background: linear-gradient(135deg, rgba(245, 163, 199, 0.05), rgba(155, 124, 184, 0.05));">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <label class="fw-bold pregunta-label" style="color: #9b7cb8;">${etiqueta}</label>
                   <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.pregunta-item').remove()" style="border-radius: 15px;">Eliminar</button>
                 </div>
                 
@@ -1620,421 +1526,208 @@ div.innerHTML = `
 
             cont.appendChild(div);
 
-            // Si es pregunta de incisos, cargar opciones
             if (!esArchivo && datosPregunta) {
               const contenedorOpciones = div.querySelector('.contenedor-opciones');
               const selectRespuesta = div.querySelector('.select-respuesta');
               
-              // Cargar opciones existentes
               if (Object.keys(opciones).length > 0) {
                 Object.entries(opciones).forEach(([letra, texto]) => {
                   agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
                 });
               } else {
-                // Formato antiguo
-                const opcionesAntiguas = [
-                  ['A', datosPregunta.opcion_a],
-                  ['B', datosPregunta.opcion_b],
-                  ['C', datosPregunta.opcion_c]
-                ];
+                const opcionesAntiguas = [['A', datosPregunta.opcion_a], ['B', datosPregunta.opcion_b], ['C', datosPregunta.opcion_c]];
                 opcionesAntiguas.forEach(([letra, texto]) => {
-              if (texto) {
-                agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
+                  if (texto) agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto);
+                });
               }
-            });
-          }
-          
-          // Seleccionar respuesta correcta
-          if (datosPregunta.respuesta_correcta) {
-            selectRespuesta.value = datosPregunta.respuesta_correcta;
-          }
-        }
-
-        // Configurar botones de tipo
-        configurarBotonesTipo(div);
-        
-        // Configurar botón agregar opción
-        configurarBotonAgregarOpcion(div);
-      }
-      
-      // Función para agregar una opción
-      function agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto = '') {
-        const nuevaOpcion = document.createElement('div');
-        nuevaOpcion.className = 'opcion-item mb-2';
-        nuevaOpcion.setAttribute('data-letra', letra);
-        
-        nuevaOpcion.innerHTML = `
-          <div class="input-group">
-            <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">${letra}</span>
-            <input type="text" class="form-control opcion-texto" placeholder="Opción ${letra}" value="${escapeHtml(texto)}" style="border-radius: 0;">
-            <button type="button" class="btn btn-danger btn-eliminar-opcion" style="border-radius: 0 10px 10px 0;">Eliminar</button>
-          </div>
-        `;
-        
-        contenedorOpciones.appendChild(nuevaOpcion);
-        
-        // Agregar al select si no existe
-        if (!selectRespuesta.querySelector(`option[value="${letra}"]`)) {
-          const option = document.createElement('option');
-          option.value = letra;
-          option.textContent = letra;
-          selectRespuesta.appendChild(option);
-        }
-        
-        // Configurar botón eliminar CON REORDENAMIENTO
-        nuevaOpcion.querySelector('.btn-eliminar-opcion').addEventListener('click', function() {
-          nuevaOpcion.remove();
-          reordenarOpciones(contenedorOpciones, selectRespuesta);
-        });
-      }
-      
-      // Configurar botones de tipo de pregunta
-      function configurarBotonesTipo(div) {
-        const tipoBtns = div.querySelectorAll(".tipo-btn");
-        const preguntaTextoContainer = div.querySelector('.pregunta-texto-container');
-        const opcionesDinamicas = div.querySelector('.opciones-dinamicas');
-        const archivoContainer = div.querySelector('.archivo-container');
-        
-        tipoBtns.forEach(btn => {
-          btn.addEventListener("click", () => {
-            tipoBtns.forEach(x => x.classList.remove("active"));
-            btn.classList.add("active");
-            const tipo = btn.dataset.tipo;
-            
-           const label = div.querySelector('.pregunta-label');
-
-if (tipo === 'incisos') {
-  preguntaTextoContainer.style.display = 'block';
-  opcionesDinamicas.style.display = 'block';
-  archivoContainer.style.display = 'none';
-  if (label) label.innerHTML = '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
-} else {
-  preguntaTextoContainer.style.display = 'none';
-  opcionesDinamicas.style.display = 'none';
-  archivoContainer.style.display = 'block';
-  if (label) label.innerHTML = '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo';
-}
-          });
-        });
-      }
-      
-      // Configurar botón agregar opción
-      function configurarBotonAgregarOpcion(div) {
-        const btnAgregarOpcion = div.querySelector('.btn-agregar-opcion');
-        const contenedorOpciones = div.querySelector('.contenedor-opciones');
-        const selectRespuesta = div.querySelector('.select-respuesta');
-        
-        btnAgregarOpcion.addEventListener('click', () => {
-          const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-          const opcionesActuales = contenedorOpciones.querySelectorAll('.opcion-item');
-          const siguienteLetra = letras[opcionesActuales.length];
-          
-          if (opcionesActuales.length >= 26) {
-            Swal.fire({
-              icon: 'warning',
-              title: 'Límite alcanzado',
-              text: 'No puedes agregar más de 26 opciones',
-              toast: true,
-              position: 'top-end',
-              timer: 3000,
-              showConfirmButton: false
-            });
-            return;
-          }
-          
-          agregarOpcion(contenedorOpciones, selectRespuesta, siguienteLetra, '');
-        });
-      }
-      
-      // Cargar preguntas existentes
-      preguntas.forEach((p, i) => {
-        crearPregunta(p, i + 1);
-      });
-      
-      // Configurar botón agregar pregunta nueva
-      document.getElementById("btnAgregarPregunta").addEventListener("click", () => {
-        crearPregunta();
-      });
-    },
-    preConfirm: () => {
-      const titulo = document.getElementById("tituloVideo").value.trim();
-      const descripcion = document.getElementById("descripcionVideo").value.trim();
-      const urlYoutube = document.getElementById("urlYoutube").value.trim();
-      const instruccionesCuestionario = document.getElementById("instruccionesCuestionario").value.trim();
-
-      if (!titulo) {
-        Swal.showValidationMessage("Debes ingresar el título del video");
-        return false;
-      }
-
-   
-
-      // Clasificar preguntas: nuevas, actualizadas y eliminadas
-      const preguntasNuevas = [];
-      const preguntasActualizadas = [];
-      const preguntasEliminadas = [];
-      
-      // IDs de preguntas originales (las que vinieron del servidor)
-      const idsOriginales = preguntas.map(p => p.id_cuestionario.toString());
-      
-      // IDs de preguntas actuales en el formulario
-      const idsActuales = [];
-      
-      let errorValidacion = null;
-      
-      document.querySelectorAll(".pregunta-item").forEach((div, i) => {
-        if (errorValidacion) return;
-        
-        const id = div.querySelector('.pregunta-id').value;
-        const tipo = div.querySelector(".tipo-btn.active")?.dataset.tipo;
-
-        if (tipo === "incisos") {
-          const pregunta = div.querySelector('.pregunta-input').value.trim();
-          
-          if (!pregunta) {
-            errorValidacion = `La pregunta ${i+1} no puede estar vacía`;
-            return;
-          }
-
-          const opciones = {};
-          const opcionesItems = div.querySelectorAll('.opcion-item');
-          
-          opcionesItems.forEach(item => {
-            const letra = item.getAttribute('data-letra');
-            const texto = item.querySelector('.opcion-texto').value.trim();
-            
-            if (!texto) {
-              errorValidacion = `La opción ${letra} de la pregunta ${i+1} no puede estar vacía`;
-              return;
+              
+              if (datosPregunta.respuesta_correcta) selectRespuesta.value = datosPregunta.respuesta_correcta;
             }
+
+            configurarBotonesTipo(div);
+            configurarBotonAgregarOpcion(div);
+          }
+          
+          function agregarOpcion(contenedorOpciones, selectRespuesta, letra, texto = '') {
+            const nuevaOpcion = document.createElement('div');
+            nuevaOpcion.className = 'opcion-item mb-2';
+            nuevaOpcion.setAttribute('data-letra', letra);
+            nuevaOpcion.innerHTML = `
+              <div class="input-group">
+                <span class="input-group-text" style="background: #9b7cb8; color: white; border-radius: 10px 0 0 10px; font-weight: 600;">${letra}</span>
+                <input type="text" class="form-control opcion-texto" placeholder="Opción ${letra}" value="${escapeHtml(texto)}" style="border-radius: 0;">
+                <button type="button" class="btn btn-danger btn-eliminar-opcion" style="border-radius: 0 10px 10px 0;">Eliminar</button>
+              </div>
+            `;
+            contenedorOpciones.appendChild(nuevaOpcion);
+            if (!selectRespuesta.querySelector(`option[value="${letra}"]`)) {
+              const option = document.createElement('option');
+              option.value = letra;
+              option.textContent = letra;
+              selectRespuesta.appendChild(option);
+            }
+            nuevaOpcion.querySelector('.btn-eliminar-opcion').addEventListener('click', function() {
+              nuevaOpcion.remove();
+              reordenarOpciones(contenedorOpciones, selectRespuesta);
+            });
+          }
+          
+          function configurarBotonesTipo(div) {
+            const tipoBtns = div.querySelectorAll(".tipo-btn");
+            const preguntaTextoContainer = div.querySelector('.pregunta-texto-container');
+            const opcionesDinamicas = div.querySelector('.opciones-dinamicas');
+            const archivoContainer = div.querySelector('.archivo-container');
             
-            opciones[letra] = texto;
+            tipoBtns.forEach(btn => {
+              btn.addEventListener("click", () => {
+                tipoBtns.forEach(x => x.classList.remove("active"));
+                btn.classList.add("active");
+                const tipo = btn.dataset.tipo;
+                const label = div.querySelector('.pregunta-label');
+
+                if (tipo === 'incisos') {
+                  preguntaTextoContainer.style.display = 'block';
+                  opcionesDinamicas.style.display = 'block';
+                  archivoContainer.style.display = 'none';
+                  if (label) label.innerHTML = '<i class="fa-solid fa-question" style="color: #B197FC;"></i> Pregunta';
+                } else {
+                  preguntaTextoContainer.style.display = 'none';
+                  opcionesDinamicas.style.display = 'none';
+                  archivoContainer.style.display = 'block';
+                  if (label) label.innerHTML = '<i class="fa-solid fa-paperclip" style="color: #B197FC;"></i> Archivo';
+                }
+              });
+            });
+          }
+          
+          function configurarBotonAgregarOpcion(div) {
+            const btnAgregarOpcion = div.querySelector('.btn-agregar-opcion');
+            const contenedorOpciones = div.querySelector('.contenedor-opciones');
+            const selectRespuesta = div.querySelector('.select-respuesta');
+            
+            btnAgregarOpcion.addEventListener('click', () => {
+              const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+              const opcionesActuales = contenedorOpciones.querySelectorAll('.opcion-item');
+              if (opcionesActuales.length >= 26) return;
+              const siguienteLetra = letras[opcionesActuales.length];
+              agregarOpcion(contenedorOpciones, selectRespuesta, siguienteLetra, '');
+            });
+          }
+          
+          preguntas.forEach((p, i) => crearPregunta(p, i + 1));
+          document.getElementById("btnAgregarPregunta").addEventListener("click", () => crearPregunta());
+        },
+        preConfirm: () => {
+          const titulo = document.getElementById("tituloVideo").value.trim();
+          const descripcion = document.getElementById("descripcionVideo").value.trim();
+          const urlYoutube = document.getElementById("urlYoutube").value.trim();
+          const instruccionesCuestionario = document.getElementById("instruccionesCuestionario").value.trim();
+
+          if (!titulo) { Swal.showValidationMessage("Debes ingresar el título del video"); return false; }
+
+          const preguntasNuevas = [];
+          const preguntasActualizadas = [];
+          const preguntasEliminadas = [];
+          const idsOriginales = preguntas.map(p => p.id_cuestionario.toString());
+          const idsActuales = [];
+          let errorValidacion = null;
+          
+          document.querySelectorAll(".pregunta-item").forEach((div, i) => {
+            if (errorValidacion) return;
+            const id = div.querySelector('.pregunta-id').value;
+            const tipo = div.querySelector(".tipo-btn.active")?.dataset.tipo;
+
+            if (tipo === "incisos") {
+              const pregunta = div.querySelector('.pregunta-input').value.trim();
+              if (!pregunta) { errorValidacion = `La pregunta ${i+1} no puede estar vacía`; return; }
+
+              const opciones = {};
+              div.querySelectorAll('.opcion-item').forEach(item => {
+                const letra = item.getAttribute('data-letra');
+                const texto = item.querySelector('.opcion-texto').value.trim();
+                if (!texto) { errorValidacion = `La opción ${letra} de la pregunta ${i+1} no puede estar vacía`; return; }
+                opciones[letra] = texto;
+              });
+
+              if (Object.keys(opciones).length < 2) { errorValidacion = `La pregunta ${i+1} debe tener al menos 2 opciones`; return; }
+              const resp = div.querySelector('.select-respuesta').value;
+              if (!resp) { errorValidacion = `Debes seleccionar la respuesta correcta de la pregunta ${i+1}`; return; }
+              if (!opciones[resp]) { errorValidacion = `La respuesta correcta "${resp}" no existe entre las opciones de la pregunta ${i+1}`; return; }
+
+              const preguntaData = { tipo, pregunta, opciones, respuesta_correcta: resp };
+              if (id) { preguntaData.id = id; preguntasActualizadas.push(preguntaData); idsActuales.push(id); }
+              else { preguntasNuevas.push(preguntaData); }
+
+            } else if (tipo === "archivo") {
+              const instrucciones = div.querySelector('.instrucciones-archivo').value.trim();
+              if (!instrucciones) { errorValidacion = `La pregunta ${i+1} de tipo archivo debe tener instrucciones`; return; }
+              const preguntaData = { tipo, pregunta: instrucciones, instrucciones: instrucciones };
+              if (id) { preguntaData.id = id; preguntasActualizadas.push(preguntaData); idsActuales.push(id); }
+              else { preguntasNuevas.push(preguntaData); }
+            }
           });
 
-          if (Object.keys(opciones).length < 2) {
-            errorValidacion = `La pregunta ${i+1} debe tener al menos 2 opciones`;
-            return;
-          }
+          if (errorValidacion) { Swal.showValidationMessage(errorValidacion); return false; }
 
-          const resp = div.querySelector('.select-respuesta').value;
-          
-          if (!resp) {
-            errorValidacion = `Debes seleccionar la respuesta correcta de la pregunta ${i+1}`;
-            return;
-          }
+          idsOriginales.forEach(idOriginal => {
+            if (!idsActuales.includes(idOriginal)) preguntasEliminadas.push(idOriginal);
+          });
 
-          // Verificar que la respuesta existe en las opciones
-          if (!opciones[resp]) {
-            errorValidacion = `La respuesta correcta "${resp}" no existe entre las opciones de la pregunta ${i+1}`;
-            return;
-          }
-
-          const preguntaData = {
-            tipo,
-            pregunta,
-            opciones,
-            respuesta_correcta: resp
-          };
-
-          if (id) {
-            // Pregunta existente - ACTUALIZAR
-            preguntaData.id = id;
-            preguntasActualizadas.push(preguntaData);
-            idsActuales.push(id);
-          } else {
-            // Pregunta nueva
-            preguntasNuevas.push(preguntaData);
-          }
-
-        } else if (tipo === "archivo") {
-          const instrucciones = div.querySelector('.instrucciones-archivo').value.trim();
-          
-          if (!instrucciones) {
-            errorValidacion = `La pregunta ${i+1} de tipo archivo debe tener instrucciones`;
-            return;
-          }
-
-          const preguntaData = {
-            tipo,
-            pregunta: instrucciones,
-            instrucciones: instrucciones
-          };
-
-          if (id) {
-            // Pregunta existente - ACTUALIZAR
-            preguntaData.id = id;
-            preguntasActualizadas.push(preguntaData);
-            idsActuales.push(id);
-          } else {
-            // Pregunta nueva
-            preguntasNuevas.push(preguntaData);
-          }
+          return { titulo, descripcion, urlYoutube, preguntasNuevas, preguntasActualizadas, preguntasEliminadas, instruccionesCuestionario };
         }
       });
 
-      if (errorValidacion) {
-        Swal.showValidationMessage(errorValidacion);
-        return false;
-      }
+      if (!formValues) return;
 
-      // Detectar preguntas eliminadas (las que estaban pero ya no están)
-      idsOriginales.forEach(idOriginal => {
-        if (!idsActuales.includes(idOriginal)) {
-          preguntasEliminadas.push(idOriginal);
+      Swal.fire({ title: 'Guardando cambios...', html: '<p>Por favor espera mientras se actualizan los datos.</p>', allowOutsideClick: false, allowEscapeKey: false, showConfirmButton: false, didOpen: () => { Swal.showLoading(); } });
+
+      const formData = new FormData();
+      formData.append("id_video", idVideo);
+      formData.append("titulo", formValues.titulo);
+      formData.append("descripcion", formValues.descripcion);
+      formData.append("instrucciones_cuestionario", formValues.instruccionesCuestionario);
+      if (formValues.preguntasNuevas.length > 0) formData.append("preguntas_nuevas", JSON.stringify(formValues.preguntasNuevas));
+      if (formValues.preguntasActualizadas.length > 0) formData.append("preguntas_actualizadas", JSON.stringify(formValues.preguntasActualizadas));
+      if (formValues.preguntasEliminadas.length > 0) formData.append("preguntas_eliminadas", JSON.stringify(formValues.preguntasEliminadas));
+      if (formValues.urlYoutube) formData.append("url_youtube", formValues.urlYoutube);
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 300000);
+
+        const updateRes = await fetch("actualizar_video_completo.php", { method: "POST", body: formData, signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        const contentType = updateRes.headers.get("content-type");
+        const responseText = await updateRes.text();
+
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("El servidor no devolvió JSON. Respuesta: " + responseText.substring(0, 500));
         }
-      });
 
-      if (preguntasNuevas.length === 0 && preguntasActualizadas.length === 0) {
-        Swal.showValidationMessage("Debes tener al menos una pregunta en el cuestionario");
-        return false;
+        let updateData;
+        try { updateData = JSON.parse(responseText); }
+        catch (parseError) { throw new Error("Respuesta inválida del servidor: " + responseText.substring(0, 500)); }
+
+        if (updateData.success) {
+          await Swal.fire({ icon: 'success', title: '¡Cambios guardados!', text: updateData.message, confirmButtonText: 'Aceptar' });
+          location.reload();
+        } else {
+          Swal.fire({ icon: 'error', title: 'Error al guardar', html: `<p><strong>Mensaje:</strong> ${updateData.message || 'Error desconocido'}</p>${updateData.error ? `<p class="text-muted" style="font-size: 0.9rem;"><strong>Detalle:</strong> ${updateData.error}</p>` : ''}`, width: '600px' });
+        }
+
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          Swal.fire({ icon: 'error', title: 'Tiempo agotado', text: 'La operación tomó demasiado tiempo. Intenta nuevamente.' });
+        } else {
+          Swal.fire({ icon: 'error', title: 'Error de conexión', html: `<p><strong>Error:</strong> ${error.message}</p>`, width: '700px' });
+        }
       }
 
-      return { 
-        titulo, 
-        descripcion, 
-        urlYoutube, 
-        preguntasNuevas, 
-        preguntasActualizadas, 
-        preguntasEliminadas,
-        instruccionesCuestionario 
-      };
+    } catch (error) {
+      Swal.fire({ icon: 'error', title: 'Error', text: error.message || 'No se pudieron cargar los datos del video' });
     }
   });
-
-  if (!formValues) return;
-
-  // Mostrar loading
-  Swal.fire({
-    title: 'Guardando cambios...',
-    html: '<p>Por favor espera mientras se actualizan los datos.</p>',
-    allowOutsideClick: false,
-    allowEscapeKey: false,
-    showConfirmButton: false,
-    didOpen: () => {
-      Swal.showLoading();
-    }
-  });
-
-  // Enviar datos actualizados con clasificación correcta
-  const formData = new FormData();
-  formData.append("id_video", idVideo);
-  formData.append("titulo", formValues.titulo);
-  formData.append("descripcion", formValues.descripcion);
-  formData.append("instrucciones_cuestionario", formValues.instruccionesCuestionario);
-
-  // Clasificar preguntas según el formato que espera el servidor
-  if (formValues.preguntasNuevas.length > 0) {
-    formData.append("preguntas_nuevas", JSON.stringify(formValues.preguntasNuevas));
-  }
-
-  if (formValues.preguntasActualizadas.length > 0) {
-    formData.append("preguntas_actualizadas", JSON.stringify(formValues.preguntasActualizadas));
-  }
-
-  if (formValues.preguntasEliminadas.length > 0) {
-    formData.append("preguntas_eliminadas", JSON.stringify(formValues.preguntasEliminadas));
-  }
-
-  if (formValues.urlYoutube) { 
-    formData.append("url_youtube",  formValues.urlYoutube);
-}
-
-  // LOG PARA DEBUGGING
-  console.log("=== DATOS A ENVIAR ===");
-  console.log("ID Video:", idVideo);
-  console.log("Título:", formValues.titulo);
-  console.log("Preguntas nuevas:", formValues.preguntasNuevas);
-  console.log("Preguntas actualizadas:", formValues.preguntasActualizadas);
-  console.log("Preguntas eliminadas:", formValues.preguntasEliminadas);
-
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 300000);
-
-    const updateRes = await fetch("actualizar_video_completo.php", {
-      method: "POST",
-      body: formData,
-      signal: controller.signal
-    });
-
-    clearTimeout(timeoutId);
-
-    console.log("Status de respuesta:", updateRes.status);
-
-    const contentType = updateRes.headers.get("content-type");
-    const responseText = await updateRes.text();
-    
-    console.log("Respuesta del servidor:", responseText);
-
-    if (!contentType || !contentType.includes("application/json")) {
-      throw new Error("El servidor no devolvió JSON. Respuesta: " + responseText.substring(0, 500));
-    }
-
-    let updateData;
-    try {
-      updateData = JSON.parse(responseText);
-    } catch (parseError) {
-      console.error("Error al parsear JSON:", parseError);
-      throw new Error("Respuesta inválida del servidor: " + responseText.substring(0, 500));
-    }
-
-    console.log("Datos parseados:", updateData);
-
-    if (updateData.success) {
-      await Swal.fire({
-        icon: 'success',
-        title: '¡Cambios guardados!',
-        text: updateData.message,
-        confirmButtonText: 'Aceptar'
-      });
-      location.reload();
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al guardar',
-        html: `
-          <p><strong>Mensaje:</strong> ${updateData.message || 'Error desconocido'}</p>
-          ${updateData.error ? `<p class="text-muted" style="font-size: 0.9rem;"><strong>Detalle:</strong> ${updateData.error}</p>` : ''}
-        `,
-        width: '600px'
-      });
-    }
-
-  } catch (error) {
-    console.error("Error completo:", error);
-    
-    if (error.name === 'AbortError') {
-      Swal.fire({
-        icon: 'error',
-        title: 'Tiempo agotado',
-        text: 'La operación tomó demasiado tiempo. Intenta nuevamente.'
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de conexión',
-        html: `
-          <p><strong>Error:</strong> ${error.message}</p>
-          <details style="margin-top: 15px; text-align: left;">
-            <summary style="cursor: pointer; color: #9b7cb8; font-weight: 600;">Ver detalles técnicos</summary>
-            <pre style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.8rem; overflow-x: auto;">${error.stack || error.message}</pre>
-          </details>
-        `,
-        width: '700px'
-      });
-    }
-  }
-
-} catch (error) {
-  console.error("Error:", error);
-  
-  Swal.fire({
-    icon: 'error',
-    title: 'Error',
-    text: error.message || 'No se pudieron cargar los datos del video'
-  });
-}
-});
 });
 </script>
 </body>
